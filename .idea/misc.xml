@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Black">
+    <option name="sdkName" value="Poetry (combine)" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="aea171c5-1132-480f-a331-c7a0f68f313e" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_23" project-jdk-name="Python 3.13 (combine-zyHrk4GN-py3.13)" project-jdk-type="Python SDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
