@@ -1,20 +1,18 @@
-[project]
+[tool.poetry]
 name = "combine"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Andre van Zuydam",email = "andrevanzuydam@gmail.com"}
-]
-package-mode = false
+authors = ["Andre van Zuydam <andrevanzuydam@gmail.com>"]
 readme = "README.md"
-requires-python = "^3.10"
-dependencies = [
-    "tina4-python (>=0.2.43,<0.3.0)"
-]
 
+[tool.poetry.dependencies]
+python = "^3.12"
+tina4-python = "^0.2.46"
+
+
+[tool.poetry.group.dev.dependencies]
+poetry-plugin-export = "^1.9.0"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-
