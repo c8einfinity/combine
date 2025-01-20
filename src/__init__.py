@@ -11,4 +11,4 @@ dba = Database(f"mysql.connector:{database_path}",
                os.getenv("DATABASE_PASSWORD", "doadmin"))
 migrate(dba)
 
-from routes import *
+from .routes import *
