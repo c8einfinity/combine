@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/combine.iml" filepath="$PROJECT_DIR$/combine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/combine.iml" filepath="$PROJECT_DIR$/.idea/combine.iml" />
     </modules>
   </component>
 </project>
