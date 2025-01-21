@@ -1,4 +1,6 @@
 import os
+
+from tina4_python import Debug
 from tina4_python.Router import get
 from tina4_python.Queue import Queue, Config, Producer
 
@@ -14,7 +16,10 @@ config.rabbitmq_config = {
 
 queue = Queue(config, topic="server-start")
 
-producer = Producer(queue)
+def tell_me(queue, err, msg):
+    Debug.info(err, msg)
+
+producer = Producer(queue, delivery_callback=tell_me)
 
 @get("/")
 async def index(request, response):
