@@ -1,0 +1,109 @@
+<div class="row m-0">
+    <div class="form-side-graphic-container col-md-6 d-flex flex-column justify-content-end justify-content-md-center align-items-center p-0 m-0">
+        <div class="form-side-graphic-row row">
+            <div class="col-12 px-0">
+                <h1 class="text-white" style="font-size: 5rem; font-family: Anton, Arial, Helvetica, sans-serif;">
+                    UNLOCK YOUR <span class="text-anton text-inchworm-green">INNER GREATNESS</span>
+                </h1>
+            </div>
+            <div class="col-12 px-0 mt-md-5">
+                {% if logo %}
+                    <img src="{{ logo }}" alt="Organization Logo" class="form-side-graphic-logo img-fluid"/>
+                {% else  %}
+                    <img src="/images/logos/organization-preview-logo.png" alt="Organization Preview Logo"
+                         class="form-side-graphic-logo img-fluid"/>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 p-0 d-flex flex-column justify-content-center align-items-center bg-white text-maastricht-blue">
+        <div class="p-3">
+            {% set signup_header_class = "signup-header-full" if not pricing_data or payment_required == "0" else "signup-header" %}
+
+            <div class="{{ signup_header_class }}">
+                <div>
+                    <h1 class="text-anton">SIGN UP</h1>
+                    <p>Already have an account? <a href="#" class="link">Log in</a></p>
+                </div>
+
+                {% if pricing_data and payment_required == "1" %}
+                    <div class="discount">
+                        <div class="discount-badge">
+                            <div class="percentage">{{ pricing_data.discount_percent }}%</div>
+                            <div class="text">OFF</div>
+                        </div>
+                        <div class="discount-prices">
+                            <div class="full-price"><s>${{ pricing_data.unit_amount }}</s></div>
+                            <div class="discount-price p-0">${{ pricing_data.discounted_total }}</div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <form id="signUpForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="first_name">First name</label>
+                    <input class="form-control" type="text" name="first_name" id="first_name"
+                           placeholder="First name" value="" autocomplete="given-name"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="last_name">Last name</label>
+                    <input class="form-control" type="text" name="last_name" id="last_name"
+                           placeholder="Last name" value="" autocomplete="family-name"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-control" type="email" name="email" id="email" placeholder="Email"
+                           value="" autocomplete="email"/>
+                </div>
+
+                <div class="form-group">
+                    <div class="d-flex justify-content-between">
+                        <label for="password">Password</label>
+                        <button class="btn border-0 bg-transparent text-maastricht-blue" type="button"
+                                id="passwordVisibility">
+                            <i class="fa-solid fa-eye-slash text-granite-gray"></i>
+                            <span id="passwordVisibilityPrompt"> Hide</span>
+                        </button>
+                    </div>
+                    <input class="form-control" type="text" name="password" id="password" placeholder="Password"
+                           value="" autocomplete="off"/>
+                    <small class="form-text text-maastricht-blue">
+                        Use 8 or more characters with a mix of letters, numbers & symbols
+                    </small>
+                </div>
+
+                <div class="form-check form-check-inline mb-3">
+                    <input type="checkbox" name="is_minor" id="is_minor" value="">
+                    <label class="form-check-label" for="is_minor">
+                        I am under 18. My guardian consents to me signing up
+                    </label>
+                </div>
+
+                <p>
+                    By creating an account you agree to our<br/>
+                    <a href="#" class="link" target="_blank">Terms of use</a> and
+                    <a href="#" class="link" target="_blank">Privacy Policy</a>
+                </p>
+
+                <div class="g-recaptcha mt-5" data-sitekey="{{ recaptcha_site_key }}"></div>
+                <br/>
+
+                <input id="confirmation_hash" type="hidden" name="confirmation_hash" value=""/>
+                <input id="payment_required" type="hidden" name="payment_required" value=""/>
+
+                <button class="login-signup-button btn rounded-0 btn-lg" title="Create an Account">
+                    Create an Account
+                </button>
+                <p class="pt-1">Already have an account?
+                    <a href="#" class="link">Log in</a>
+                </p>
+            </form>
+
+            <div id="message"></div>
+        </div>
+    </div>
+</div>

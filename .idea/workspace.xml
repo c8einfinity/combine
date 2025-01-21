@@ -5,7 +5,315 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/public/css/aatos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/css/bootstrap/scss/bootstrap-grid.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/css/bootstrap/scss/bootstrap-reboot.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/css/bootstrap/scss/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/css/team_q.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-144-144.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-192-192.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-48-48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-512-512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-72-72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/android/android-launchericon-96-96.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/icons.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/1024.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/114.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/120.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/128.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/144.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/152.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/167.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/180.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/192.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/256.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/29.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/50.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/512.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/57.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/58.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/60.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/76.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/80.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/ios/87.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/LargeTile.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/LargeTile.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/LargeTile.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/LargeTile.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/LargeTile.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SmallTile.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SmallTile.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SmallTile.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SmallTile.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SmallTile.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SplashScreen.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SplashScreen.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SplashScreen.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SplashScreen.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/SplashScreen.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square150x150Logo.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square150x150Logo.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square150x150Logo.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square150x150Logo.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square150x150Logo.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-256.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-60.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-80.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-lightunplated_targetsize-96.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-256.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-60.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-80.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.altform-unplated_targetsize-96.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-16.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-20.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-24.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-256.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-30.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-36.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-40.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-44.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-48.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-60.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-64.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-72.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-80.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Square44x44Logo.targetsize-96.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/StoreLogo.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/StoreLogo.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/StoreLogo.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/StoreLogo.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/StoreLogo.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Wide310x150Logo.scale-100.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Wide310x150Logo.scale-125.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Wide310x150Logo.scale-150.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Wide310x150Logo.scale-200.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/icons/windows11/Wide310x150Logo.scale-400.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/avatar.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/chat/coach_carter.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/chat/send-icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/email/playerq-emailer-cta.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/email/playerq-emailer-logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/login_signup_side_dp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/login_signup_side_mb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/PlayerQ_navy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/PlayerQ_navy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/PlayerQ_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/PlayerQ_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/Q_icon_navy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/Q_icon_navy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/Q_icon_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/Q_icon_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TEAM Q_icon_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_Logo_navy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_icon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_navy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_navy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/TeamQ_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/Thumbs.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/organization-preview-logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/player-q-logo-dark.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/player-q-logo-light.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/slash_icon_navy.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/slash_icon_navy.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/slash_icon_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/logos/slash_icon_white.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/player/welcome-screen-image-dp.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/player/welcome-screen-image-mb.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/arrow-right.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-adaptable.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-anchorer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-collaborator.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-commander.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-compliant.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-dominant.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-explorer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-facilitator.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-firebrand.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-grounded.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-guardian.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-influential.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-pioneer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-stabilizer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-steady.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/icon-trailblazer.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/report_donts.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/results/report_dos.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/images/upload.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/js/emoji.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/js/jquery.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/js/jquery.validate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/js/reconnecting-websocket.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/js/team_q.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/public/service-worker.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_aatos.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_buttons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_cards.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_charts.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_dropdowns.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_error.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_footer.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_global.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_login.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_mixins.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_navs.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_utilities.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/_variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_alert.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_badge.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_breadcrumb.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_button-group.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_buttons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_card.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_carousel.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_close.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_code.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_custom-forms.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_dropdown.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_forms.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_functions.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_grid.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_images.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_input-group.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_jumbotron.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_list-group.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_media.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_mixins.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_modal.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_nav.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_navbar.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_pagination.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_popover.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_print.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_progress.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_reboot.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_root.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_spinners.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_tables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_toasts.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_tooltip.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_transitions.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_type.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_utilities.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/_variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/bootstrap-grid.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/bootstrap-reboot.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/bootstrap.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_alert.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_background-variant.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_badge.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_border-radius.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_box-shadow.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_breakpoints.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_buttons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_caret.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_clearfix.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_deprecate.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_float.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_forms.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_gradients.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_grid-framework.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_grid.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_hover.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_image.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_list-group.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_lists.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_nav-divider.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_pagination.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_reset-text.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_resize.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_screen-reader.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_size.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_table-row.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_text-emphasis.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_text-hide.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_text-truncate.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_transition.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/mixins/_visibility.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_align.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_background.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_borders.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_clearfix.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_display.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_embed.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_flex.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_float.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_interactions.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_overflow.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_position.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_screenreaders.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_shadows.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_sizing.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_spacing.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_stretched-link.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_text.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/utilities/_visibility.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/bootstrap/scss/vendor/_rfs.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/default.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/navs/_global.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/navs/_sidebar.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/navs/_topbar.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_animation.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_background.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_border.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_display.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_progress.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_rotate.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/scss/utilities/_text.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/auth/forgot_password.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/auth/login.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/auth/sign_up.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/auth/sign_up_preview.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/base.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/index.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/snippets/datatable_empty.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/snippets/form_side_graphic.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/snippets/navigation.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/snippets/profile.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/images/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/js/tina4helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/tina4helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/home.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,11 +353,13 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.app.executor": "Debug",
+    "Python.consumer.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/andrevanzuydam/IdeaProjects/combine/src/public/css",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -61,7 +371,15 @@
     "settings.editor.selected.configurable": "preferences.lookFeel"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.consumer">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/public/css" />
+      <recent name="$PROJECT_DIR$/src/public" />
+      <recent name="$PROJECT_DIR$/src/templates" />
+      <recent name="$PROJECT_DIR$/src/scss" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.app">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="combine" />
       <option name="ENV_FILES" value="" />
@@ -136,7 +454,7 @@
       <workItem from="1737387942087" duration="75000" />
       <workItem from="1737388019165" duration="121000" />
       <workItem from="1737388929937" duration="6030000" />
-      <workItem from="1737442016910" duration="3655000" />
+      <workItem from="1737442016910" duration="4761000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -178,7 +496,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737394272109</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added logs for delivery">
+      <option name="closed" value="true" />
+      <created>1737447087535</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1737447087535</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,20 +517,11 @@
     <MESSAGE value="Added queue" />
     <MESSAGE value="Updated libraries" />
     <MESSAGE value="Added test for queue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added test for queue" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/consume.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Added logs for delivery" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logs for delivery" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1737446840414" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1737447672808" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

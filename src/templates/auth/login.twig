@@ -1,0 +1,114 @@
+{% set logged_in = request.session.get("logged_in") %}
+
+{% extends "base.twig" %}
+
+{% block content_public %}
+    <div class="page-container row m-0">
+        {% include "snippets/form_side_graphic.twig" %}
+
+        <div class="col d-flex flex-column justify-content-center align-items-center bg-white text-maastricht-blue">
+            <div class="p-3">
+                <h1 class="text-anton">Login</h1>
+                <form id="loginForm" onsubmit="return false;">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input class="form-control" type="text" name="email" id="email" placeholder="Email"
+                               value=""/>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="d-flex justify-content-between">
+                            <label for="password">Password</label>
+                            <div class="col text-right">
+                                <button class="btn border-0 bg-transparent text-maastricht-blue" type="button"
+                                        id="passwordVisibility">
+                                    <i class="fa-solid fa-eye-slash text-granite-gray"></i>
+                                    <span id="passwordVisibilityPrompt"> Hide</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input class="form-control" name="password" id="password" placeholder="Password" value="" autocomplete="off" />
+                    </div>
+
+                    <div class="g-recaptcha" data-callback="recaptchaChecked"
+                         data-expired-callback="recaptchaExpired" data-sitekey="{{ recaptcha_site_key }}">
+                    </div>
+                    <br/>
+
+                    <button class="login-signup-button btn rounded-0 btn-lg" title="Log In"
+                            onclick="login()" >
+                        Log In
+                        <i class="progress-spinner fa fa-spinner fa-spin ml-3"></i>
+                    </button>
+
+                    {{ "loginForm" | formToken }}
+                </form>
+
+                <div id="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const userExists = urlParams.get('u_e'); // User exists
+            const sessionEnded = urlParams.get('s_e'); // User session ended
+
+            if (userExists) {
+                const email = urlParams.get('email');
+
+                $("#email").val(email)
+
+                showMessage("Account with the email address already exists.", "danger");
+            }
+
+            if (sessionEnded) {
+                showMessage("Your session has ended. Please login again.", "danger");
+            }
+        });
+
+        $(".progress-spinner").hide();
+
+        $("#loginForm").validate({
+            rules: {
+                email: {
+                    required: true
+                },
+                password: {
+                    required: true
+                }
+            }
+        });
+
+        function login() {
+            if ($('#loginForm').valid()) {
+                $(".progress-spinner").show();
+                saveForm('loginForm', '/login?formToken={{ formToken() }}');
+            }
+        }
+
+        function recaptchaChecked() {
+            $(".login-signup-button").removeAttr('disabled');
+        }
+
+        function recaptchaExpired() {
+            $(".login-signup-button").attr('disabled', true);
+        }
+
+        $("#passwordVisibility").on("click", function () {
+            togglePasswordVisibility();
+
+            const prompt = $("#passwordVisibilityPrompt");
+
+            if (prompt.text().trim() === "Hide") {
+                prompt.text("Show");
+                $("#passwordVisibility i").removeClass("fa-eye-slash").addClass("fa-eye");
+            } else {
+                prompt.text("Hide");
+                $("#passwordVisibility i").removeClass("fa-eye").addClass("fa-eye-slash");
+            }
+        });
+    </script>
+{% endblock %}

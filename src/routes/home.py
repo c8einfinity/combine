@@ -3,6 +3,7 @@ import os
 from tina4_python import Debug
 from tina4_python.Router import get
 from tina4_python.Queue import Queue, Config, Producer
+from tina4_python.Template import Template
 
 config = Config()
 config.queue_type = 'rabbitmq'
@@ -25,5 +26,5 @@ producer = Producer(queue, delivery_callback=tell_me)
 async def index(request, response):
     request.session.set("logged_in", True)
 
-    producer.produce({"event": "Hitting route"})
-    return response("Ok")
+    html = Template.render_twig_template("index.twig")
+    return response(html)

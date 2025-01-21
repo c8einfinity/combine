@@ -1,0 +1,121 @@
+<div class="px-3 py-4">
+    <div class="row align-items-center justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="content p-4">
+                <h3 class='text-anton text-maastricht-blue pb-2'>PROFILE</h3>
+                <div class="gradient-separator"></div>
+
+                <form id="usersForm" class="pt-4" enctype="multipart/form-data" onsubmit="return false;">
+                    <div class="form-group mt-3">
+                        <label class="text-maastricht-blue font-weight-bold" for="first_name">
+                            First Name
+                        </label>
+                        <input class="form-control" name="first_name" id="first_name" type="text"
+                               value="{{ person.first_name }}" placeholder="First Name" autocomplete="given-name"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label class="text-maastricht-blue font-weight-bold" for="last_name">
+                            Last Name
+                        </label>
+                        <input class="form-control" name="last_name" id="last_name" type="text"
+                               value="{{ person.last_name }}" placeholder="Last Name" autocomplete="family-name"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label class="text-maastricht-blue font-weight-bold" for="email">
+                            Email
+                        </label>
+                        <input class="form-control" name="email" id="email" type="email" value="{{ person.email }}"
+                               placeholder="Email" readonly autocomplete="email"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label class="text-maastricht-blue font-weight-bold" for="password">
+                            Password
+                        </label>
+                        <input class="form-control" name="password" id="password" type="text"
+                               value="" placeholder="Password" autocomplete="off"/>
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <label class="text-maastricht-blue font-weight-bold" for="mobile_no">
+                            Mobile Number
+                        </label>
+                        <input class="form-control" name="mobile_no" id="mobile_no" type="text"
+                               value="{{ person.mobile_no }}" placeholder="Mobile Number" autocomplete="tel-national"/>
+                    </div>
+
+                    <div class="form-group row mt-3">
+                        <div class="col-10">
+                            <label class="text-maastricht-blue font-weight-bold">
+                                Upload Avatar
+                            </label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="avatar_image" id="avatar_image"
+                                       accept="image/*">
+                                <label class="custom-file-label" for="avatar_image">Choose file</label>
+                            </div>
+                        </div>
+                        {% if person.avatar_image %}
+                            <div class="col-2 align-content-end">
+                                <img class="avatar-img" src="data:image/png;base64,{{ person.avatar_image }}"
+                                     alt="Avatar"/>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <input type="hidden" name="id" value="{{ person.id }}"/>
+
+                    <div class="mt-3 text-right">
+                        <button class="btn btn-soft-green px-5 rounded-0 text-uppercase" title="Save"
+                                onclick="saveProfile()">
+                            Save
+                        </button>
+                    </div>
+                    {{ "usersForm" | formToken }}
+                </form>
+
+                <div class="mt-3 mb-0" id="message"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * Function to set the file name after the file is selected.
+     */
+    $('input[type="file"]').change(function (e) {
+        const fileName = e.target.files[0].name;
+
+        $('.custom-file-label').html(fileName);
+    });
+
+    let usersForm = $("#usersForm");
+
+    /**
+     * Function to validate the mobile number field.
+     */
+    usersForm.validate({
+        rules: {
+            mobile_no: {
+                digits: true,
+                minlength: 10,
+                maxlength: 10
+            }
+        }
+    });
+
+    /**
+     * Function to submit the profile user's form.
+     */
+    function saveProfile() {
+        if (usersForm.valid()) {
+            const trimInputArray = ["first_name", "last_name", "password", "mobile_no"];
+
+            trimInput(trimInputArray);
+            saveForm('usersForm', '/system/profile?formToken={{ formToken() }}');
+        }
+    }
+</script>
