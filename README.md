@@ -8,5 +8,6 @@ poetry install
 ```
 
 ```bash
-poetry export --without-hashes --format=requirements.txt > requirements.txt
+poetry add poetry-plugin-export
+poetry export -f requirements.txt --output requirements.txt
 ```
