@@ -24,7 +24,7 @@ producer = Producer(queue, delivery_callback=tell_me)
 
 @get("/")
 async def index(request, response):
-    request.session.set("logged_in", True)
+    # request.session.set("logged_in", True)
 
     html = Template.render_twig_template("index.twig")
     return response(html)
