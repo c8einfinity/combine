@@ -1,8 +1,10 @@
 import os
-from tina4_python import Debug
+from tina4_python import Debug, tina4_auth
 from tina4_python.Router import get, post
 from tina4_python.Queue import Queue, Config, Producer
 from tina4_python.Template import Template
+
+
 
 config = Config()
 config.queue_type = 'rabbitmq'
@@ -25,16 +27,24 @@ producer = Producer(queue, delivery_callback=tell_me)
 async def index(request, response):
     request.session.set("logged_in", False)
 
-    html = Template.render_twig_template("index.twig")
+    html = Template.render("index.twig")
     return response(html)
 
 @post("/login")
 async def login(request, response):
-    request.session.set("logged_in", True)
-    return response("<script>window.location.href='/dashboard'</script>")
+    from src.orm.User import User
+    user = User()
 
+    if "email" in request.body and user.load("email = ?", [request.body["email"]]):
+        # validating
+        print("USER IS SOMETHING", user.password, user.email)
+        if  tina4_auth.check_password( str(user.password), request.body["password"]):
+            return response("<script>window.location.href='/dashboard'</script>")
+        else:
+            return response('<div class="alert alert-danger">Error - not a user or not a password</div><script>$(".progress-spinner").hide();</script>')
 
-
+    else:
+        return response('<div class="alert alert-warning ">Error - not a user or not a password</div><script>$(".progress-spinner").hide();</script>')
 
 @get("/session")
 async def session(request, response):
