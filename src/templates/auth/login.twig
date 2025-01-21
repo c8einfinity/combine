@@ -1,5 +1,6 @@
 {% set logged_in = request.session.get("logged_in") %}
 
+
 {% extends "base.twig" %}
 
 {% block content_public %}
@@ -40,8 +41,8 @@
                         Log In
                         <i class="progress-spinner fa fa-spinner fa-spin ml-3"></i>
                     </button>
-
-                    {{ "loginForm" | formToken }}
+                    {%  set token = formToken({"page":"Login"}) %}
+                    <input type="hidden" name="formToken" value="{{ token }}">
                 </form>
 
                 <div id="message"></div>
@@ -85,7 +86,7 @@
         function login() {
             if ($('#loginForm').valid()) {
                 $(".progress-spinner").show();
-                saveForm('loginForm', '/login?formToken={{ formToken() }}');
+                saveForm('loginForm', '/login', 'message');
             }
         }
 

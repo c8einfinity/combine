@@ -4,7 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="" />
+    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/000002_create_user_table.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/000003_default_users_and_groups.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/Setup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/orm/User.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/orm/UserGroup.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/dashboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/dashboard.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/js/tina4helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/tina4helper.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/home.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/auth/login.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/auth/login.twig" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -56,6 +74,11 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.lookFeel"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RecentsManager">
@@ -219,7 +242,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737456647270</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Updated project">
+      <option name="closed" value="true" />
+      <created>1737456872995</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1737456872995</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -239,6 +270,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1737456349303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1737469311052" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

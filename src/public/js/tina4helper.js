@@ -35,17 +35,25 @@ function sendRequest (url, request, method, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
 
-    xhr.onload = function () {
-        let content = xhr.response;
-        if (xhr.getResponseHeader('FreshToken') !== '' && xhr.getResponseHeader('FreshToken') !== null) {
-            formToken = xhr.getResponseHeader('FreshToken');
-        }
+    xhr.onreadystatechange  = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let content = xhr.response;
 
-        try {
-            content = JSON.parse(content);
-            callback(content);
-        } catch (exception) {
-            callback (content);
+            if (xhr.getResponseHeader('FreshToken') !== '' && xhr.getResponseHeader('FreshToken') !== null) {
+                formToken = xhr.getResponseHeader('FreshToken');
+            }
+
+            try {
+                content = JSON.parse(content);
+                callback(content);
+            } catch (exception) {
+                callback (content);
+            }
+
+        } else if (xhr.status !== 200) {
+            let content = xhr.response;
+            console.log('An unexpected response occurred while sending request',url, content, xhr.status, xhr.readyState, xhr, xhr.getResponseHeader('Location'));
+            callback(xhr.status+" An error occurred, see the console")
         }
     };
 

@@ -1,0 +1,15 @@
+Index: .env.example
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># Project Settings\r\nPROJECT_NAME=\"QFinder Combine\"\r\nVERSION=1.0.0\r\nTINA4_LANGUAGE=en\r\nAPI_KEY=f80a54aca301823e3b92829932ab3a7f\r\nTINA4_DEBUG_LEVEL=[TINA4_LOG_ALL]\r\nDATABASE_PATH=db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder\r\nDATABASE_USERNAME=doadmin\r\nDATABASE_PASSWORD=\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.env.example b/.env.example
+--- a/.env.example	(revision c80f3d815a24c74012f2aa48631a09e0245f4e22)
++++ b/.env.example	(date 1737387060459)
+@@ -7,3 +7,4 @@
+ DATABASE_PATH=db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder
+ DATABASE_USERNAME=doadmin
+ DATABASE_PASSWORD=
++RABBIT_SERVER_HOST=system.teamq.io
