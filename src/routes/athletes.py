@@ -21,7 +21,11 @@ async def get_athletes(request, response):
                               limit=data_tables_filter["length"],
                               skip=data_tables_filter["start"],)
 
-    return response (players.to_paginate())
+    data = players.to_paginate()
+
+    data["draw"] = request.params["draw"]
+
+    return response (data)
 
 
 @post("/api/athletes")
