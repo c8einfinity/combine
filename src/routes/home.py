@@ -46,6 +46,11 @@ async def login(request, response):
     else:
         return response('<div class="alert alert-warning ">Error - not a user or not a password</div><script>$(".progress-spinner").hide();</script>')
 
+@get("/logout")
+async def get_logout(request, response):
+    request.session.set("logged_in", False)
+    return response.redirect("/")
+
 @get("/session")
 async def session(request, response):
     print("OK")

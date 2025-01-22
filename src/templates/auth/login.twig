@@ -24,7 +24,7 @@
                                 <button class="btn border-0 bg-transparent text-maastricht-blue" type="button"
                                         id="passwordVisibility">
                                     <i class="fa-solid fa-eye-slash text-granite-gray"></i>
-                                    <span id="passwordVisibilityPrompt"> Hide</span>
+                                    <span id="passwordVisibilityPrompt">Show</span>
                                 </button>
                             </div>
                         </div>
@@ -44,8 +44,10 @@
                     {%  set token = formToken({"page":"Login"}) %}
                     <input type="hidden" name="formToken" value="{{ token }}">
                 </form>
+                <br>
+                <div id="message"></div>
             </div>
-            <div id="message"></div>
+
         </div>
     </div>
 
@@ -110,5 +112,7 @@
                 $("#passwordVisibility i").removeClass("fa-eye").addClass("fa-eye-slash");
             }
         });
+
+        togglePasswordVisibility();
     </script>
 {% endblock %}

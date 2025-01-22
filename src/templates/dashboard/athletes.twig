@@ -1,0 +1,37 @@
+<div class="px-3 py-4">
+    <div class="content pt-4 pb-5 px-4">
+        <h3 class='text-anton text-maastricht-blue pb-2'>ATHLETES</h3>
+        <form id="athlete" method="post" onsubmit="return false;">
+            <div class="row">
+                <div class="col form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" placeholder="First Name">
+                </div>
+                <div class="col form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" placeholder="Last Name">
+                </div>
+                <div class="col form-group">
+                    <label>Sport</label>
+                    <select class="form-control">
+                        <option>Football</option>
+                    </select>
+                </div>
+                <div class="col form-group">
+                    <br/>
+                    <button class="btn btn-soft-green rounded-0" onclick="addAthlete()">
+                        Add
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div id="message"></div>
+    </div>
+</div>
+<script>
+    function addAthlete(){
+
+        submitForm("athlete", "/api/athletes", "")
+    }
+
+</script>
