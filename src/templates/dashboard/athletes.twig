@@ -1,3 +1,5 @@
+
+
 <div class="px-3 py-4">
     <div class="content pt-4 pb-5 px-4">
         <h3 class='text-anton text-maastricht-blue pb-2'>ATHLETES</h3>
@@ -5,15 +7,15 @@
             <div class="row">
                 <div class="col form-group">
                     <label>First Name</label>
-                    <input type="text" class="form-control" placeholder="First Name">
+                    <input type="text" class="form-control" name="firstName" placeholder="First Name">
                 </div>
                 <div class="col form-group">
                     <label>Last Name</label>
-                    <input type="text" class="form-control" placeholder="Last Name">
+                    <input type="text" class="form-control" name="lastName" placeholder="Last Name">
                 </div>
                 <div class="col form-group">
                     <label>Sport</label>
-                    <select class="form-control">
+                    <select class="form-control" name="sport">
                         <option>Football</option>
                     </select>
                 </div>
@@ -26,12 +28,64 @@
             </div>
         </form>
         <div id="message"></div>
+
+        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+            <table id="athletes-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Date of Birth</th>
+                    <th>Sport</th>
+                    <th>Home Town</th>
+                    <th>Major</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+            </table>
+
+            <div id="message"></div>
+        </div>
     </div>
 </div>
 <script>
+    var athletesGrid = null;
+
     function addAthlete(){
 
-        submitForm("athlete", "/api/athletes", "")
+        submitForm("athlete", "/api/athletes", "", function(data){
+            console.log("Arrived", data)
+            //What to do here ?
+            athletesGrid.ajax.reload();
+        });
     }
+
+
+
+    $(document).ready(function () {
+        athletesGrid = $("#athletes-grid").DataTable({
+            dom: '',
+            ajax: "/api/athletes",
+            columns: [
+                { data: 'first_name' },
+                { data: 'last_name' },
+                { data: 'date_of_birth' },
+                { data: 'sport' },
+                { data: 'home_town' },
+                { data: 'major' },
+                { "render": function() {
+                        let icons = "icons"
+                        return icons
+                    }
+                }
+            ],
+            language: {
+                emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
+            },
+            processing: true,
+            serverSide: true
+        });
+    });
 
 </script>
