@@ -5,18 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/documentation/FINAL Scout PlayerQ Report Rules and Content Bank.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/Utility.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/orm/Player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/public/images/500.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/templates/errors/500.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/js/tina4helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/tina4helper.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/dashboard.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/dashboard.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/templates/dashboard/athletes.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/dashboard/athletes.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -268,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737534425254</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Latest updates">
+      <option name="closed" value="true" />
+      <created>1737570501769</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1737570501769</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -287,7 +283,8 @@
     <MESSAGE value="Added default user" />
     <MESSAGE value="Updates for logging into dashboard" />
     <MESSAGE value="Added athlete submit form" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added athlete submit form" />
+    <MESSAGE value="Latest updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Latest updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
