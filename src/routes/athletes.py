@@ -1,3 +1,4 @@
+from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post
 from tina4_python.Swagger import secure
@@ -6,6 +7,9 @@ from ..app.Utility import get_data_tables_filter
 
 @get("/api/athletes")
 async def get_athletes(request, response):
+    if "draw" not in request.params:
+        return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
     from ..orm.Player import Player
 
     data_tables_filter = get_data_tables_filter(request)
