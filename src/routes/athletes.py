@@ -18,7 +18,7 @@ async def get_athletes(request, response):
     if data_tables_filter["where"] != "":
         where += " and "+data_tables_filter["where"]
 
-    players = Player().select(["first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
+    players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                                 where,
                               [0],
                               order_by=data_tables_filter["order_by"],
@@ -31,6 +31,17 @@ async def get_athletes(request, response):
 
     return response (data)
 
+@get("/api/athletes/{id}")
+async def get_athlete(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    if player.load():
+        html = Template.render("player/profile.twig", {"player": player.to_dict()})
+        return response(html)
+    else:
+        return response("Player error, or player not found")
+
+
 
 @post("/api/athletes")
 async def post_athletes(request, response):
@@ -40,3 +51,12 @@ async def post_athletes(request, response):
 
 
     return response(player)
+
+@post("/api/athletes/{id}")
+async def post_athletes_id(request, response):
+    from ..orm.Player import Player
+    player = Player(request.body)
+    if player.save():
+        return response("Player saved")
+    else:
+        return response("Failed to save player!")

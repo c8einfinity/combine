@@ -3,11 +3,10 @@ from datetime import datetime
 
 class Player(ORM):
     id = IntegerField(auto_increment=True, primary_key=True, default_value=0)
-    username = TextField(field_size=200)
+    username = TextField(field_size=200, primary_key=True)
     first_name = TextField(field_size=200)
     last_name = TextField(field_size=200)
     email = TextField(field_size=255)
-    mobile_no = TextField(field_size=30)
     image = BlobField()
     height = TextField(field_size=20)
     team = TextField(field_size=200)

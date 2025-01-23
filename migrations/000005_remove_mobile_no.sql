@@ -1,0 +1,1 @@
+alter table player drop mobile_no;

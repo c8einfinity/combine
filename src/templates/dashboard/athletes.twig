@@ -42,9 +42,7 @@
                     <th>Status</th>
                 </tr>
                 </thead>
-
             </table>
-
             <div id="message"></div>
         </div>
     </div>
@@ -72,8 +70,8 @@
                 { data: 'sport' },
                 { data: 'home_town' },
                 { data: 'major' },
-                { "render": function() {
-                        let icons = "icons"
+                { "render": function(data, type, row) {
+                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/${row.id}', 'content')"> Profile </button>`
                         return icons
                     }
                 }
