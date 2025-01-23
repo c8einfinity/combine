@@ -254,6 +254,38 @@ function postUrl(url, data, targetElement, callback= null) {
     });
 }
 
+
+/**
+ * Delete URL posts data to a specific url
+ * @param url
+ * @param data
+ * @param targetElement
+ * @param callback
+ */
+function deleteUrl(url, data, targetElement, callback= null) {
+    sendRequest(url, data, 'DELETE', function(data) {
+        let processedHTML = '';
+        if (data.message !== undefined) {
+            processedHTML = handleHtmlData ((data.message), targetElement);
+        } else {
+            if (document.getElementById(targetElement) !== null) {
+                processedHTML =  handleHtmlData (data, targetElement);
+            } else {
+                if (callback) {
+                    callback(data);
+                } else {
+                    console.log('TINA4 - define targetElement or callback for deleteUrl', data);
+                }
+                return;
+            }
+        }
+
+        if (callback) {
+            callback(processedHTML,data)
+        }
+    });
+}
+
 /**
  * Saves a form to a POST end point
  * @param formId

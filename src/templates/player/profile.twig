@@ -77,41 +77,102 @@
         <div id="tabLinks" class="row card pt-3 pb-3 px-3 tab">
             <div class="card-body">
                 <h5 class="card-title text-anton text-maastricht-blue pb-2">Links</h5>
+                <form id="linkDetails" onsubmit="return false">
+                    <input type="hidden" name="player_id" value="{{ player.id }}" >
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Link Url</label>
+                            <input class="form-control" name="url" placeholder="https://..." >
+                        </div>
+                        <div class="col form-group">
+                            <label>Link Type</label>
+                            <select class="form-control" name="mediaType">
+                                <option value="video-youtube">You Tube</option>
+                                <option value="link-bio">Bio Link</option>
+                                <option value="video-generic">Video Link</option>
+                                <option value="link-generic">Generic Link</option>
+                            </select>
+                        </div>
+                        <div class="col form-group">
+                            <br/>
+                            <button class="btn btn-soft-green rounded-0" onclick="addLink()">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="linkMessage"></div>
+                <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+                    <table id="links-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th>Link Url</th>
+                            <th>Link Type</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <script>
+                        var linksGrid = null
+                        $(document).ready(function () {
+                            linksGrid = $("#links-grid").DataTable({
+                                dom: '',
+                                ajax: "/api/athletes/{{ player.id }}/links",
+                                columns: [
+                                    { data: 'url' },
+                                    { data: 'media_type' },
+                                    { "render": function(data, type, row) {
+                                            let icons = `<button class="btn btn-soft-green" onclick="deleteLink(${row.id})"> Delete </button>`
+                                            return icons
+                                        }
+                                    }
+                                ],
+                                language: {
+                                    emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
+                                },
+                                processing: true,
+                                serverSide: true
+                            });
+                        });
+                    </script>
+                </div>
             </div>
-
-
-
         </div>
         <div id="tabVideos" class="row card pt-3 pb-3 px-3 tab">
             <div class="card-body">
                 <h5 class="card-title text-anton text-maastricht-blue pb-2">Videos</h5>
             </div>
-
-
-
         </div>
         <div id="tabPlayerQ" class="row card pt-3 pb-3 px-3 tab">
             <div class="card-body">
                 <h5 class="card-title text-anton text-maastricht-blue pb-2">PlayerQ</h5>
             </div>
-
-
-
         </div>
-
         <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}', 'content')"> Refresh </button>
     </div>
 </div>
 <script>
     function showTab(tabName) {
-
         $(".tab").hide();
         $("#tab"+tabName).show();
     }
 
+    function addLink() {
+        submitForm('linkDetails', '/api/athletes/{{ player.id }}/links', 'linkMessage', function() {
+            linksGrid.ajax.reload();
+        });
+
+    }
+
+    function deleteLink(link_id) {
+        if (confirm("Delete Link ?")) {
+            deleteUrl(`/api/athletes/{{ player.id }}/links/${link_id}`, null, 'linkMessage', function (){
+                linksGrid.ajax.reload();
+            })
+        }
+    }
+
     showTab("Profile");
 </script>
-<pre>
-     {{ RANDOM()~"ID" }}
-     {{ dump(player) }}
-</pre>
+
+<!-- {{ RANDOM()~"ID" }} -->

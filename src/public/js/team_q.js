@@ -52,48 +52,6 @@ function teamQNavSetActive() {
     });
 }
 
-/**
- * Function to redirect a user back to the dashboard.
- * @param progressElement
- */
-function getDashboard(progressElement) {
-    $(progressElement).show();
-
-    window.location.href = "/player/dashboard";
-}
-
-/**
- * Function to handle person attempting to make payment using the "Subscribe Now" button.
- * @param progressElement
- * @param confirmationHash
- * @param element
- * @param redirectLink
- */
-function getPayment(progressElement, confirmationHash, element, redirectLink) {
-    $(progressElement).show();
-
-    sendRequest(`/player/payment/${confirmationHash}`, null, "GET", function (data) {
-        if (data.success) {
-            if (data.paid) {
-                const message = "Your account has already been settled.";
-                const message_type = "danger";
-
-                $(progressElement).hide();
-                showMessage(message, message_type, element);
-
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000);
-            } else {
-                $(progressElement).hide();
-                window.location.href = redirectLink;
-            }
-        } else {
-            $(progressElement).hide();
-            window.location.href = "/login?s_e=1";
-        }
-    });
-}
 
 /**
  * Function to handle preparing the candidate for the assessment and to show an error message if not successful or else

@@ -53,8 +53,6 @@
     function addAthlete(){
 
         submitForm("athlete", "/api/athletes", "", function(data){
-            console.log("Arrived", data)
-            //What to do here ?
             athletesGrid.ajax.reload();
         });
     }

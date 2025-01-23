@@ -1402,14 +1402,14 @@ files = [
 
 [[package]]
 name = "tina4-python"
-version = "0.2.64"
+version = "0.2.69"
 description = "Tina4Python - This is not another framework for Python"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "tina4_python-0.2.64-py3-none-any.whl", hash = "sha256:05c1469cb34ac13184b0b33cd49de7dd5165be01d45049431e63c69a9c35f4de"},
-    {file = "tina4_python-0.2.64.tar.gz", hash = "sha256:4aca14291365f19d76bcf6a37f26e39d004d48176aea52064bd2195fd9b6d827"},
+    {file = "tina4_python-0.2.69-py3-none-any.whl", hash = "sha256:e8ab8a00cb48e8cbb6f3511e36a7b5757fdff937e7e5ad6adf636de03d2d7dea"},
+    {file = "tina4_python-0.2.69.tar.gz", hash = "sha256:4032b8ba499eb928d7f17ce18fe055cb817deb3722824dc3eda471300959859b"},
 ]
 
 [package.dependencies]

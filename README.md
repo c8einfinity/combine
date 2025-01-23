@@ -20,3 +20,8 @@ rabbitmqctl add_user <user> <password>
 rabbitmqctl set_user_tags <user> administrator
 rabbitmqctl set_permissions -p "/" "<user>" ".*" ".*" ".*"
 ```
+
+## Clean up
+```bash
+find . -type d -name __pycache__ -exec rm -r {} \+
+```
