@@ -659,9 +659,9 @@ shellingham==1.5.4 ; python_version >= "3.12" and python_version < "4.0" \
 soupsieve==2.6 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb \
     --hash=sha256:e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9
-tina4-python==0.2.72 ; python_version >= "3.12" and python_version < "4.0" \
-    --hash=sha256:63acc4611f57cf39dde667acc3a3b89839cb8c9c1da51c1ab359c60bbaedb83d \
-    --hash=sha256:a1fb1bb593aeb4d5977597a8c8b95ddad388694803ba03c3a986e04bb66aeee6
+tina4-python==0.2.73 ; python_version >= "3.12" and python_version < "4.0" \
+    --hash=sha256:1538c35ebcc0bc98cddf1b3bc1da9165cd9f1acd3a7976f6da7dfb18f4ba9212 \
+    --hash=sha256:c495f8b7c808d40b4d6122120b2f3dd052530fa75aaa1a6ce447977154e446ce
 tomlkit==0.13.2 ; python_version >= "3.12" and python_version < "4.0" \
     --hash=sha256:7a974427f6e119197f670fbbbeae7bef749a6c14e793db934baefc1b5f03efde \
     --hash=sha256:fff5fe59a87295b278abd31bec92c15d9bc4a06885ab12bcea52c71119392e79
