@@ -1,8 +1,9 @@
 {% extends "base.twig" %}
 
 {% block head_content %}
+    <script src="/js/emoji.js"></script>
+    <script src="/js/reconnecting-websocket.js"></script>
     <link href="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.css" rel="stylesheet">
-
     <script src="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.js"></script>
 {% endblock %}
 
@@ -48,6 +49,10 @@
 {% block content_public %}
     <div id="content"></div>
     <script>
-        loadPage('/dashboard/athletes', 'content')
+        loadPage('/dashboard/athletes', 'content');
+
+
+        socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket");
+
     </script>
 {% endblock %}

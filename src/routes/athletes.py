@@ -1,7 +1,11 @@
+import json
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
+from tina4_python.Request import params
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 from tina4_python.Swagger import secure
+
+from ..app.Setup import check_players
 from ..app.Utility import get_data_tables_filter
 
 
@@ -31,15 +35,39 @@ async def get_athletes(request, response):
 
     return response (data)
 
+def decode_metadata(record):
+    record["metadata"] = json.loads(record["metadata"])
+    record["title"] = record["metadata"]["items"][0]["snippet"]["title"]
+    record["description"] = record["metadata"]["items"][0]["snippet"]["description"]
+    record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
+
+    return record
+
 @get("/api/athletes/{id}")
 async def get_athlete(request, response):
     from ..orm.Player import Player
+    from ..orm.PlayerMedia import PlayerMedia
+
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' ", params=[request.params["id"]])
     player = Player({"id": request.params["id"]})
+
+
+    # return response({"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
     if player.load():
-        html = Template.render("player/profile.twig", {"player": player.to_dict()})
+        html = Template.render("player/profile.twig", {"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
         return response(html)
     else:
         return response("Player error, or player not found")
+
+@get("/api/athletes/{id}/videos")
+async def get_athlete_videos(request, response):
+    from ..orm.Player import Player
+    from ..orm.PlayerMedia import PlayerMedia
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' ", params=[request.params["id"]])
+    player = Player({"id": request.params["id"]})
+    html = Template.render("player/videos.twig", {"player": player.to_dict(), "videos": videos.to_list(decode_metadata), "json": json})
+    return response(html)
+
 
 @get("/api/athletes/{id}/links")
 async def get_athlete_links(request, response):

@@ -53,6 +53,28 @@ tests = ["pytest (>=3.2.1,!=3.3.0)"]
 typecheck = ["mypy"]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.12.3"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.6.0"
+groups = ["main"]
+files = [
+    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
+    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
+]
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "blessed"
 version = "1.20.0"
 description = "Easy, practical library for making terminal apps, by providing an elegant, well-documented interface to Colors, Keyboard input, and screen Positioning capabilities."
@@ -1401,15 +1423,27 @@ files = [
 ]
 
 [[package]]
+name = "soupsieve"
+version = "2.6"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "soupsieve-2.6-py3-none-any.whl", hash = "sha256:e72c4ff06e4fb6e4b5a9f0f55fe6e81514581fca1515028625d0f299c602ccc9"},
+    {file = "soupsieve-2.6.tar.gz", hash = "sha256:e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb"},
+]
+
+[[package]]
 name = "tina4-python"
-version = "0.2.69"
+version = "0.2.72"
 description = "Tina4Python - This is not another framework for Python"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "tina4_python-0.2.69-py3-none-any.whl", hash = "sha256:e8ab8a00cb48e8cbb6f3511e36a7b5757fdff937e7e5ad6adf636de03d2d7dea"},
-    {file = "tina4_python-0.2.69.tar.gz", hash = "sha256:4032b8ba499eb928d7f17ce18fe055cb817deb3722824dc3eda471300959859b"},
+    {file = "tina4_python-0.2.72-py3-none-any.whl", hash = "sha256:63acc4611f57cf39dde667acc3a3b89839cb8c9c1da51c1ab359c60bbaedb83d"},
+    {file = "tina4_python-0.2.72.tar.gz", hash = "sha256:a1fb1bb593aeb4d5977597a8c8b95ddad388694803ba03c3a986e04bb66aeee6"},
 ]
 
 [package.dependencies]
@@ -1648,4 +1682,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "69ef5cc2e17715e42f1ff107d90e442c7097fa8b44287e95a3defae1cfb1058d"
+content-hash = "b84584f3e0fd9060f98415ca147b069f5d2cda725de1df43668e2c0dbb126305"
