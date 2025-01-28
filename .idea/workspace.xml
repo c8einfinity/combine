@@ -5,20 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/orm/PlayerTranscripts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/templates/player/video-transcript.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/app.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/audio/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/lib/Aatos.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/poetry.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/pyproject.toml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/secrets/domain.cert" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/secrets/private.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/secrets/public.key" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/css/readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/403.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/404.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/500.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/js/readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/js/tina4helper.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/swagger/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/public/swagger/oauth2-redirect.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/403.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/404.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/500.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/profile.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/profile.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/videos.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/videos.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transcribe/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/transcribe/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/transcribe/lib/Aatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/transcribe/Aatos.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +47,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="SOFT" />
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$USER_HOME$/Library/Caches/pypoetry/virtualenvs/combine-zyHrk4GN-py3.13/lib/python3.13/site-packages/tina4_python/Migration.py" root0="SKIP_INSPECTION" />
@@ -97,6 +108,7 @@
       <recent name="D:\projects\python\combine\src\templates\errors" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\python\combine\transcribe" />
       <recent name="D:\projects\python\combine\transcribe\lib" />
     </key>
   </component>
@@ -180,7 +192,7 @@
       <workItem from="1737388019165" duration="121000" />
       <workItem from="1737388929937" duration="6030000" />
       <workItem from="1737442016910" duration="6925000" />
-      <workItem from="1737964716797" duration="33683000" />
+      <workItem from="1737964716797" duration="36668000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -350,11 +362,38 @@
       <option name="project" value="LOCAL" />
       <updated>1737994103040</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Added transcribe service">
+      <option name="closed" value="true" />
+      <created>1738058755400</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1738058755400</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Added transcribe service">
+      <option name="closed" value="true" />
+      <created>1738061739475</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1738061739475</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -372,7 +411,8 @@
     <MESSAGE value="Latest updates" />
     <MESSAGE value="Scraping videos successfully" />
     <MESSAGE value="Updated tina4python" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated tina4python" />
+    <MESSAGE value="Added transcribe service" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added transcribe service" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

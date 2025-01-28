@@ -2,3 +2,4 @@
 /logs/
 /combine.db
 .env
+/transcribe/logs/debug.log
