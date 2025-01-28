@@ -15,10 +15,6 @@ from tina4_python.Database import Database
 
 database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
 
-
-
-
-
 aatos = Aatos
 aatos.LLM_URLS = [os.getenv("AATOS_URL", "http://192.168.88.99:8001")]
 
@@ -116,13 +112,13 @@ while not terminated:
 
                 error = download_youtube_video(video_url, audio_filename.replace('.wav', ''))
 
-                transcription = transcribe_audio(audio_filename)
+                transcription, text_transcript = transcribe_audio(audio_filename)
 
                 data = {"transcription": transcription, "metadata": media_file[0]["metadata"], "player_media_id": media_file[0]["id"]}
 
+                dba.execute("delete from player_transcripts where player_id = ? and player_media_id = ?", [media_file[0]["player_id"],  media_file[0]["id"]])
                 next_id = dba.get_next_id("player_transcripts")
                 dba.insert("player_transcripts", {"data": data, "id": next_id, "player_id": media_file[0]["player_id"], "player_media_id": media_file[0]["id"]})
-
 
                 dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": data})
                 dba.commit()
