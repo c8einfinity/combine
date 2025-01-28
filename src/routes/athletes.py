@@ -43,6 +43,11 @@ def decode_metadata(record):
 
     return record
 
+def decode_transcript(record):
+    record["data"] = json.loads(record["data"])
+    return record
+
+
 @get("/api/athletes/{id}")
 async def get_athlete(request, response):
     from ..orm.Player import Player
@@ -65,7 +70,19 @@ async def get_athlete_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' ", params=[request.params["id"]])
     player = Player({"id": request.params["id"]})
-    html = Template.render("player/videos.twig", {"player": player.to_dict(), "videos": videos.to_list(decode_metadata), "json": json})
+    html = Template.render("player/videos.twig", {"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
+    return response(html)
+
+
+@get("/api/athletes/{id}/videos/{video_id}/transcript")
+async def get_athlete_transcripts(request, response):
+    from ..orm.Player import Player
+    from ..orm.PlayerMedia import PlayerMedia
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and id = ? ", params=[request.params["id"], request.params["video_id"]])
+    player = Player({"id": request.params["id"]})
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["video_id"]])
+    html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": videos.to_list(decode_metadata)[0], "transcripts": player_transcripts.to_list(decode_transcript)})
     return response(html)
 
 

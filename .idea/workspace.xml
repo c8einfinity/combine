@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/orm/PlayerTranscripts.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/templates/player/video-transcript.twig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/audio/.gitkeep" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/lib/Aatos.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/poetry.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/pyproject.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transcribe/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/player/profile.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/profile.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/player/videos.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/videos.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +66,7 @@
     "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/projects/python/combine",
+    "last_opened_file_path": "D:/projects/python/combine/transcribe",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -78,11 +90,14 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projects\python\combine\transcribe" />
       <recent name="D:\projects\python\combine" />
       <recent name="D:\projects\python\combine\src\app" />
       <recent name="D:\projects\python\combine\src\public\images" />
       <recent name="D:\projects\python\combine\src\templates\errors" />
-      <recent name="D:\projects\python\combine\documentation" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\python\combine\transcribe\lib" />
     </key>
   </component>
   <component name="RunManager" selected="Python.app">
@@ -165,7 +180,7 @@
       <workItem from="1737388019165" duration="121000" />
       <workItem from="1737388929937" duration="6030000" />
       <workItem from="1737442016910" duration="6925000" />
-      <workItem from="1737964716797" duration="19561000" />
+      <workItem from="1737964716797" duration="33683000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -327,7 +342,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737993057788</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Updated tina4python">
+      <option name="closed" value="true" />
+      <created>1737994103040</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1737994103040</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -348,7 +371,8 @@
     <MESSAGE value="Added athlete submit form" />
     <MESSAGE value="Latest updates" />
     <MESSAGE value="Scraping videos successfully" />
-    <option name="LAST_COMMIT_MESSAGE" value="Scraping videos successfully" />
+    <MESSAGE value="Updated tina4python" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated tina4python" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -378,6 +402,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1737993512788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1738055941292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>

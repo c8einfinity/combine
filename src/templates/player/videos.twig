@@ -1,34 +1,39 @@
+{%  set ns = namespace(load_video_id = 0) %}
 <div class="card-body">
-    <h5 class="card-title text-anton text-maastricht-blue pb-2">Videos</h5>
-
+    <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
     <div class="row">
         <div class="col-4">
-
-
-            {% for video in videos %}
-                <div class="row">
+            <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
+            <div class="row" style="overflow: auto; height:100vh">
+                {% for video in videos %}
                     <div class="col-4">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe width="420" height="315"
                                     src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}">
                             </iframe>
                         </div>
+                        {% if ns.load_video_id == 0 and video %}
+                            {%  set ns.load_video_id = video.id %}
+                        {% endif %}
                     </div>
                     <div class="col-8">
-                        <h6 class="text-anton text-maastricht-blue pb-2">{{ video.title }} - {{ video.published_at }}</h6>
+                        <h6 class="text-anton text-maastricht-blue pb-2" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</h6>
                         <div class="form-group">
-                            <label>Valid?</label>
-                            <input type="checkbox" class="form-control">
+                            <label>Include this video transcript in the results?</label>
+                            <input type="checkbox" class="form-control" onclick="addToQueue({{ video.id }})">
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-
+                {% endfor %}
+            </div>
         </div>
-        <div class="col-8">
-            <h3>Video Transcript</h3>
+        <div class="col-8" id="videoTranscript">
         </div>
-
     </div>
-    <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
+    <script>
+        function loadTranscript(videoId) {
+            loadPage(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
+        }
+
+        loadTranscript({{ ns.load_video_id }})
+    </script>
 </div>
