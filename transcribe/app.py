@@ -97,7 +97,7 @@ while not terminated:
                        os.getenv("DATABASE_USERNAME", "doadmin"),
                        os.getenv("DATABASE_PASSWORD", "doadmin"))
 
-        queue = dba.fetch("select * from queue where processed = 0 and action = 'transcribe'").to_list(decode_data)
+        queue = dba.fetch("select * from queue where processed = 0 and action = 'transcribe'", limit=1).to_list(decode_data)
 
         if len(queue) == 1:
             print("FOUND", queue[0])
