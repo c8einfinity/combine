@@ -1,10 +1,52 @@
-<h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }} {{ video.url }}</h5>
+<h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
+{%  set nsa = namespace(speaker_array = []) %}
+{% for transcript in transcripts  %}
+{% for transcription in transcript.data.transcription %}
+    {% for speaker in transcription %}
+        {% do nsa.speaker_array.append(speaker["speaker"]) %}
+    {% endfor %}
+{% endfor %}
+{% endfor %}
 <form class="form-inline">
     <div class="form-group">
         <label>Player :</label>
-        <select class="form-control">
-            <option>SPEAKER 1</option>
+        <select class="form-control" onclick="showHideTranscript(this.value)">
+            <option value="ALL">Show All</option>
+            {% for speaker_array in nsa.speaker_array | unique %}
+                {% if speaker_array %}
+                <option value="{{ speaker_array }}" {% if speaker_array == "SPEAKER00" %}selected{% endif %}>{{ speaker_array }}</option>
+                {% endif %}
+            {% endfor %}
         </select>
     </div>
 </form>
+<div style="overflow: auto; height:35vh">
+    {% for transcript in transcripts  %}
+        {%  for transcription in transcript.data.transcription %}
+            {% for speaker in transcription %}
+                {% if speaker["text"] %}
+                    <div class="{{ speaker["speaker"] }} speaker"><b>{{ speaker["speaker"] }}</b>: {{ speaker["text"] }}</div>
+                {% endif %}
+            {% endfor %}
+        {%  endfor %}
+    {%  endfor %}
+</div>
+<br>
+<h5 class="text-anton text-maastricht-blue pb-2">Classification</h5>
+<div style="overflow: auto; height:35vh">
+
+</div>
+<script>
+    function showHideTranscript(speakerName) {
+        if (speakerName == "ALL") {
+            $('.speaker').show();
+        } else {
+            $('.speaker').hide();
+            $('.' + speakerName).show();
+        }
+    }
+
+    showHideTranscript("SPEAKER00");
+</script>
+
 <!-- {{ RANDOM()~"ID" }} -->

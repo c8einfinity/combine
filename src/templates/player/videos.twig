@@ -1,6 +1,5 @@
 {%  set ns = namespace(load_video_id = 0) %}
 <div class="card-body">
-    <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
     <div class="row">
         <div class="col-12" id="videoFeedback"></div>
         <div class="col-4">
@@ -32,6 +31,10 @@
     </div>
     <script>
         function loadTranscript(videoId) {
+            $('#videoTranscript').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Loading ...</h5><div style="width: 10rem; height: 10rem;" class="spinner-border" role="status">
+                <span class="sr-only text-maastricht-blue">Loading...</span>
+            </div></div>`)
+
             loadPage(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
         }
 
@@ -41,4 +44,5 @@
 
         loadTranscript({{ ns.load_video_id }})
     </script>
+    <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
 </div>

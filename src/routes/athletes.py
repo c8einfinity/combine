@@ -1,11 +1,9 @@
 import json
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
-from tina4_python.Request import params
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-from tina4_python.Swagger import secure
+import base64
 
-from ..app.Setup import check_players
 from ..app.Utility import get_data_tables_filter
 
 
@@ -44,7 +42,7 @@ def decode_metadata(record):
     return record
 
 def decode_transcript(record):
-    record["data"] = json.loads(record["data"])
+    record["data"] = json.loads(base64.b64decode(record["data"]))
     return record
 
 
