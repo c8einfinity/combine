@@ -2,6 +2,7 @@
 <div class="card-body">
     <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
     <div class="row">
+        <div class="col-12" id="videoFeedback"></div>
         <div class="col-4">
             <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
             <div class="row" style="overflow: auto; height:100vh">
@@ -32,6 +33,10 @@
     <script>
         function loadTranscript(videoId) {
             loadPage(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
+        }
+
+        function addToQueue(videoId) {
+            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback")
         }
 
         loadTranscript({{ ns.load_video_id }})

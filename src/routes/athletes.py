@@ -85,6 +85,16 @@ async def get_athlete_transcripts(request, response):
     html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": videos.to_list(decode_metadata)[0], "transcripts": player_transcripts.to_list(decode_transcript)})
     return response(html)
 
+@post("/api/athletes/{id}/videos/{video_id}/transcript/queue")
+async def post_athlete_transcripts_queue(request, response):
+    from ..orm.Queue import Queue
+
+    queue = Queue()
+    queue.action = 'transcribe'
+    queue.player_id = request.params["id"]
+    queue.data = {"player_media_id": request.params["video_id"]}
+    queue.save()
+    return response(request.body)
 
 @get("/api/athletes/{id}/links")
 async def get_athlete_links(request, response):

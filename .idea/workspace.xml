@@ -5,30 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/transcribe/secrets/domain.cert" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/secrets/private.key" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/secrets/public.key" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/css/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/403.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/404.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/500.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/logo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/images/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/js/readme.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/js/tina4helper.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/swagger/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/public/swagger/oauth2-redirect.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/403.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/404.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/errors/500.twig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/transcribe/src/templates/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/orm/Queue.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/player/videos.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/videos.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/transcribe/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/transcribe/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/transcribe/lib/Aatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/transcribe/Aatos.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +174,7 @@
       <workItem from="1737388019165" duration="121000" />
       <workItem from="1737388929937" duration="6030000" />
       <workItem from="1737442016910" duration="6925000" />
-      <workItem from="1737964716797" duration="36668000" />
+      <workItem from="1737964716797" duration="38284000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -378,7 +360,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738061739475</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Added transcribe service">
+      <option name="closed" value="true" />
+      <created>1738061906418</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1738061906418</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -442,6 +432,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1738055941292" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1738063089236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>

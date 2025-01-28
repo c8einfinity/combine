@@ -100,40 +100,45 @@ while True:
                        os.getenv("DATABASE_USERNAME", "doadmin"),
                        os.getenv("DATABASE_PASSWORD", "doadmin"))
 
-        queue = dba.fetch("select * from queue where processed = 0").to_list(decode_data)
+        queue = dba.fetch("select * from queue where processed = 0 and action = 'transcribe'").to_list(decode_data)
 
         if len(queue) == 1:
             print("FOUND", queue[0])
 
-            media_file = dba.fetch("select * from player_media where id = "+str(queue[0]["data"]["player_media_id"])).to_list()
+            try:
+                media_file = dba.fetch("select * from player_media where id = "+str(queue[0]["data"]["player_media_id"])).to_list()
 
-            video_url = media_file[0]["url"]
-            audio_filename = "audio/"+media_file[0]["url"].replace("https://www.youtube.com/watch?v=", "").strip()+".wav"
+                video_url = media_file[0]["url"]
+                audio_filename = "audio/"+media_file[0]["url"].replace("https://www.youtube.com/watch?v=", "").strip()+".wav"
 
-            print("PROCESSING", video_url, audio_filename)
+                print("PROCESSING", video_url, audio_filename)
 
-            error = download_youtube_video(video_url, audio_filename.replace('.wav', ''))
+                error = download_youtube_video(video_url, audio_filename.replace('.wav', ''))
 
-            transcription = transcribe_audio(audio_filename)
+                transcription = transcribe_audio(audio_filename)
 
-            data = {"transcription": transcription, "metadata": media_file[0]["metadata"], "player_media_id": media_file[0]["id"]}
+                data = {"transcription": transcription, "metadata": media_file[0]["metadata"], "player_media_id": media_file[0]["id"]}
 
-            next_id = dba.get_next_id("player_transcripts")
-            dba.insert("player_transcripts", {"data": data, "id": next_id, "player_id": media_file[0]["player_id"], "player_media_id": media_file[0]["id"]})
+                next_id = dba.get_next_id("player_transcripts")
+                dba.insert("player_transcripts", {"data": data, "id": next_id, "player_id": media_file[0]["player_id"], "player_media_id": media_file[0]["id"]})
 
 
-            dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": data})
-            dba.commit()
+                dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": data})
+                dba.commit()
 
-            dba.close()
+                dba.close()
 
-            os.remove(audio_filename)
+                os.remove(audio_filename)
+            except Exception as e:
+                print("ERROR", str(e))
+                dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": {"error": str(e)}})
 
             time.sleep(1)
         else:
             print("LOOKING...")
             time.sleep(1)
 
+        dba.commit()
         dba.close()
     except KeyboardInterrupt:
         print("Application Terminated")
