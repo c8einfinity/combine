@@ -94,7 +94,8 @@ def decode_data(record):
     return record
 
 # run an endless process
-while True:
+terminated = False
+while not terminated:
     try:
         dba = Database(f"mysql.connector:{database_path}",
                        os.getenv("DATABASE_USERNAME", "doadmin"),
@@ -142,3 +143,4 @@ while True:
         dba.close()
     except KeyboardInterrupt:
         print("Application Terminated")
+        terminated = True
