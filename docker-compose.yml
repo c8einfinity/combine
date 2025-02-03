@@ -1,0 +1,12 @@
+services:
+  mysql:
+    image: mysql:8.4.2
+    restart: always
+    container_name: "combine-mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: Pass1234!
+      MYSQL_DATABASE: qfinder
+    ports:
+      - "33068:3306"
+    volumes:
+      - "./database:/var/lib/mysql"

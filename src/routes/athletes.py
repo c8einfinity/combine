@@ -4,6 +4,8 @@ from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import base64
 
+from torch.distributions.constraints import less_than
+
 from ..app.Utility import get_data_tables_filter
 
 
@@ -80,7 +82,13 @@ async def get_athlete_transcripts(request, response):
     videos = PlayerMedia().select(limit=1000, filter="player_id = ? and id = ? ", params=[request.params["id"], request.params["video_id"]])
     player = Player({"id": request.params["id"]})
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["video_id"]])
-    html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": videos.to_list(decode_metadata)[0], "transcripts": player_transcripts.to_list(decode_transcript)})
+
+    if len(videos) > 0:
+        video = videos.to_list(decode_metadata)[0]
+    else:
+        video = None
+
+    html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": video, "transcripts": player_transcripts.to_list(decode_transcript)})
     return response(html)
 
 @post("/api/athletes/{id}/videos/{video_id}/transcript/queue")
@@ -124,6 +132,7 @@ async def get_athlete_links(request, response):
 @post("/api/athletes")
 async def post_athletes(request, response):
     from ..orm.Player import Player
+
     player = Player(request.body)
     player.save()
     return response(player)
@@ -147,6 +156,15 @@ async def post_athlete_links(request, response):
         return response("Player Media saved")
     else:
         return response("Failed to save media!")
+
+@delete("/api/athletes/{id}")
+async def delete_athlete(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    if player.delete():
+        return response("Player deleted")
+    else:
+        return response("Failed to delete player!")
 
 @delete("/api/athletes/{id}/links/{link_id}")
 async def delete_athlete_link(request, response):

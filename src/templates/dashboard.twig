@@ -51,8 +51,19 @@
     <script>
         loadPage('/dashboard/athletes', 'content');
 
+        var socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket/feed");
 
-        socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket");
 
+        // Do something when connected
+        socket.addEventListener("open", (event) => {
+            console.log("Websocket connected!");
+            socket.send("Ping!")
+        });
+
+        // Listen for messages
+        socket.addEventListener("message", (event) => {
+            console.log("Message from server ", event.data);
+            socket.send('Received!')
+        });
     </script>
 {% endblock %}

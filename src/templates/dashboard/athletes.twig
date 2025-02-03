@@ -70,6 +70,7 @@
                 { data: 'major' },
                 { "render": function(data, type, row) {
                         let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/${row.id}', 'content')"> Profile </button>`
+                        icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                         return icons
                     }
                 }
@@ -81,5 +82,13 @@
             serverSide: true
         });
     });
+
+    function deleteAthlete(id) {
+        if (confirm("Delete Athlete ?")) {
+            deleteUrl(`/api/athletes/${id}`, null, 'message', function (){
+                athletesGrid.ajax.reload();
+            })
+        }
+    }
 
 </script>

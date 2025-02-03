@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Player(ORM):
     id = IntegerField(auto_increment=True, primary_key=True, default_value=0)
-    username = TextField(field_size=200, primary_key=True)
+    username = TextField(field_size=200, primary_key=False)
     first_name = TextField(field_size=200)
     last_name = TextField(field_size=200)
     email = TextField(field_size=255)

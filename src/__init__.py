@@ -15,6 +15,7 @@ dba = Database(f"mysql.connector:{database_path}",
 migrate(dba)
 orm(dba)
 
+check_setup(dba)
 
 # import everything
 
