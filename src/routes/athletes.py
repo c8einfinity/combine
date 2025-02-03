@@ -3,9 +3,6 @@ from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import base64
-
-from torch.distributions.constraints import less_than
-
 from ..app.Utility import get_data_tables_filter
 
 
@@ -83,7 +80,7 @@ async def get_athlete_transcripts(request, response):
     player = Player({"id": request.params["id"]})
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["video_id"]])
 
-    if len(videos) > 0:
+    if videos.count > 0:
         video = videos.to_list(decode_metadata)[0]
     else:
         video = None
