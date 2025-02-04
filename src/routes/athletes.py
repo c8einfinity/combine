@@ -3,6 +3,7 @@ from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import base64
+from ..app.Scraper import get_speaker_from_transcript, get_classification_text
 from ..app.Utility import get_data_tables_filter
 
 
@@ -173,3 +174,15 @@ async def delete_athlete_link(request, response):
     else:
         return response("Failed to delete media!")
 
+
+@get("/test/classification")
+async def get_test_classification(request, response):
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[1, 300])
+    transcripts = player_transcripts.to_list(decode_transcript)
+
+    html = json.dumps(transcripts)
+
+
+
+    return response(html)

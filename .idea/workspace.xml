@@ -5,9 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/runtime.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/000009_adding_selected_speaker_and_statuses.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/Aatos.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Aatos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/Scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/Scraper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/orm/PlayerTranscripts.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/orm/PlayerTranscripts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +98,7 @@
       <recent name="D:\projects\python\combine\src\templates\errors" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\projects\python\combine\src" />
       <recent name="D:\projects\python\combine\transcribe" />
       <recent name="D:\projects\python\combine\transcribe\lib" />
     </key>
@@ -102,7 +113,6 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12 (combine-zyHrk4GN-py3.12)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -487,7 +497,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1738620673456" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1738665410184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>

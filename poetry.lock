@@ -1488,6 +1488,31 @@ cryptography = ">=2.0"
 jeepney = ">=0.6"
 
 [[package]]
+name = "semantic-text-splitter"
+version = "0.22.0"
+description = "Split text into semantic chunks, up to a desired chunk size. Supports calculating length by characters and tokens, and is callable from Rust and Python."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-macosx_10_12_x86_64.whl", hash = "sha256:64e35b079031d2c7da540ccb478c0b046aaed7602ad8e3928ed53e1185c124ee"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-macosx_11_0_arm64.whl", hash = "sha256:701f4192eef46bc9ca6509bb1118aecbd6a8d462c59ec36e758c32ef1d854b3c"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c83c40ffa848dd27099bd1683dfa977f5fb73b6016a64897895e85b4bf6ec62d"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:189afba6b50c32c6c07ec721a43afa6e3c46d198de2b6595215725127a88babb"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:5b99f73f72cf16318f852655a2253bfd64cb61884bb09a3b0f6efa80312db063"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:684f3537b9ac3ccdfde5698183fc42c521fcb20566852fe9195dd7f396f832bc"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_s390x.manylinux2014_s390x.whl", hash = "sha256:cfa8fd9b50bbb5db3c590c693a156275af9679d8d0b3ae29676f3a5495889162"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:aaa089cc22dd1d1a056675502fd16f0f20e7bae936a14e06dd654088dd1f2fe0"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-win32.whl", hash = "sha256:1fc78eb9b052fc98323cd013d38c6772d67bff1de59fb790059542d1d2764e34"},
+    {file = "semantic_text_splitter-0.22.0-cp39-abi3-win_amd64.whl", hash = "sha256:3e4e3884c9d712b1139697b53d3e0743c82e0b636146c33b215052b76a6b64c2"},
+    {file = "semantic_text_splitter-0.22.0.tar.gz", hash = "sha256:506d288d73220fbdf80dafbbca14222452c3c9a9e03933116027649092b29272"},
+]
+
+[package.extras]
+docs = ["pdoc"]
+test = ["pytest", "tokenizers", "tree-sitter-python"]
+
+[[package]]
 name = "shellingham"
 version = "1.5.4"
 description = "Tool to Detect Surrounding Shell"
@@ -1544,14 +1569,14 @@ files = [
 
 [[package]]
 name = "tina4-python"
-version = "0.2.80"
+version = "0.2.81"
 description = "Tina4Python - This is not another framework for Python"
 optional = false
 python-versions = "<4.0,>=3.10"
 groups = ["main"]
 files = [
-    {file = "tina4_python-0.2.80-py3-none-any.whl", hash = "sha256:21321f874e2003f2780a25c6ac9181bef6c9e3b28797f4f3218eeaa45033bebf"},
-    {file = "tina4_python-0.2.80.tar.gz", hash = "sha256:2fc280ea6464472c2255568a6515103e91c1e0a6aecce8f1526c150c1103fe80"},
+    {file = "tina4_python-0.2.81-py3-none-any.whl", hash = "sha256:fda596446f6364b555875bdc0c5a9c4a8ae83f67dbf5fa834a17f0d2006c65c1"},
+    {file = "tina4_python-0.2.81.tar.gz", hash = "sha256:2d95fbf26bc9f636ab1096024941e1afa2c2fc38ce5722b4584c935d82dc7e06"},
 ]
 
 [package.dependencies]
@@ -1808,4 +1833,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "dc6394fd35ca5618f222c42c0a09a5d96d4dab954634cac73bb923a388e9ad51"
+content-hash = "3d158ddb7f8fb74caeb76144cca699aa1d768a032601fe76939398e798eae07b"

@@ -19,7 +19,7 @@ check_setup(dba)
 
 # import everything
 
-from .app import Setup, Utility
+from .app import Setup, Utility, Scraper
 from .routes import athletes, dashboard, home, websocket
 
 
