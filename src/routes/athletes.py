@@ -184,6 +184,7 @@ async def get_test_classification(request, response):
 
     html = """<ul class='text-maastricht-blue'>
 <li>A. Leadership and Teamwork </li>
+<li>B. Resilience and Stress Management </li>
 <li>C. Goal-Setting and Motivation </li>
 <li>D. Communication Style </li>
 <li>E. Problem-Solving and Critical Thinking </li>
@@ -202,7 +203,7 @@ async def get_test_classification(request, response):
 
                 result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into one or more categories:\nText:"+speaker["text"]+"\nUse the following output format for each line:\nClassification:[One or more classification categories]\nComment:[Short motivation for the classification]\n",
                                         "Human", "AI",
-                                        "You are an AI assistant evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                                        "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
                                         _context="CLASSIFICATION RULES:\n"+classification_text)
 
                 html += """

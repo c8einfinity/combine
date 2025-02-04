@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/classification_rules.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/Scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/Scraper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/video-transcript.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/video-transcript.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/videos.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/videos.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -443,7 +438,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738665661998</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Added classification">
+      <option name="closed" value="true" />
+      <created>1738672522090</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1738672522090</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -478,7 +481,8 @@
     <MESSAGE value="Updated tina4python" />
     <MESSAGE value="Added transcribe service" />
     <MESSAGE value="Updated logic and system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated logic and system" />
+    <MESSAGE value="Added classification" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added classification" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
