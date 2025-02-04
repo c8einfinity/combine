@@ -175,13 +175,44 @@ async def delete_athlete_link(request, response):
         return response("Failed to delete media!")
 
 
-@get("/test/classification")
+@get("/api/athletes/{id}/transcripts/{media_id}/classification")
 async def get_test_classification(request, response):
+    from ..app.Scraper import aatos, classification_text
     from ..orm.PlayerTranscripts import PlayerTranscripts
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[1, 300])
-    transcripts = player_transcripts.to_list(decode_transcript)
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["media_id"]])
+    transcript = player_transcripts.to_list(decode_transcript)[0]
 
-    html = json.dumps(transcripts)
+    html = """<ul class='text-maastricht-blue'>
+<li>A. Leadership and Teamwork </li>
+<li>C. Goal-Setting and Motivation </li>
+<li>D. Communication Style </li>
+<li>E. Problem-Solving and Critical Thinking </li>
+<li>F. Adaptability and Flexibility </li>
+<li>G. Self-Awareness and Reflection </li>
+<li>H. Personal Relationships: Family and Friends </li>
+<li>I. Unknown </li>
+</ul>
+\n"""
+
+    text = ""
+    for speaker in transcript["data"]["transcription"][0]:
+
+        if speaker["speaker"] == transcript["selected_speaker"]:
+
+
+                result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into one or more categories:\nText:"+speaker["text"]+"\nUse the following output format for each line:\nClassification:[One or more classification categories]\nComment:[Short motivation for the classification]\n",
+                                        "Human", "AI",
+                                        "You are an AI assistant evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                                        _context="CLASSIFICATION RULES:\n"+classification_text)
+
+                html += """
+                <div class="card">
+                  <h5 class="card-header text-maastricht-blue">"""+speaker["text"]+"""</h5>
+                  <div class="card-body">
+                    <p class="card-text">"""+result["output"].replace("[", "").replace("]", "").replace("Comment:", "<br><b class='text-maastricht-blue'>Comment:</b>").replace("Classification:", "<b class='text-maastricht-blue'>Classification:</b>")+"""</p>
+                  </div>
+                </div><br>
+                """
 
 
 

@@ -33,8 +33,7 @@
 </div>
 <br>
 <h5 class="text-anton text-maastricht-blue pb-2">Classification</h5>
-<div style="overflow: auto; height:35vh">
-
+<div id="videoClassification" style="overflow: auto; height:50vh">
 </div>
 <script>
     function showHideTranscript(speakerName) {
@@ -44,9 +43,20 @@
             $('.speaker').hide();
             $('.' + speakerName).show();
         }
+
+        doClassification()
     }
 
     showHideTranscript("SPEAKER00");
+
+    function doClassification() {
+        $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                <span class="sr-only text-maastricht-blue">Loading...</span>
+            </div></div>`)
+
+        // /api/athletes/{id}/transcripts/{media_id}/classification
+        loadPage(`/api/athletes/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification`, 'videoClassification');
+    }
 </script>
 
 <!-- {{ RANDOM()~"ID" }} -->

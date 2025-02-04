@@ -1,6 +1,9 @@
 import re
 import requests
 import os.path
+
+import tina4_python
+
 from .. import Aatos
 import json
 from bs4 import BeautifulSoup, Comment, NavigableString
@@ -65,6 +68,9 @@ prompt = ("Output the player information in the following JSON format ONLY if yo
 system_prompt = "You are AI assistant parsing scraped data from the BIO of an athlete from a website. Extract the player's information as required. Determine the sport by the Position played. Only answer with the requested JSON format."
 
 replace_text = ["html", "Skip to main content: #main-content", "Close Ad"]
+
+
+classification_text = open(tina4_python.root_path+"/src/app/classification_rules.txt", "r").read()
 
 
 def chunk_text(text, max_characters=24000):
