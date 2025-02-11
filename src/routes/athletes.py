@@ -219,7 +219,7 @@ async def get_test_classification(request, response):
 
     player_media = PlayerMedia({"id": request.params["media_id"]})
     if player_media.load():
-        if str(player_media.classification) == "" or request.params["refresh"] == 1:
+        if str(player_media.classification) == "" or ("refresh" in request.params and request.params["refresh"] == 1):
             html = """<ul class='text-maastricht-blue'>
         <li>A. Leadership and Teamwork </li>
         <li>B. Resilience and Stress Management </li>
