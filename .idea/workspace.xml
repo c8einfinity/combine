@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orm/PlayerMedia.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/orm/PlayerMedia.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/videos.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/videos.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +176,7 @@
       <workItem from="1738751726519" duration="498000" />
       <workItem from="1738835170458" duration="4708000" />
       <workItem from="1739265301025" duration="1325000" />
-      <workItem from="1739267199292" duration="5139000" />
+      <workItem from="1739267199292" duration="6215000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -469,7 +466,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739272081300</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Updated logic for classification and deleting and including scripts">
+      <option name="closed" value="true" />
+      <created>1739273122364</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1739273122364</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -530,6 +535,16 @@
           <url>file://$USER_HOME$/AppData/Local/pypoetry/Cache/virtualenvs/combine-RvP220RT-py3.12/Lib/site-packages/mysql/connector/opentelemetry/instrumentation.py</url>
           <line>359</line>
           <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/routes/athletes.py</url>
+          <line>221</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/routes/athletes.py</url>
+          <line>220</line>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

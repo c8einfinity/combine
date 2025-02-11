@@ -219,7 +219,7 @@ async def get_test_classification(request, response):
 
     player_media = PlayerMedia({"id": request.params["media_id"]})
     if player_media.load():
-        if player_media.classification == "":
+        if str(player_media.classification) == "" or request.params["refresh"] == 1:
             html = """<ul class='text-maastricht-blue'>
         <li>A. Leadership and Teamwork </li>
         <li>B. Resilience and Stress Management </li>
@@ -239,7 +239,7 @@ async def get_test_classification(request, response):
                 if speaker["speaker"] == transcript["selected_speaker"]:
 
 
-                        result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into one or more categories:\nText:"+speaker["text"]+"\nUse the following output format for each line:\nClassification:[One or more classification categories]\nComment:[Short motivation for the classification]\n",
+                        result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into a single classification with a single comment, you do not need to repeat the text:\nText:"+speaker["text"]+"\nUse ONLY the following output format:\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text]\n",
                                                 "Human", "AI",
                                                 "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
                                                 _context="CLASSIFICATION RULES:\n"+classification_text)
