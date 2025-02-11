@@ -5,7 +5,7 @@ from tina4_python.Router import get, post, delete
 import base64
 from ..app.Scraper import get_speaker_from_transcript, get_classification_text
 from ..app.Utility import get_data_tables_filter
-
+from .. import dba
 
 @get("/api/athletes")
 async def get_athletes(request, response):
@@ -38,6 +38,11 @@ def decode_metadata(record):
     record["title"] = record["metadata"]["items"][0]["snippet"]["title"]
     record["description"] = record["metadata"]["items"][0]["snippet"]["description"]
     record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
+    transcript = dba.fetch_one("select * from player_transcripts where player_media_id = ?", [record["id"]])
+    if transcript:
+        record["transcript"] = json.loads(base64.b64decode(transcript["data"]))
+    else:
+        record["transcript"] = None
 
     return record
 
@@ -51,7 +56,7 @@ async def get_athlete(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
-    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' ", params=[request.params["id"]])
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ", params=[request.params["id"]])
     player = Player({"id": request.params["id"]})
 
 
@@ -66,7 +71,7 @@ async def get_athlete(request, response):
 async def get_athlete_videos(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
-    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' ", params=[request.params["id"]])
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ", params=[request.params["id"]])
     player = Player({"id": request.params["id"]})
     html = Template.render("player/videos.twig", {"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
     return response(html)
@@ -77,7 +82,7 @@ async def get_athlete_transcripts(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.PlayerTranscripts import PlayerTranscripts
-    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and id = ? ", params=[request.params["id"], request.params["video_id"]])
+    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and id = ? and is_deleted = 0 ", params=[request.params["id"], request.params["video_id"]])
     player = Player({"id": request.params["id"]})
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["video_id"]])
 
@@ -94,11 +99,40 @@ async def post_athlete_transcripts_queue(request, response):
     from ..orm.Queue import Queue
 
     queue = Queue()
-    queue.action = 'transcribe'
-    queue.player_id = request.params["id"]
-    queue.data = {"player_media_id": request.params["video_id"]}
-    queue.save()
-    return response(request.body)
+
+    if not queue.load("player_media_id", [request.params["video_id"]]):
+        queue.action = 'transcribe'
+        queue.player_id = request.params["id"]
+        queue.data = {"player_media_id": request.params["video_id"]}
+        queue.save()
+    return response("Queued!")
+
+@post("/api/athletes/{id}/videos/{video_id}/remove")
+async def post_athlete_transcripts_queue(request, response):
+    from ..orm.PlayerMedia import PlayerMedia
+
+    player_media = PlayerMedia({"id": request.params["video_id"]})
+    if player_media.load():
+        player_media.is_deleted = 1
+        player_media.save()
+
+    return response("Removed!")
+
+@post("/api/athletes/{id}/videos/{video_id}/include")
+async def post_athlete_transcripts_queue(request, response):
+    from ..orm.PlayerMedia import PlayerMedia
+
+    player_media = PlayerMedia({"id": request.params["video_id"]})
+    if player_media.load():
+        if player_media.is_valid:
+            player_media.is_valid = 0
+        else:
+            player_media.is_valid = 1
+
+        player_media.save()
+
+    return response("Done!")
+
 
 @get("/api/athletes/{id}/links")
 async def get_athlete_links(request, response):

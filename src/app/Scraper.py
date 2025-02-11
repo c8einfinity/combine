@@ -57,7 +57,7 @@ def get_speaker_from_transcript(transcript, player_name):
 
 
 aatos = Aatos
-aatos.LLM_URLS = [os.getenv("AATOS_URL", "http://192.168.88.99:8001")]
+aatos.LLM_URLS = [os.getenv("AATOS_URL", "http://73.155.227.31:40008/")]
 
 
 prompt = ("Output the player information in the following JSON format ONLY if you can determine the data:\n" +

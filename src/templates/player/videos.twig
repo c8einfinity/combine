@@ -20,7 +20,13 @@
                         <h6 class="text-anton text-maastricht-blue pb-2" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</h6>
                         <div class="form-group">
                             <label>Include this video transcript in the results?</label>
-                            <input type="checkbox" class="form-control" onclick="addToQueue({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
+                            <input type="checkbox" class="form-control" onclick="" {%  if video.is_valid %}checked{% endif %} >
+                            {%  if not video.transcript %}
+                            <a href="#" class="fa fa-plus-square" onclick="addToQueue({{ video.id }})"></a>
+                            {% endif %}
+
+                            <a href="#" class="fa fa-minus-square" style="color: orangered" onclick="removeVideo({{ video.id }})"></a>
+
                         </div>
                     </div>
                 {% endfor %}
@@ -39,7 +45,21 @@
         }
 
         function addToQueue(videoId) {
-            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback")
+            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');
+            })
+        }
+
+        function toggleIncludeVideo(videoId) {
+            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');
+            })
+        }
+
+        function removeVideo(videoId) {
+            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')
+            });
         }
 
         loadTranscript({{ ns.load_video_id }})

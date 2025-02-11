@@ -11,3 +11,5 @@ class PlayerMedia(ORM):
     is_valid= IntegerField(default_value=0)
     is_processed= IntegerField(default_value=0)
     player_id = ForeignKeyField(IntegerField("id"), Player, default_value=1)
+    is_deleted= IntegerField(default_value=0)
+    classification= StringField(default_value="")
