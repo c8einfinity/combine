@@ -213,42 +213,50 @@ async def delete_athlete_link(request, response):
 async def get_test_classification(request, response):
     from ..app.Scraper import aatos, classification_text
     from ..orm.PlayerTranscripts import PlayerTranscripts
+    from ..orm.PlayerMedia import PlayerMedia
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["media_id"]])
     transcript = player_transcripts.to_list(decode_transcript)[0]
 
-    html = """<ul class='text-maastricht-blue'>
-<li>A. Leadership and Teamwork </li>
-<li>B. Resilience and Stress Management </li>
-<li>C. Goal-Setting and Motivation </li>
-<li>D. Communication Style </li>
-<li>E. Problem-Solving and Critical Thinking </li>
-<li>F. Adaptability and Flexibility </li>
-<li>G. Self-Awareness and Reflection </li>
-<li>H. Personal Relationships: Family and Friends </li>
-<li>I. Unknown </li>
-</ul>
-\n"""
+    player_media = PlayerMedia({"id": request.params["media_id"]})
+    if player_media.load():
+        if player_media.classification == "":
+            html = """<ul class='text-maastricht-blue'>
+        <li>A. Leadership and Teamwork </li>
+        <li>B. Resilience and Stress Management </li>
+        <li>C. Goal-Setting and Motivation </li>
+        <li>D. Communication Style </li>
+        <li>E. Problem-Solving and Critical Thinking </li>
+        <li>F. Adaptability and Flexibility </li>
+        <li>G. Self-Awareness and Reflection </li>
+        <li>H. Personal Relationships: Family and Friends </li>
+        <li>I. Unknown </li>
+        </ul>
+        \n"""
 
-    text = ""
-    for speaker in transcript["data"]["transcription"][0]:
+            text = ""
+            for speaker in transcript["data"]["transcription"][0]:
 
-        if speaker["speaker"] == transcript["selected_speaker"]:
-
-
-                result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into one or more categories:\nText:"+speaker["text"]+"\nUse the following output format for each line:\nClassification:[One or more classification categories]\nComment:[Short motivation for the classification]\n",
-                                        "Human", "AI",
-                                        "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                                        _context="CLASSIFICATION RULES:\n"+classification_text)
-
-                html += """
-                <div class="card">
-                  <h5 class="card-header text-maastricht-blue">"""+speaker["text"]+"""</h5>
-                  <div class="card-body">
-                    <p class="card-text">"""+result["output"].replace("[", "").replace("]", "").replace("Comment:", "<br><b class='text-maastricht-blue'>Comment:</b>").replace("Classification:", "<b class='text-maastricht-blue'>Classification:</b>")+"""</p>
-                  </div>
-                </div><br>
-                """
+                if speaker["speaker"] == transcript["selected_speaker"]:
 
 
+                        result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into one or more categories:\nText:"+speaker["text"]+"\nUse the following output format for each line:\nClassification:[One or more classification categories]\nComment:[Short motivation for the classification]\n",
+                                                "Human", "AI",
+                                                "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                                                _context="CLASSIFICATION RULES:\n"+classification_text)
 
+                        html += """
+                        <div class="card">
+                          <h5 class="card-header text-maastricht-blue">"""+speaker["text"]+"""</h5>
+                          <div class="card-body">
+                            <p class="card-text">"""+result["output"].replace("[", "").replace("]", "").replace("Comment:", "<br><b class='text-maastricht-blue'>Comment:</b>").replace("Classification:", "<b class='text-maastricht-blue'>Classification:</b>")+"""</p>
+                          </div>
+                        </div><br>
+                        """
+
+
+
+            player_media.classification = html
+            player_media.save()
+        else:
+            html = str(player_media.classification)
     return response(html)
