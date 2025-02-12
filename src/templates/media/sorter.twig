@@ -1,0 +1,48 @@
+{% extends "base.twig" %}
+
+{% block content_public %}
+    <style>
+        body {
+            background: #3579EB;
+        }
+    </style>
+    <div class="container">
+    <div class="px-3 py-4">
+        <div class="content pt-4 pb-5 px-4">
+            <div class="row">
+                <h3>{{ video.title }}</h3>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe width="420" height="315"
+                            src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}">
+                    </iframe>
+                </div>
+                <div class="col">
+                <form method="post" onsubmit="return false">
+                    {{  ("SomeValue"~RANDOM()) | formToken }}
+                    <input type="hidden" name="player_media_id" value="{{ video.id }}">
+                    <input type="hidden" name="is_valid" value="0">
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-danger" onclick="document.forms[0].is_valid.value = 0; document.forms[0].submit()">NO</button>
+                        </div>
+                        <div clss="col">
+                        <h4>Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?</h4>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" style="float: right" onclick="document.forms[0].is_valid.value = 1; document.forms[0].submit()">Yes</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col"><h4 class="text-center">{{ counter }}</h4></div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

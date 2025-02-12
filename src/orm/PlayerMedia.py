@@ -13,3 +13,4 @@ class PlayerMedia(ORM):
     player_id = ForeignKeyField(IntegerField("id"), Player, default_value=1)
     is_deleted= IntegerField(default_value=0)
     classification= BlobField(default_value="")
+    is_sorted= IntegerField(default_value=0)

@@ -100,7 +100,7 @@ async def post_athlete_transcripts_queue(request, response):
 
     queue = Queue()
 
-    if not queue.load("player_media_id", [request.params["video_id"]]):
+    if not queue.load("player_media_id = ? ", [request.params["video_id"]]):
         queue.action = 'transcribe'
         queue.player_id = request.params["id"]
         queue.data = {"player_media_id": request.params["video_id"]}

@@ -1,0 +1,1 @@
+alter table player_media add is_sorted integer default 0;
