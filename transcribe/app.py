@@ -125,12 +125,12 @@ while not terminated:
                 dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": data})
                 dba.commit()
 
-                dba.close()
-
                 os.remove(audio_filename)
             except Exception as e:
                 print("ERROR", str(e))
                 dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": {"error": str(e)}})
+                dba.commit()
+
 
             time.sleep(1)
         else:
