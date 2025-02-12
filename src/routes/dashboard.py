@@ -59,6 +59,8 @@ async def post_media_sorter(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
 
+    print("here")
+
     counter = request.session.get("counter")
     if counter is None:
         request.session.set("counter", 1)
@@ -67,14 +69,14 @@ async def post_media_sorter(request, response):
 
     player_media = PlayerMedia({"id": request.body["player_media_id"]})
 
-    if request.body["is_valid"] == 1:
+    if request.body["is_valid"] == "1":
         player_media.is_valid  = 1
 
         queue = Queue()
-        if not queue.load("player_media_id = ?", [request.params["player_media_id"]]):
+        if not queue.load("player_media_id = ?", [request.body["player_media_id"]]):
             queue.action = 'transcribe'
-            queue.player_id = request.params["player_id"]
-            queue.data = {"player_media_id": request.params["player_media_id"]}
+            queue.player_id = request.body["player_id"]
+            queue.data = {"player_media_id": request.body["player_media_id"]}
             queue.save()
 
     else:
