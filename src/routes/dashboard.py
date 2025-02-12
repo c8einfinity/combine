@@ -36,7 +36,7 @@ async def get_media_sorter(request, response):
     counter = request.session.get("counter")
 
     if counter is None:
-        counter = 0
+        counter = 1
 
     videos = PlayerMedia().select(limit=1, skip=skip, filter="media_type like 'video%' and is_deleted = 0 and is_sorted = 0")
 
