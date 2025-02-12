@@ -71,10 +71,10 @@ async def post_media_sorter(request, response):
         player_media.is_valid  = 1
 
         queue = Queue()
-        if not queue.load("player_media_id = ?", [request.params["video_id"]]):
+        if not queue.load("player_media_id = ?", [request.params["player_media_id"]]):
             queue.action = 'transcribe'
-            queue.player_id = request.params["id"]
-            queue.data = {"player_media_id": request.params["video_id"]}
+            queue.player_id = request.params["player_id"]
+            queue.data = {"player_media_id": request.params["player_media_id"]}
             queue.save()
 
     else:

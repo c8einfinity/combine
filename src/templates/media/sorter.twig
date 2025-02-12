@@ -19,6 +19,7 @@
                 <div class="col">
                 <form method="post" onsubmit="return false">
                     {{  ("SomeValue"~RANDOM()) | formToken }}
+                    <input type="hidden" name="player_id" value="{{ player.id }}">
                     <input type="hidden" name="player_media_id" value="{{ video.id }}">
                     <input type="hidden" name="is_valid" value="0">
                     <br>
