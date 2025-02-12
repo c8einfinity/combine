@@ -1,6 +1,5 @@
 # Start your project here
 import os
-import threading
 
 from tina4_python.Database import Database
 from tina4_python.Migration import migrate

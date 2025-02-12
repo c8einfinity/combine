@@ -3,7 +3,7 @@ from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import base64
-from ..app.Scraper import get_speaker_from_transcript, get_classification_text
+
 from ..app.Utility import get_data_tables_filter
 from .. import dba
 
@@ -217,46 +217,57 @@ async def get_test_classification(request, response):
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?', params=[request.params["id"], request.params["media_id"]])
     transcript = player_transcripts.to_list(decode_transcript)[0]
 
-    player_media = PlayerMedia({"id": request.params["media_id"]})
-    if player_media.load():
-        if str(player_media.classification) == "" or ("refresh" in request.params and request.params["refresh"] == 1):
-            html = """<ul class='text-maastricht-blue'>
-        <li>A. Leadership and Teamwork </li>
-        <li>B. Resilience and Stress Management </li>
-        <li>C. Goal-Setting and Motivation </li>
-        <li>D. Communication Style </li>
-        <li>E. Problem-Solving and Critical Thinking </li>
-        <li>F. Adaptability and Flexibility </li>
-        <li>G. Self-Awareness and Reflection </li>
-        <li>H. Personal Relationships: Family and Friends </li>
-        <li>I. Unknown </li>
-        </ul>
-        \n"""
-
-            text = ""
-            for speaker in transcript["data"]["transcription"][0]:
-
-                if speaker["speaker"] == transcript["selected_speaker"]:
-
-
-                        result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into a single classification with a single comment, you do not need to repeat the text:\nText:"+speaker["text"]+"\nUse ONLY the following output format:\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text]\n",
-                                                "Human", "AI",
-                                                "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                                                _context="CLASSIFICATION RULES:\n"+classification_text)
-
-                        html += """
-                        <div class="card">
-                          <h5 class="card-header text-maastricht-blue">"""+speaker["text"]+"""</h5>
-                          <div class="card-body">
-                            <p class="card-text">"""+result["output"].replace("[", "").replace("]", "").replace("Comment:", "<br><b class='text-maastricht-blue'>Comment:</b>").replace("Classification:", "<b class='text-maastricht-blue'>Classification:</b>")+"""</p>
-                          </div>
-                        </div><br>
-                        """
+    for speaker in transcript["data"]["transcription"][0]:
+        text = ""
+        if speaker["speaker"] == transcript["selected_speaker"]:
+            text += speaker["text"]+"\n\n"
 
 
 
-            player_media.classification = html
-            player_media.save()
-        else:
-            html = str(player_media.classification)
-    return response(html)
+
+    return response(text)
+
+    # player_media = PlayerMedia({"id": request.params["media_id"]})
+    # if player_media.load():
+    #     if str(player_media.classification) == "" or ("refresh" in request.params and request.params["refresh"] == 1):
+    #         html = """<ul class='text-maastricht-blue'>
+    #     <li>A. Leadership and Teamwork </li>
+    #     <li>B. Resilience and Stress Management </li>
+    #     <li>C. Goal-Setting and Motivation </li>
+    #     <li>D. Communication Style </li>
+    #     <li>E. Problem-Solving and Critical Thinking </li>
+    #     <li>F. Adaptability and Flexibility </li>
+    #     <li>G. Self-Awareness and Reflection </li>
+    #     <li>H. Personal Relationships: Family and Friends </li>
+    #     <li>I. Unknown </li>
+    #     </ul>
+    #     \n"""
+    #
+    #         text = ""
+    #         for speaker in transcript["data"]["transcription"][0]:
+    #
+    #             if speaker["speaker"] == transcript["selected_speaker"]:
+    #
+    #
+    #                     result = aatos.generate("Classify this text based on the CLASSIFICATION RULES into a single classification with a single comment, you do not need to repeat the text:\nText:"+speaker["text"]+"\nUse ONLY the following output format:\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text]\n",
+    #                                             "Human", "AI",
+    #                                             "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+    #                                             _context="CLASSIFICATION RULES:\n"+classification_text)
+    #
+    #                     html += """
+    #                     <div class="card">
+    #                       <h5 class="card-header text-maastricht-blue">"""+speaker["text"]+"""</h5>
+    #                       <div class="card-body">
+    #                         <p class="card-text">"""+result["output"].replace("[", "").replace("]", "").replace("Comment:", "<br><b class='text-maastricht-blue'>Comment:</b>").replace("Classification:", "<b class='text-maastricht-blue'>Classification:</b>")+"""</p>
+    #                       </div>
+    #                     </div><br>
+    #                     """
+    #
+    #
+    #
+    #         player_media.classification = html
+    #         player_media.save()
+    #     else:
+    #         html = str(player_media.classification)
+    # return response(html)
+
