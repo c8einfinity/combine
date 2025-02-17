@@ -53,6 +53,8 @@
     function addAthlete(){
 
         submitForm("athlete", "/api/athletes", "", function(data){
+            document.forms[0].firstName.value = '';
+            document.forms[0].lastName.value = '';
             athletesGrid.ajax.reload();
         });
     }
