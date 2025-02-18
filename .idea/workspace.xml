@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="" />
+    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/routes/home.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/home.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -175,15 +177,7 @@
       <workItem from="1739265301025" duration="1325000" />
       <workItem from="1739267199292" duration="6492000" />
       <workItem from="1739534128651" duration="2371000" />
-      <workItem from="1739774000865" duration="61283000" />
-    </task>
-    <task id="LOCAL-00001" summary="Added migrations">
-      <option name="closed" value="true" />
-      <created>1736862580022</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1736862580022</updated>
+      <workItem from="1739774000865" duration="61488000" />
     </task>
     <task id="LOCAL-00002" summary="Added redis session handling">
       <option name="closed" value="true" />
@@ -569,7 +563,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739881516740</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Latest changes">
+      <option name="closed" value="true" />
+      <created>1739881624860</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1739881624860</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
