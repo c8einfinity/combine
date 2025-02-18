@@ -1,0 +1,44 @@
+<div class="px-3 py-4" style="width: 50%">
+    <div class="content pt-4 pb-5 px-4">
+        <div class="row">
+            <h3>{{ video.title }}</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe width="420" height="315"
+                        src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}?rel=0">
+                </iframe>
+
+            </div>
+            <div class="col">
+            <a href="{% if video %}{{ video.url }}{% endif %}" target="_blank">Click here to watch the video directly on YouTube if it does not display in the frame above</a>
+            <form id="videoInformation" method="post" onsubmit="return false">
+                {{  ("SomeValue"~RANDOM()) | formToken }}
+                <input type="hidden" name="player_id" value="{{ player.id }}">
+                <input type="hidden" name="player_media_id" value="{{ video.id }}">
+                <input id="is_valid" type="hidden" name="is_valid" value="0">
+                <br>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-danger" onclick="document.getElementById('is_valid').value = 0;  updateVideo()">NO</button>
+                    </div>
+                    <div clss="col">
+                    <h4>Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?</h4>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" style="float: right" onclick="document.getElementById('is_valid').value = 1; updateVideo()">Yes</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col"><h4 class="text-center">{{ counter }}</h4></div>
+                    <div class="col"></div>
+                </div>
+            </form>
+            </div>
+            <script>
+                function updateVideo() {
+                    submitForm("videoInformation", "/api/athletes/{{ player.id }}/videos", "tabVideos");
+                }
+            </script>
+        </div>
+    </div>
+</div>

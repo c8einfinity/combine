@@ -1,16 +1,17 @@
 <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
+
 {%  set nsa = namespace(speaker_array = []) %}
 {% for transcript in transcripts  %}
 {% for transcription in transcript.data.transcription %}
-    {% for speaker in transcription %}
-        {% do nsa.speaker_array.append(speaker["speaker"]) %}
-    {% endfor %}
+    {% do nsa.speaker_array.append(transcription["speaker"]) %}
 {% endfor %}
 {% endfor %}
+
+
 <form class="form-inline">
     <div class="form-group">
         <label>Player :</label>
-        <select class="form-control" onclick="showHideTranscript(this.value)">
+        <select class="form-control" onchange="showHideTranscript(this.value, 1)">
             <option value="ALL">Show All</option>
             {% for speaker_array in nsa.speaker_array | unique %}
                 {% if speaker_array %}
@@ -22,12 +23,12 @@
 </form>
 <div style="overflow: auto; height:35vh">
     {% for transcript in transcripts  %}
-        {%  for transcription in transcript.data.transcription %}
-            {% for speaker in transcription %}
+        {%  for speaker in transcript.data.transcription %}
+
                 {% if speaker["text"] %}
                     <div class="{{ speaker["speaker"] }} speaker"><b>{{ speaker["speaker"] }}</b>: {{ speaker["text"] }}</div>
                 {% endif %}
-            {% endfor %}
+
         {%  endfor %}
     {%  endfor %}
 </div>
@@ -36,7 +37,7 @@
 <div id="videoClassification" style="overflow: auto; height:50vh">
 </div>
 <script>
-    function showHideTranscript(speakerName) {
+    function showHideTranscript(speakerName, refresh) {
         if (speakerName == "ALL") {
             $('.speaker').show();
         } else {
@@ -44,18 +45,19 @@
             $('.' + speakerName).show();
         }
 
-        doClassification()
+        doClassification(speakerName, refresh);
     }
 
-    showHideTranscript("SPEAKER00");
+    showHideTranscript("SPEAKER00", 0);
 
-    function doClassification(refresh) {
+    function doClassification(speakerName, refresh) {
+        if (refresh === undefined) refresh = 0;
+
         $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                 <span class="sr-only text-maastricht-blue">Loading...</span>
             </div></div>`)
 
-        // /api/athletes/{id}/transcripts/{media_id}/classification
-        loadPage(`/api/athletes/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}`, 'videoClassification');
+        loadPage(`/api/athletes/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
     }
 </script>
 

@@ -4,7 +4,7 @@
         <div class="col-12" id="videoFeedback"></div>
         <div class="col-4">
             <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
-            <div class="row" style="overflow: auto; height:100vh">
+            <div class="row" style="overflow: auto; ">
                 {% for video in videos %}
                     <div class="col-4">
                         <div class="embed-responsive embed-responsive-16by9">
@@ -24,9 +24,7 @@
                             {%  if not video.transcript %}
                             <a href="#" class="fa fa-plus-square" onclick="addToQueue({{ video.id }})"></a>
                             {% endif %}
-
                             <a href="#" class="fa fa-minus-square" style="color: orangered" onclick="removeVideo({{ video.id }})"></a>
-
                         </div>
                     </div>
                 {% endfor %}
@@ -64,5 +62,5 @@
 
         loadTranscript({{ ns.load_video_id }})
     </script>
-    <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button>
+    <!-- <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button> -->
 </div>

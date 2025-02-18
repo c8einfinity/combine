@@ -7,7 +7,7 @@ SEED = 990011
 
 
 def generate(_prompt, _human_name, _ai_name, _system_prompt=None, _summary=None, _context="", _history=None,
-                   _temperature=0.0, _top_k=5, _top_p=0.5, _max_tokens=512, _model="Llama-3.2", _seed=SEED, _stop_tokens=None, _chat_handler=None):
+                   _temperature=0.0, _top_k=5, _top_p=0.5, _max_tokens=24000, _model="Llama-3.2", _seed=SEED, _stop_tokens=None, _chat_handler=None):
     global BALANCER_INDEX
     global LLM_URLS
 

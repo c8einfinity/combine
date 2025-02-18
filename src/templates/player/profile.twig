@@ -78,11 +78,13 @@
             {% include "player/links.twig" %}
         </div>
         <div id="tabVideos" class="row card pt-3 pb-3 px-3 tab">
-            {% include "player/videos.twig" %}
+            <script>
+                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')
+            </script>
         </div>
         <div id="tabPlayerQ" class="row card pt-3 pb-3 px-3 tab">
             <div class="card-body">
-                <h5 class="card-title text-anton text-maastricht-blue pb-2">PlayerQ</h5>
+                <h5 class="card-title text-anton text-maastricht-blue pb-2">Results</h5>
             </div>
         </div>
     </div>

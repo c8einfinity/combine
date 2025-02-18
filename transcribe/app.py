@@ -1,5 +1,6 @@
 import base64
 import json
+import ast
 import sys
 import os.path
 import yt_dlp
@@ -87,7 +88,7 @@ def transcribe_audio(audio_file):
     return speaker_output, transcript
 
 def decode_data(record):
-    record["data"] = json.loads(base64.b64decode(record["data"]))
+    record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
 
     return record
 
@@ -137,7 +138,6 @@ while not terminated:
             print("LOOKING...")
             time.sleep(1)
 
-        dba.commit()
         dba.close()
     except KeyboardInterrupt:
         print("Application Terminated")

@@ -5,22 +5,23 @@ import json
 
 @get("/dashboard")
 async def get_dashboard(request, response):
-
-
     html = Template.render_twig_template("dashboard.twig")
     return response(html)
 
 
 @get("/dashboard/athletes")
 async def get_dashboard_athletes(request, response):
-
-
     html = Template.render_twig_template("dashboard/athletes.twig")
 
     return response(html)
 
 
 def decode_metadata(record):
+    """
+    Decodes the metadata from the video
+    :param record:
+    :return:
+    """
     record["metadata"] = json.loads(record["metadata"])
     record["title"] = record["metadata"]["items"][0]["snippet"]["title"]
     record["description"] = record["metadata"]["items"][0]["snippet"]["description"]
@@ -50,16 +51,12 @@ async def get_media_sorter(request, response):
 
     html = Template.render_twig_template("media/sorter.twig", {"video": video, "player": player.to_dict(), "counter": counter})
 
-
-
     return response(html)
 
 @post("/media/sorter")
 async def post_media_sorter(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
-
-    print("here")
 
     counter = request.session.get("counter")
     if counter is None:
@@ -68,6 +65,7 @@ async def post_media_sorter(request, response):
         request.session.set("counter", counter + 1)
 
     player_media = PlayerMedia({"id": request.body["player_media_id"]})
+    player_media.load()
 
     if request.body["is_valid"] == "1":
         player_media.is_valid  = 1
