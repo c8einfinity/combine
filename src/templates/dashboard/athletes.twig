@@ -51,11 +51,27 @@
     var athletesGrid = null;
 
     function addAthlete(){
+        if (document.forms[0].firstName.value == '') {
+            $('#message').html(`<div class="alert alert-danger">First Name is required</div>`);
+            document.forms[0].firstName.focus();
+            return;
+        };
+
+        if (document.forms[0].lastName.value == '') {
+            $('#message').html(`<div class="alert alert-danger">Last Name is required</div>`);
+            document.forms[0].lastName.focus();
+            return;
+        };
+
+        $('#message').html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                <span class="sr-only text-maastricht-blue">Adding ...</span>
+            </div></div>`)
 
         submitForm("athlete", "/api/athletes", "", function(data){
             document.forms[0].firstName.value = '';
             document.forms[0].lastName.value = '';
             athletesGrid.ajax.reload();
+            $('#message').html(``);
         });
     }
 

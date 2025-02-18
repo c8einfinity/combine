@@ -1,0 +1,35 @@
+<div class="row" >
+    <div class="col-4">
+        <h5 class="text-anton text-maastricht-blue pb-2">Submit for {{ player.first_name }} {{ player.last_name }} <button class="btn btn-soft-green " style="float: right" onclick="loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')"> Submit </button></h5>
+    </div>
+    <div class="col">
+        <h5 class="text-anton text-maastricht-blue pb-2">Player Q Results</h5>
+    </div>
+</div>
+<div class="row ">
+    <div class="col-4">
+        <form id="text-submit">
+            <textarea class="form-control mt-2" rows="20" placeholder="Text to submit"></textarea>
+        </form>
+    </div>
+    <div class="col">
+        <div id="player-report"></div>
+        <script>
+            $.ajaxSetup({
+                headers:{
+                    'Authorization': "Bearer {{ TEAMQ_API_KEY }}",
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            $.post('{{ TEAMQ_RESULTS_ENDPOINT }}', data=JSON.stringify({candidate_id: '67b44f59b8b16a8498272d57'}),
+                function (data) {
+                    $("#player-report").html(data["player"]["html"]);
+                }
+            );
+        </script>
+    </div>
+</div>
+
+
+

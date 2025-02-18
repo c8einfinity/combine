@@ -1,23 +1,23 @@
 <div class="px-3 py-4">
-    <div class="content pt-4 pb-5 px-4">
-        <div class="row">
-            <h3 class='col text-anton text-maastricht-blue pb-2'>PLAYER: {{ player.first_name }} {{ player.last_name }}</h3>
-            <ul class="nav nav-tabs justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link active" data-toggle="tab" aria-current="page" href="#" onclick="showTab(this.innerHTML)">Profile</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Videos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Links</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">PlayerQ</a>
-                </li>
-            </ul>
-        </div>
-        <div id="tabProfile" class="row card pt-3 px-3 tab">
+    <div class="content pt-2 pb-2 px-4">
+        <h3 class='col text-anton text-maastricht-blue pb-0'>PLAYER: {{ player.first_name }} {{ player.last_name }}</h3>
+        <ul class="nav nav-tabs justify-content-end">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" aria-current="page" href="#"
+                   onclick="showTab(this.innerHTML)">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Videos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Links</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">PlayerQ</a>
+            </li>
+        </ul>
+
+        <div id="tabProfile" class="card pt-3 px-3 tab">
             <div class="card-body">
                 <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
                 <form id="profileDetails" onsubmit="return false;">
@@ -26,75 +26,86 @@
                             <input type="hidden" name="id" value="{{ player.id }}">
                             <div class="form-group">
                                 <label>First Name</label>
-                                <input class="form-control" name="firstName" type="text" value="{{ player.first_name }}" placeholder="First Name">
+                                <input class="form-control" name="firstName" type="text" value="{{ player.first_name }}"
+                                       placeholder="First Name">
                             </div>
                             <div class="form-group">
                                 <label>Last Name</label>
-                                <input class="form-control" name="lastName" type="text" value="{{ player.last_name }}" placeholder="Last Name">
+                                <input class="form-control" name="lastName" type="text" value="{{ player.last_name }}"
+                                       placeholder="Last Name">
                             </div>
                             <div class="form-group">
                                 <label>Height</label>
-                                <input class="form-control" name="height" type="text" value='{{ player.height }}' placeholder="Height">
+                                <input class="form-control" name="height" type="text" value='{{ player.height }}'
+                                       placeholder="Height">
                             </div>
                             <div class="form-group">
                                 <label>Sport</label>
-                                <input class="form-control" name="sport" disabled type="text" value="{{ player.sport }}" placeholder="Sport">
+                                <input class="form-control" name="sport" disabled type="text" value="{{ player.sport }}"
+                                       placeholder="Sport">
                             </div>
                             <div class="form-group">
                                 <label>Email</label>
-                                <input class="form-control" name="email" type="text" value="{{ player.email }}" placeholder="Email">
+                                <input class="form-control" name="email" type="text" value="{{ player.email }}"
+                                       placeholder="Email">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label>Team</label>
-                                <input class="form-control" name="team" type="text" value="{{ player.team }}" placeholder="Team">
+                                <input class="form-control" name="team" type="text" value="{{ player.team }}"
+                                       placeholder="Team">
                             </div>
                             <div class="form-group">
                                 <label>Position</label>
-                                <input class="form-control" name="position" type="text" value="{{ player.position }}" placeholder="Position">
+                                <input class="form-control" name="position" type="text" value="{{ player.position }}"
+                                       placeholder="Position">
                             </div>
                             <div class="form-group">
                                 <label>Home Town</label>
-                                <input class="form-control" name="homeTown" type="text" value="{{ player.home_town }}" placeholder="Home Town">
+                                <input class="form-control" name="homeTown" type="text" value="{{ player.home_town }}"
+                                       placeholder="Home Town">
                             </div>
                             <div class="form-group">
                                 <label>Major</label>
-                                <input class="form-control" name="major" type="text" value="{{ player.major }}" placeholder="Major">
+                                <input class="form-control" name="major" type="text" value="{{ player.major }}"
+                                       placeholder="Major">
                             </div>
                             <div class="form-group">
                                 <label>Date Of Birth</label>
-                                <input class="form-control" name="dateOfBirth" type="text" value="{{ player.date_of_birth }}" placeholder="Date of Birth">
+                                <input class="form-control" name="dateOfBirth" type="text"
+                                       value="{{ player.date_of_birth }}" placeholder="Date of Birth">
                             </div>
                         </div>
                     </div>
 
                 </form>
                 <div id="profileMessage"></div>
-                <button style="width:100px" class="btn btn-soft-green rounded-0 float-right" onclick="submitForm('profileDetails', '/api/athletes/{{ player.id }}', 'profileMessage')"> Save </button>
+                <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
+                        onclick="submitForm('profileDetails', '/api/athletes/{{ player.id }}', 'profileMessage')"> Save
+                </button>
             </div>
         </div>
-        <div id="tabLinks" class="row card pt-3 pb-3 px-3 tab">
+        <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
             {% include "player/links.twig" %}
         </div>
-        <div id="tabVideos" class="row card pt-3 pb-3 px-3 tab">
+        <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
             <script>
                 loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')
             </script>
         </div>
-        <div id="tabPlayerQ" class="row card pt-3 pb-3 px-3 tab">
-            <div class="card-body">
-                <h5 class="card-title text-anton text-maastricht-blue pb-2">Results</h5>
-            </div>
+        <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
+            <script>
+                loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
+            </script>
         </div>
     </div>
 </div>
 <script>
     function showTab(tabName) {
         $(".tab").hide();
-        $("#tab"+tabName).show();
+        $("#tab" + tabName).show();
     }
-
     showTab("Profile");
 </script>
 

@@ -39,8 +39,12 @@ function sendRequest (url, request, method, callback) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let content = xhr.response;
 
-            if (xhr.getResponseHeader('FreshToken') !== '' && xhr.getResponseHeader('FreshToken') !== null) {
-                formToken = xhr.getResponseHeader('FreshToken');
+            try {
+                if (xhr.getResponseHeader('FreshToken') !== '' && xhr.getResponseHeader('FreshToken') !== null) {
+                    formToken = xhr.getResponseHeader('FreshToken');
+                }
+            } catch (exception) {
+                console.log(exception);
             }
 
             try {

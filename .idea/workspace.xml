@@ -5,8 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/templates/player/player-q-results.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/public/js/tina4helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/js/tina4helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/base.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/base.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/dashboard/athletes.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/dashboard/athletes.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/player/profile.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/profile.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/test-results.twig" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +63,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/projects/python/combine/src/templates/player",
+    "last_opened_file_path": "D:/projects/python/combine/src",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -80,11 +87,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\projects\python\combine\src" />
       <recent name="D:\projects\python\combine\src\templates\player" />
       <recent name="$PROJECT_DIR$/migrations" />
       <recent name="D:\projects\python\combine\migrations" />
       <recent name="D:\projects\python\combine\src\app" />
-      <recent name="D:\projects\python\combine" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\projects\python\combine\src" />
@@ -178,7 +185,7 @@
       <workItem from="1739265301025" duration="1325000" />
       <workItem from="1739267199292" duration="6492000" />
       <workItem from="1739534128651" duration="2371000" />
-      <workItem from="1739774000865" duration="43483000" />
+      <workItem from="1739774000865" duration="59893000" />
     </task>
     <task id="LOCAL-00001" summary="Added migrations">
       <option name="closed" value="true" />
@@ -548,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1739848638678</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Latest changes">
+      <option name="closed" value="true" />
+      <created>1739848783242</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1739848783242</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -625,6 +640,6 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1739848402773" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1739876368149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>
