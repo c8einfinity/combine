@@ -408,7 +408,7 @@ async def get_test_classification(request, response):
         classification = "<div>"+classification.replace("\n", "</div><div>")+"</div>"
         classification = classification.replace("Text:", "")
 
-    classification = """<ul class='text-maastricht-blue'>
+    classification = """<div class="row"><div class="col"><ul class='text-maastricht-blue' style="position: sticky; top: 0">
         <li>A. Leadership and Teamwork </li>
         <li>B. Resilience and Stress Management </li>
         <li>C. Goal-Setting and Motivation </li>
@@ -418,8 +418,8 @@ async def get_test_classification(request, response):
         <li>G. Self-Awareness and Reflection </li>
         <li>H. Personal Relationships: Family and Friends </li>
         <li>I. Unknown </li>
-        </ul>
-        \n"""+classification
+        </ul></div><div class="col">
+        \n"""+classification+"</div>"
 
     return response(classification)
 
