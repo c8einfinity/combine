@@ -9,7 +9,35 @@
 <div class="row ">
     <div class="col-4">
         <form id="text-submit">
-            <textarea class="form-control mt-2" rows="20" placeholder="Text to submit"></textarea>
+            <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))"></textarea>
+            <b>Word Count:</b> <span id="wordCount">0</span>
+            <script>
+                function countWords(input) {
+
+                    // Get the input text value
+                    let text = document.getElementById(input).value;
+
+                    // Initialize the word counter
+                    let numWords = 0;
+
+                    // Loop through the text
+                    // and count spaces in it
+                    for (let i = 0; i < text.length; i++) {
+                        let currentCharacter = text[i];
+
+                        // Check if the character is a space
+                        if (currentCharacter == " ") {
+                            numWords += 1;
+                        }
+                    }
+
+                    // Add 1 to make the count equal to
+                    // the number of words
+                    // (count of words = count of spaces + 1)
+                    numWords += 1;
+                    return numWords;
+                }
+            </script>
         </form>
     </div>
     <div class="col">

@@ -3,7 +3,6 @@ import json
 import os
 import sys
 
-from speechbrain.nnet.losses import classification_error
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
