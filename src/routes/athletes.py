@@ -65,7 +65,10 @@ def decode_metadata(record):
     transcript = dba.fetch_one("select * from player_transcripts where player_media_id = ?", [record["id"]])
 
     if transcript:
-        record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
+        try:
+            record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
+        except Exception as e:
+            record["transcript"] = str(e)
     else:
         record["transcript"] = None
 
@@ -73,8 +76,10 @@ def decode_metadata(record):
 
 
 def decode_transcript(record):
-    record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
-
+    try:
+        record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
+    except Exception as e:
+        record["data"] = str(e)
     return record
 
 
