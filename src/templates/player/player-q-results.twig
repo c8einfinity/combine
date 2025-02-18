@@ -3,13 +3,25 @@
         <h5 class="text-anton text-maastricht-blue pb-2">Submit for {{ player.first_name }} {{ player.last_name }} <button class="btn btn-soft-green " style="float: right" onclick="loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')"> Submit </button></h5>
     </div>
     <div class="col">
-        <h5 class="text-anton text-maastricht-blue pb-2">Player Q Results</h5>
+
+        <ul class="nav nav-tabs">
+            <h5 class="text-anton text-maastricht-blue pb-2 p-2">Player Q Results</h5>
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#" >Player</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" >Coach</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#" >Scout</a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="row ">
     <div class="col-4">
         <form id="text-submit">
-            <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))"></textarea>
+            <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
             <b>Word Count:</b> <span id="wordCount">0</span>
             <script>
                 function countWords(input) {
@@ -37,10 +49,13 @@
                     numWords += 1;
                     return numWords;
                 }
+
+                $('#wordCount').html(countWords('playerText'));
             </script>
         </form>
     </div>
     <div class="col">
+
         <div id="player-report"></div>
         <script>
             $.ajaxSetup({

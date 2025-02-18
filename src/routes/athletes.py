@@ -1,12 +1,9 @@
 import ast
 import json
 import os
-import sys
-
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-import base64
 import base64
 
 from ..app.Scraper import get_youtube_videos, chunk_text
@@ -109,10 +106,21 @@ async def get_athlete(request, response):
 @get("/api/athletes/{id}/results")
 async def get_athlete_results(request, response):
     from ..orm.Player import Player
+    from ..orm.PlayerTranscripts import PlayerTranscripts
     player = Player({"id": request.params["id"]})
-    player.load();
+    player.load()
 
-    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "TEAMQ_RESULTS_ENDPOINT": os.getenv("TEAMQ_RESULTS_ENDPOINT"), "TEAMQ_API_KEY": os.getenv("TEAMQ_API_KEY")})
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
+                                                    params=[request.params["id"]])
+
+    text = ""
+    transcripts = player_transcripts.to_list(decode_transcript)
+    for transcript in transcripts:
+        for speaker in transcript["data"]["transcription"]:
+            if speaker["speaker"] == transcript["selected_speaker"]:
+                text += speaker["text"]
+
+    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "TEAMQ_RESULTS_ENDPOINT": os.getenv("TEAMQ_RESULTS_ENDPOINT"), "TEAMQ_API_KEY": os.getenv("TEAMQ_API_KEY"), "text": text})
 
     return response(html)
 
