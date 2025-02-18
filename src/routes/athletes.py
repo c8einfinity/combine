@@ -7,6 +7,7 @@ from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import base64
+import base64
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
