@@ -1,3 +1,4 @@
+{% if video %}
 <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
 
 {%  set nsa = namespace(speaker_array = []) %}
@@ -6,8 +7,6 @@
     {% do nsa.speaker_array.append(transcription["speaker"]) %}
 {% endfor %}
 {% endfor %}
-
-
 <form class="form-inline">
     <div class="form-group">
         <label>Player :</label>
@@ -60,5 +59,9 @@
         loadPage(`/api/athletes/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
     }
 </script>
+{% else %}
+<h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - None</h5>
+<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos?search=1', 'tabVideos')"> Find Videos </button>
+{% endif %}
 
-<!-- {{ RANDOM()~"ID" }} -->
+<div style="display:none"> {{ RANDOM()~"ID" }} </div>

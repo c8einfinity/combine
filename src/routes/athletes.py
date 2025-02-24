@@ -105,6 +105,12 @@ async def get_athlete(request, response):
 
 @get("/api/athletes/{id}/results")
 async def get_athlete_results(request, response):
+    """
+    Get athlete results
+    :param request:
+    :param response:
+    :return:
+    """
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
     player = Player({"id": request.params["id"]})
@@ -121,7 +127,7 @@ async def get_athlete_results(request, response):
                 text += speaker["text"]
 
     if str(player.candidate_id) != "":
-        results = get_player_results(player.candidate_id)
+        results = get_player_results(str(player.candidate_id))
     else:
         results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
@@ -131,6 +137,12 @@ async def get_athlete_results(request, response):
 
 @post("/api/athletes/{id}/results")
 async def post_athlete_results(request, response):
+    """
+    Update
+    :param request:
+    :param response:
+    :return:
+    """
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
     player.load()
@@ -149,27 +161,39 @@ async def get_athlete_videos(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
+    player = Player({"id": request.params["id"]})
+    player.load()
+
+    if "search" in request.params and request.params["search"] == "1":
+        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name))
+        for you_tube_link in you_tube_links:
+            player_media = PlayerMedia()
+            player_media.url = you_tube_link["url"]
+            player_media.player_id = player.id
+            player_media.media_type = 'video-youtube'
+            player_media.is_valid = 1
+            player_media.metadata = you_tube_link["metadata"]
+            player_media.save()
+
     videos = PlayerMedia().select(limit=1, skip=0, filter="media_type like 'video%' and is_deleted = 0 and is_sorted = 0 and player_id = ?", params=[request.params["id"]])
 
     if videos.count > 0:
         video = videos.to_list(decode_metadata)[0]
-        player = Player({"id": video["player_id"]})
-        player.load()
-
         html = Template.render_twig_template("player/sorter.twig", {"video": video, "player": player.to_dict()})
 
     else:
         videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ",
                                       params=[request.params["id"]])
-        player = Player({"id": request.params["id"]})
+
         html = Template.render("player/videos.twig",
-                               {"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
+                               {"videos": videos.to_list(decode_metadata), "player": player.to_dict()})
     return response(html)
 
 @post("/api/athletes/{id}/videos")
 async def post_athlete_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
+
     player_media = PlayerMedia({"id": request.body["player_media_id"]})
     player_media.load()
 
@@ -200,6 +224,8 @@ async def get_athlete_transcripts(request, response):
     videos = PlayerMedia().select(limit=1000, filter="player_id = ? and id = ? and is_deleted = 0 ",
                                   params=[request.params["id"], request.params["video_id"]])
     player = Player({"id": request.params["id"]})
+    player.load()
+
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and player_media_id = ?',
                                                     params=[request.params["id"], request.params["video_id"]])
 
@@ -208,16 +234,20 @@ async def get_athlete_transcripts(request, response):
     else:
         video = None
 
+    if player_transcripts.count > 0:
+        player_transcripts = player_transcripts.to_list(
+            decode_transcript)
+    else:
+        player_transcripts = None
+
     html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": video,
-                                                            "transcripts": player_transcripts.to_list(
-                                                                decode_transcript)})
+                                                            "transcripts": player_transcripts})
     return response(html)
 
 
 @post("/api/athletes/{id}/videos/{video_id}/transcript/queue")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.Queue import Queue
-
     queue = Queue()
 
     if not queue.load("player_media_id = ? ", [request.params["video_id"]]):
