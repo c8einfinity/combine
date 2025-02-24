@@ -81,6 +81,14 @@ def decode_transcript(record):
     return record
 
 
+def decode_player_image(record):
+    try:
+        record["image"] = ast.literal_eval(base64.b64decode(record["image"]).decode("utf-8"))
+    except Exception as e:
+        record["image"] = str(e)
+    return record
+
+
 @get("/api/athletes/{id}")
 async def get_athlete(request, response):
     """
@@ -96,8 +104,9 @@ async def get_athlete(request, response):
     player = Player({"id": request.params["id"]})
 
     if player.load():
+        player_image = base64.b64decode(player.image.value).decode("utf-8")
         html = Template.render("player/profile.twig",
-                               {"player": player.to_dict(), "videos": videos.to_list(decode_metadata)})
+                               {"player": player.to_dict(),  "player_image": player_image, "videos": videos.to_list(decode_metadata)})
         return response(html)
     else:
         return response("Player error, or player not found")
@@ -116,6 +125,7 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
+
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
                                                     params=[request.params["id"]])
 
@@ -123,8 +133,9 @@ async def get_athlete_results(request, response):
     transcripts = player_transcripts.to_list(decode_transcript)
     for transcript in transcripts:
         for speaker in transcript["data"]["transcription"]:
-            if speaker["speaker"] == transcript["selected_speaker"]:
-                text += speaker["text"]
+            if speaker and "speaker" in speaker:
+                if speaker["speaker"] == transcript["selected_speaker"]:
+                    text += speaker["text"]
 
     if str(player.candidate_id) != "":
         results = get_player_results(str(player.candidate_id))
@@ -134,6 +145,15 @@ async def get_athlete_results(request, response):
     html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
 
     return response(html)
+
+@post("/api/athletes/{id}/upload-picture")
+async def post_upload_picture(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    player.load()
+    player.image = request.body["picture-upload"]["content"]
+    player.save()
+    return response("<script>loadPage('/api/athletes/"+request.params["id"]+"', 'content')</script>")
 
 @post("/api/athletes/{id}/results")
 async def post_athlete_results(request, response):
@@ -188,6 +208,7 @@ async def get_athlete_videos(request, response):
         html = Template.render("player/videos.twig",
                                {"videos": videos.to_list(decode_metadata), "player": player.to_dict()})
     return response(html)
+
 
 @post("/api/athletes/{id}/videos")
 async def post_athlete_videos(request, response):

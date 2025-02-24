@@ -1,6 +1,15 @@
 <div class="px-3 py-4">
     <div class="content pt-2 pb-2 px-4">
-        <h3 class='col text-anton text-maastricht-blue pb-0'>PLAYER: {{ player.first_name }} {{ player.last_name }}</h3>
+        <h3 class='col text-anton text-maastricht-blue pb-0'>
+            {% if player_image != "None" %}
+                <img class="img-fluid img-thumbnail"
+                     style=" width: 64px"
+                     src="data:image/png;base64,{{ player_image }}"
+                     alt="Athlete Picture">
+            {% endif %}
+            PLAYER: {{ player.first_name }} {{ player.last_name }}
+        </h3>
+
         <ul class="nav nav-tabs justify-content-end">
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" aria-current="page" href="#"
@@ -77,8 +86,22 @@
                                        value="{{ player.date_of_birth }}" placeholder="Date of Birth">
                             </div>
                         </div>
+                        <div class="col">
+                            <div id="profile-image">
+                                {% if player_image != "None" %}
+                                    <img class="img-fluid img-thumbnail"
+                                         style=" width: 100%"
+                                         src="data:image/png;base64,{{ player_image }}"
+                                         alt="Athlete Picture">
+                                {% else %}
+                                    <img class="img-fluid img-thumbnail" src="/images/avatar.svg"
+                                         style=" width: 100%"
+                                         alt="Athlete Picture">
+                                {% endif %}
+                            </div>
+                            <input id="file-upload" name="picture-upload" type="file" accept="image/*"  onchange="submitForm('profileDetails', '/api/athletes/{{ player.id }}/upload-picture', 'profile-image')">
+                        </div>
                     </div>
-
                 </form>
                 <div id="profileMessage"></div>
                 <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"

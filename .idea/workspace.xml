@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/transcribe/run_dev.sh" afterDir="false" />
+    <list default="true" id="66f9dced-92cd-4c80-92d2-1b9dee1ba082" name="Changes" comment="Latest changes">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0252124c-d063-48af-8463-99fac99d186f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/Player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/orm/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/orm/Player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/public/css/default.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/public/css/default.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/athletes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/athletes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/templates/player/player-q-results.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/player-q-results.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates/player/profile.twig" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates/player/profile.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,38 +53,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.app.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.consumer.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/projects/python/combine/migrations&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.app.executor": "Debug",
+    "Python.consumer.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/projects/python/ofw",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ],
-    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/&quot;: [
-      &quot;MySQL&quot;
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/": [
+      "MySQL"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\projects\python\combine\migrations" />
@@ -191,30 +186,6 @@
       <workItem from="1739267199292" duration="6492000" />
       <workItem from="1739534128651" duration="2371000" />
       <workItem from="1739774000865" duration="64977000" />
-    </task>
-    <task id="LOCAL-00004" summary="Updated libraries">
-      <option name="closed" value="true" />
-      <created>1737393629566</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1737393629566</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Added test for queue">
-      <option name="closed" value="true" />
-      <created>1737394272109</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1737394272109</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Added logs for delivery">
-      <option name="closed" value="true" />
-      <created>1737447087535</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1737447087535</updated>
     </task>
     <task id="LOCAL-00007" summary="Added login page">
       <option name="closed" value="true" />
@@ -584,7 +555,31 @@
       <option name="project" value="LOCAL" />
       <updated>1739886047009</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Latest changes">
+      <option name="closed" value="true" />
+      <created>1740391841482</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1740391841483</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Latest changes">
+      <option name="closed" value="true" />
+      <created>1740395098608</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1740395098608</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Latest changes">
+      <option name="closed" value="true" />
+      <created>1740400138770</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1740400138770</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -656,16 +651,6 @@
           <line>414</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/app/Player.py</url>
-          <line>21</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/app/Player.py</url>
-          <line>17</line>
-          <option name="timeStamp" value="55" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -677,7 +662,7 @@
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1740043042104" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
     <SUITE FILE_PATH="coverage/combine$consumer.coverage" NAME="consumer Coverage Results" MODIFIED="1737446994917" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/combine$app.coverage" NAME="app Coverage Results" MODIFIED="1740406155780" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/" />
   </component>
 </project>
