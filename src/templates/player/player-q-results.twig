@@ -21,7 +21,7 @@
     <div class="col-4">
         <form id="text-submit">
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
-            <b>Word Count:</b> <span id="wordCount">0</span>
+            <b>Word Count:</b> <span id="wordCount">0</span><a href="/api/athletes/{{ player.id }}/report" target="_blank" >View Report</a>
         </form>
     </div>
     <div class="col">

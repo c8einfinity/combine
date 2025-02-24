@@ -1,0 +1,16 @@
+{% extends "base.twig" %}
+
+{% block content_public %}
+    <style>
+        @media print {
+            .page, .page-break { break-after: page; }
+        }
+    </style>
+    <div class="container">
+        <div class="page">
+        {% for page in full_report.pages %}
+            {{ page.html | replace ("[PLAYER_IMAGE]", "data:image/png;base64,"~player_image ) | replace ("[REPORT_DATE]", current_date) }}
+        {% endfor %}
+        </div>
+    </div>
+{%  endblock %}

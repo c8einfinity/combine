@@ -1,5 +1,7 @@
 import ast
 import json
+from datetime import datetime
+
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
@@ -115,8 +117,8 @@ async def get_athlete(request, response):
         return response("Player error, or player not found")
 
 
-@get("/api/athletes/{id}/report/coach")
-async def get_athlete_coach_report(request, response):
+@get("/api/athletes/{id}/report")
+async def get_athlete_full_report(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
     player.load()
@@ -130,51 +132,9 @@ async def get_athlete_coach_report(request, response):
     if str(player.candidate_id) != "":
         results = get_player_results(str(player.candidate_id))
     else:
-        results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+        results = {"full_report": {"pages": []}}
 
-    html = Template.render_twig_template("player/reports/coach.twig", {"player": player.to_dict(), "player_image": player_image, "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}})
-
-    return response(html)
-
-
-@get("/api/athletes/{id}/report/player")
-async def get_athlete_coach_report(request, response):
-    from ..orm.Player import Player
-    player = Player({"id": request.params["id"]})
-    player.load()
-
-    if player.image.value is not None:
-        player_image = base64.b64decode(player.image.value).decode("utf-8")
-    else:
-        player_image = "None"
-
-    if str(player.candidate_id) != "":
-        results = get_player_results(str(player.candidate_id))
-    else:
-        results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
-
-    html = Template.render_twig_template("player/reports/player.twig", {"player": player.to_dict(), "player_image": player_image, "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}})
-
-    return response(html)
-
-
-@get("/api/athletes/{id}/report/scout")
-async def get_athlete_coach_report(request, response):
-    from ..orm.Player import Player
-    player = Player({"id": request.params["id"]})
-    player.load()
-
-    if player.image.value is not None:
-        player_image = base64.b64decode(player.image.value).decode("utf-8")
-    else:
-        player_image = "None"
-
-    if str(player.candidate_id) != "":
-        results = get_player_results(str(player.candidate_id))
-    else:
-        results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
-
-    html = Template.render_twig_template("player/reports/scout.twig", {"player": player.to_dict(), "player_image": player_image, "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}})
+    html = Template.render_twig_template("player/reports/full_report.twig", {"player": player.to_dict(), "player_image": player_image, "full_report": results["full_report"], "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")})
 
     return response(html)
 
