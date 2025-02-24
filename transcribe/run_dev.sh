@@ -1,0 +1,1 @@
+screen -dmS rag -L  poetry run python app.py stop &

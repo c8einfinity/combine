@@ -1,6 +1,5 @@
 import ast
 import json
-import os
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
@@ -8,6 +7,7 @@ import base64
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
+from ..app.Player import get_player_results, submit_player_results
 from .. import dba
 
 
@@ -120,9 +120,29 @@ async def get_athlete_results(request, response):
             if speaker["speaker"] == transcript["selected_speaker"]:
                 text += speaker["text"]
 
-    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "TEAMQ_RESULTS_ENDPOINT": os.getenv("TEAMQ_RESULTS_ENDPOINT"), "TEAMQ_API_KEY": os.getenv("TEAMQ_API_KEY"), "text": text})
+    if str(player.candidate_id) != "":
+        results = get_player_results(player.candidate_id)
+    else:
+        results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+
+    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
 
     return response(html)
+
+@post("/api/athletes/{id}/results")
+async def post_athlete_results(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    player.load()
+
+    results = submit_player_results(str(player.first_name), str(player.last_name), request.body["playerText"], str(player.candidate_id))
+
+    if "candidate_id" in results:
+        player.candidate_id = results["candidate_id"]
+        player.save()
+
+    return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+
 
 @get("/api/athletes/{id}/videos")
 async def get_athlete_videos(request, response):

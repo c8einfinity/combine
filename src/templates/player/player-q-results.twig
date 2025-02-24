@@ -1,9 +1,8 @@
 <div class="row" >
     <div class="col-4">
-        <h5 class="text-anton text-maastricht-blue pb-2">Submit for {{ player.first_name }} {{ player.last_name }} <button class="btn btn-soft-green " style="float: right" onclick="loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')"> Submit </button></h5>
+        <h5 class="text-anton text-maastricht-blue pb-2">Submit for {{ player.first_name }} {{ player.last_name }} <button class="btn btn-soft-green " style="float: right" onclick="submitPlayerText()"> Submit </button></h5>
     </div>
     <div class="col">
-
         <ul class="nav nav-tabs">
             <h5 class="text-anton text-maastricht-blue pb-2 p-2">Player Q Results</h5>
             <li class="nav-item">
@@ -51,26 +50,20 @@
                 }
 
                 $('#wordCount').html(countWords('playerText'));
+
+                function submitPlayerText() {
+                    submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function(data) {
+                        loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
+                    });
+                }
+
             </script>
         </form>
     </div>
     <div class="col">
-
-        <div id="player-report"></div>
-        <script>
-            $.ajaxSetup({
-                headers:{
-                    'Authorization': "Bearer {{ TEAMQ_API_KEY }}",
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            $.post('{{ TEAMQ_RESULTS_ENDPOINT }}', data=JSON.stringify({candidate_id: '67b44f59b8b16a8498272d57'}),
-                function (data) {
-                    $("#player-report").html(data["player"]["html"]);
-                }
-            );
-        </script>
+        <div id="player-report">{{ results.player }}</div>
+        <div id="coach-report">{{ results.coach }}</div>
+        <div id="scout-report">{{ results.scout }}</div>
     </div>
 </div>
 

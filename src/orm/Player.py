@@ -20,4 +20,6 @@ class Player(ORM):
     date_of_birth = DateTimeField(protected_field=True)
     is_bio_links_created = IntegerField(default_value=0)
     is_video_links_created = IntegerField(default_value=0)
+    candidate_id = TextField(field_size=200)
     date_created = DateTimeField(default_value=datetime.now(), protected_field=True)
+
