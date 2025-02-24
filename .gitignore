@@ -4,3 +4,5 @@
 .env
 /transcribe/logs/debug.log
 /database/
+/transcribe/audio/
+/.google-cookie

@@ -6,13 +6,13 @@
         <ul class="nav nav-tabs">
             <h5 class="text-anton text-maastricht-blue pb-2 p-2">Player Q Results</h5>
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#" >Player</a>
+                <a class="nav-link active" data-toggle="tab" href="#" onclick="showResultTab('player-report')">Player</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#" >Coach</a>
+                <a class="nav-link" data-toggle="tab" href="#" onclick="showResultTab('coach-report')">Coach</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#" >Scout</a>
+                <a class="nav-link" data-toggle="tab" href="#" onclick="showResultTab('scout-report')">Scout</a>
             </li>
         </ul>
     </div>
@@ -22,50 +22,50 @@
         <form id="text-submit">
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
             <b>Word Count:</b> <span id="wordCount">0</span>
-            <script>
-                function countWords(input) {
-
-                    // Get the input text value
-                    let text = document.getElementById(input).value;
-
-                    // Initialize the word counter
-                    let numWords = 0;
-
-                    // Loop through the text
-                    // and count spaces in it
-                    for (let i = 0; i < text.length; i++) {
-                        let currentCharacter = text[i];
-
-                        // Check if the character is a space
-                        if (currentCharacter == " ") {
-                            numWords += 1;
-                        }
-                    }
-
-                    // Add 1 to make the count equal to
-                    // the number of words
-                    // (count of words = count of spaces + 1)
-                    numWords += 1;
-                    return numWords;
-                }
-
-                $('#wordCount').html(countWords('playerText'));
-
-                function submitPlayerText() {
-                    submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function(data) {
-                        loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
-                    });
-                }
-
-            </script>
         </form>
     </div>
     <div class="col">
-        <div id="player-report">{{ results.player }}</div>
-        <div id="coach-report">{{ results.coach }}</div>
-        <div id="scout-report">{{ results.scout }}</div>
+        <div id="player-report" class="pt-1 pb-3 px-1 result-tab">{{ results.player }}</div>
+        <div id="coach-report" class="pt-1 pb-3 px-1 result-tab">{{ results.coach }}</div>
+        <div id="scout-report" class="pt-1 pb-3 px-1 result-tab">{{ results.scout }}</div>
     </div>
 </div>
+<script>
+    function showResultTab(tabName) {
+        $(".result-tab").hide();
+        $("#" + tabName).show();
+    }
+
+    showResultTab("player-report");
+
+    function countWords(input) {
+        // Get the input text value
+        let text = document.getElementById(input).value;
+
+        // Initialize the word counter
+        let numWords = 0;
+
+        for (let i = 0; i < text.length; i++) {
+            let currentCharacter = text[i];
+
+            // Check if the character is a space
+            if (currentCharacter == " ") {
+                numWords += 1;
+            }
+        }
+        numWords += 1;
+        return numWords;
+    }
+
+    $('#wordCount').html(countWords('playerText'));
+
+    function submitPlayerText() {
+        submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function(data) {
+            loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
+        });
+    }
+
+</script>
 
 
 
