@@ -17,6 +17,9 @@ requests = "^2.32.3"
 beautifulsoup4 = "^4.12.3"
 semantic-text-splitter = "^0.22.0"
 google = "^3.0.0"
+weasyprint = "^64.1"
+wkhtmltopdf = "^0.2"
+pdfkit = "^1.0.0"
 
 
 [tool.poetry.group.dev.dependencies]

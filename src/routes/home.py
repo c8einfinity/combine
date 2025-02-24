@@ -1,4 +1,6 @@
 import os
+
+import tina4_python
 from tina4_python import Debug, tina4_auth
 from tina4_python.Router import get, post
 from tina4_python.Queue import Queue, Config, Producer
@@ -70,3 +72,19 @@ async def index(request, response):
     dba.commit()
 
     return response(collected_data)
+
+
+@get("/test/pdf")
+async def index(request, response):
+    # import os
+    # os.environ['PATH']='C:/Program Files/GTK3-Runtime Win64/bin/'+ os.pathsep + os.environ['PATH']
+    # from weasyprint import HTML
+    # HTML('https://qfinder.io/').write_pdf(tina4_python.root_path+'/output/login.pdf')
+    #
+    import pdfkit
+    path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+    pdfkit.from_url('https://qfinder.io/', tina4_python.root_path+'/output/login-pdfkit.pdf', configuration=config)
+
+    return response("OK")
+

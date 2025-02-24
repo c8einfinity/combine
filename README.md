@@ -25,3 +25,7 @@ rabbitmqctl set_permissions -p "/" "<user>" ".*" ".*" ".*"
 ```bash
 find . -type d -name __pycache__ -exec rm -r {} \+
 ```
+
+### WeasyPrint to work on windows
+
+https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases
