@@ -33,6 +33,27 @@ body {
     width: 100vw;
 }
 
+/* FULL SCREEN LOADER STYLES */
+#loader-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: block;
+    z-index: 99;
+    text-align: center;
+    background: var(--light-grey);
+    opacity: 0.4;
+}
+
+.loader {
+    position: absolute;
+    color: #012839;
+    opacity: 1;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+}
+
 /* FONT COLOUR STYLES */
 .text-anton {
     font-family: Anton, Arial, Helvetica, sans-serif;
@@ -229,7 +250,7 @@ input[type="checkbox"]:checked:after {
     }
 
     .form-side-graphic-logo-teamq {
-        width: 70%;
+        width: 50%;
     }
 }
 
@@ -385,7 +406,6 @@ input[type="checkbox"]:checked:after {
     color: #ffffff;
 }
 
-.invites-pending .badge,
 .subscribe-btn {
     font-family: var(--ff-anton);
     font-weight: 400;
@@ -799,6 +819,18 @@ input[type="checkbox"]:checked:after {
     background: linear-gradient(90deg, #7DC037 0%, #03709F 50%, #012839 100%) !important;
 }
 
+.pdf-content-container {
+    border: 1px solid #b5b5b5;
+    border-radius: 20px
+}
+
+.coaching-title {
+    background: linear-gradient(90deg, #7DC037 0%, #03709F 15%, #012839 40%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
 .gradient-card h2 {
     font-family: "Inter", sans-serif;
     text-transform: unset;
@@ -884,4 +916,9 @@ input[type="checkbox"]:checked:after {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.daterangepicker td.active,
+.daterangepicker td.active:hover {
+    background: var(--navy) !important;
 }
