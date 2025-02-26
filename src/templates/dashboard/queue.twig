@@ -1,5 +1,54 @@
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">Transcription Queue</h3>
+        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+            <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Queue Action</th>
+                        <th>Date Created</th>
+                        <th>Player</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="message"></div>
+        </div>
     </div>
 </div>
+<script>
+    if (typeof queueGrid === 'undefined') {
+        let queueGrid = null;
+    }
+    $(document).ready(function() {
+        queueGrid = $('#queue-grid').DataTable({
+            "ajax": "/api/queue",
+            "columns": [{
+                    "data": "id"
+                },
+                {
+                    "data": "action"
+                },
+                {
+                    "data": "date_created"
+                },
+                {
+                    "data": "player"
+                },
+                {
+                    "render": function (data, type, row) {
+
+                        return "Actions"
+                    }
+                }
+            ],
+            language: {
+                emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
+            },
+            "processing": true,
+            "serverSide": true,
+        });
+    });
+
+</script>
