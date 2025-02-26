@@ -18,17 +18,17 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" onclick="loadPage('/dashboard/athletes', 'content')">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" id="homeLink" href="#" role="button" onclick="loadPage('/dashboard/athletes', 'content'); teamQNavSetActive(this);">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="loadPage('/dashboard/athletes', 'content')">Athletes</a>
+                    <a class="nav-link" id="athleteLink" href="#" role="button" onclick="loadPage('/dashboard/athletes', 'content'); teamQNavSetActive(this);">Athletes</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Queue</a>
+                    <a class="nav-link" id="queueLink" href="#" role="button" onclick="loadPage('/dashboard/queue', 'content'); teamQNavSetActive(this);">Queue</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
@@ -44,8 +44,9 @@
     <div id="content"></div>
     <script>
         loadPage('/dashboard/athletes', 'content');
+        teamQNavSetActive($('#athleteLink')[0]);
 
-        var socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket/feed");
+        const socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket/feed");
 
 
         // Do something when connected

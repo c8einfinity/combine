@@ -34,20 +34,15 @@ function trimInput(inputArray) {
 /**
  * Function to handle toggling the active nav links and toggling hidden nav links to show.
  */
-function teamQNavSetActive() {
-    $(".tq-nav-item").removeClass("active");
+function teamQNavSetActive(linkItem) {
+    $(".nav-item").removeClass("active");
 
-    const links = $(".tq-nav-link");
+    const links = $(".nav-link").get();
 
-    links.each(function () {
-        if (location.pathname.includes("organizations/edit") && this.href.includes("organizations/edit")) {
-            $(this).parent().removeClass("d-none")
-            $(this).parent().addClass("active");
-            $(this).attr("href", location.pathname)
-        }
-
-        if (this.href.includes(location.pathname)) {
-            $(this).parent().addClass("active");
+    links.forEach(function (link) {
+        if (link === linkItem) {
+            $(linkItem).parent().removeClass("d-none")
+            $(linkItem).parent().addClass("active");
         }
     });
 }
