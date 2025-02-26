@@ -15,6 +15,15 @@ async def get_dashboard_athletes(request, response):
 
     return response(html)
 
+@get("/dashboard/queue")
+async def get_dashboard_queue(request, response):
+    """
+    Get the queue grid for the dashboard
+    :param request:
+    :param response:
+    :return:
+    """
+    return response(Template.render_twig_template("dashboard/queue.twig"))
 
 def decode_metadata(record):
     """
