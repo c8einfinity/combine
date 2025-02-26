@@ -1,26 +1,28 @@
 <div class="px-3 py-4">
-    <div class="content pt-4 pb-5 px-4">
+    <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">ATHLETES</h3>
-        <form id="athlete" method="post" onsubmit="return false;">
-            <div class="row">
-                <div class="col form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
-                </div>
-                <div class="col form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
-                </div>
-                <div class="col form-group">
-                    <label for="sport">Sport</label>
-                    <select class="form-control" name="sport" id="sport">
-                        <option>Football</option>
-                    </select>
-                </div>
-                <div class="col form-group p-5">
-                    <button type="submit" class="btn btn-soft-green rounded-0" onclick="addAthlete()">
-                        Add
-                    </button>
+        <form id="athlete" class="card" method="post" onsubmit="return false;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
+                    </div>
+                    <div class="col form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
+                    </div>
+                    <div class="col form-group">
+                        <label for="sport">Sport</label>
+                        <select class="form-control" name="sport" id="sport">
+                            <option>Football</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2 pt-4">
+                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addAthlete()">
+                            Add
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
