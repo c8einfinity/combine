@@ -1,0 +1,1 @@
+alter table queue add priority integer not null default 0;
