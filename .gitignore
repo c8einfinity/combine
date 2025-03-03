@@ -6,3 +6,6 @@
 /database/
 /transcribe/audio/
 /.google-cookie
+
+# ide specific files
+.idea/
