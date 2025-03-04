@@ -42,8 +42,8 @@
                 },
                 {
                     "render": function (data, type, row) {
-
-                        return "Actions"
+                        let actions = `<a class="fas fa-trash" href="#" onclick="deleteQueueItem(${row.id})"></a>`;
+                        return actions;
                     }
                 }
             ],
@@ -55,4 +55,11 @@
         });
     });
 
+    function deleteQueueItem(id) {
+        if (confirm("Delete Transcription Item?")) {
+            deleteUrl(`/api/queue/${id}`, null, 'message', function (){
+                queueGrid.ajax.reload();
+            })
+        }
+    }
 </script>

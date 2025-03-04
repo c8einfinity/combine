@@ -29,3 +29,39 @@ async def get_queue(request, response):
     data["draw"] = request.params["draw"]
 
     return response(data)
+
+@post("/api/queue/{id}/set_priority")
+async def set_queue_priority(request, response):
+    """
+    Set the priority of a queue item
+    :param request:
+    :param response:
+    :return:
+    """
+
+    from ..orm.Queue import Queue
+
+    queue_item = Queue({"id": request.params["id"]})
+    queue_item.load()
+    queue_item.priority = request.body["priority"]
+    if queue_item.save():
+        return response({"status": "ok"})
+
+    return response({"status": "error"})
+
+@delete("/api/queue/{id}")
+async def delete_queue(request, response):
+    """
+    Delete a queue item
+    :param request:
+    :param response:
+    :return:
+    """
+
+    from ..orm.Queue import Queue
+
+    queue_item = Queue({"id": request.params["id"]})
+    if queue_item.delete():
+        return response({"status": "ok"})
+
+    return response({"status": "error"})
