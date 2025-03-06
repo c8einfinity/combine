@@ -1,4 +1,5 @@
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
+from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 
 from ..app.Utility import get_data_tables_filter
@@ -29,6 +30,22 @@ async def get_queue(request, response):
     data["draw"] = request.params["draw"]
 
     return response(data)
+
+@get("/queue/{id}/priority")
+async def get_queue_priority_snippet(request, response):
+    """
+    Get the priority of a queue item
+    :param request:
+    :param response:
+    :return:
+    """
+
+    from ..orm.Queue import Queue
+
+    queue_item = Queue({"id": request.params["id"]})
+    queue_item.load()
+
+    return response(Template.render("/queue/priority.twig", {"queue_item":queue_item}))
 
 @post("/api/queue/{id}/set_priority")
 async def set_queue_priority(request, response):

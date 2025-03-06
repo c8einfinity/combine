@@ -1,0 +1,63 @@
+<h1>Set priority:</h1>
+<form id="queue-priority-form" method="POST" onsubmit="setPriority(); return false;">
+    <!-- radio buttons for priority 1 - 5 -->
+    {% set selectedPriority = queue_item.priority %}
+    <div class="row container mx-auto">
+        <div class="col form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="priority" id="priority1" value="0"
+                        {% if selectedPriority == 0 %} checked {% endif %}
+                />
+                <label class="form-check-label" for="priority1">
+                    1
+                </label>
+            </div>
+        </div>
+        <div class="col form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="priority" id="priority2" value="1"
+                        {% if selectedPriority == 1 %} checked {% endif %}
+                />
+                <label class="form-check-label" for="priority2">
+                    2
+                </label>
+            </div>
+        </div>
+        <div class="col form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="priority" id="priority3" value="2"
+                        {% if selectedPriority == 2 %} checked {% endif %}
+                />
+                <label class="form-check-label" for="priority3">
+                    3
+                </label>
+            </div>
+        </div>
+        <div class="col form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="priority" id="priority4" value="3"
+                        {% if selectedPriority == 3 %} checked {% endif %}
+                />
+                <label class="form-check-label" for="priority4">
+                    4
+                </label>
+            </div>
+        </div>
+        <div class="col form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="priority" id="priority5" value="4"
+                        {% if selectedPriority == 4 %} checked {% endif %}
+                />
+                <label class="form-check-label" for="priority5">5</label>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<script>
+    function setPriority() {
+        submitForm("queue-priority-form", "/api/queue/{{ queue_item.id }}/set_priority", "", function(data){
+            loadPage('/dashboard/queue', 'content');
+        });
+    }
+</script>
