@@ -81,7 +81,20 @@
         prioritySelector.classList.add('priority-selector');
         clickedEl.after(prioritySelector);
         showForm('GET', `/queue/${id}/priority`, prioritySelector.id);
+
+        // Stop event propagation to prevent the document click listener from removing the selector
+        prioritySelector.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
     }
 
+    // click anywhere to close the priority selector
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.priority-selector') && !event.target.closest('a[role="button"]')) {
+            document.querySelectorAll('.priority-selector').forEach((el) => {
+                el.remove();
+            });
+        }
+    });
 
 </script>
