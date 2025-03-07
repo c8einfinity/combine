@@ -5,9 +5,9 @@
             <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
                 <thead>
                     <tr>
+                        <th>Priority</th>
                         <th>Id</th>
                         <th>Queue Action</th>
-                        <th>Priority</th>
                         <th>Date Created</th>
                         <th>Player</th>
                         <th>Actions</th>
@@ -15,24 +15,6 @@
                 </thead>
             </table>
             <div id="message"></div>
-        </div>
-    </div>
-</div>
-<div class="modal" id="priorityModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="priorityModalBody">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
         </div>
     </div>
 </div>
@@ -44,14 +26,17 @@
     $(document).ready(function() {
         queueGrid = $('#queue-grid').DataTable({
             "ajax": "/api/queue",
-            "columns": [{
+            "columns": [
+                {
+                    "render": function (data, type, row) {
+                        return `<a role="button" onclick="showPrioritySelector(this, ${row.id})"><img src="/images/queue/priority-${row.priority}-on.svg" alt="Current Priority" /></a>`;
+                    }
+                },
+                {
                     "data": "id"
                 },
                 {
                     "data": "action"
-                },
-                {
-                    "data": "priority"
                 },
                 {
                     "data": "date_created"
@@ -62,8 +47,7 @@
                 {
                     "render": function (data, type, row) {
                         let actions = [
-                            `<a role="button" class="fas fa-trash" onclick="deleteQueueItem(${row.id})"></a>`,
-                            `<a role="button" class="btn btn-secondary" onclick="showPriorityModal(${row.id})">Set Priority</a>`
+                            `<a role="button" class="fas fa-trash" onclick="deleteQueueItem(${row.id})"></a>`
                         ];
                         return actions.join("");
                     }
@@ -72,6 +56,7 @@
             language: {
                 emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
             },
+            order: [[0, 'asc']],
             "processing": true,
             "serverSide": true,
         });
@@ -85,8 +70,17 @@
         }
     }
 
-    function showPriorityModal(id) {
-        showForm('GET', `/queue/${id}/priority`, 'content');
+    function showPrioritySelector(clickedEl, id) {
+        // remove and selectors still open
+        document.querySelectorAll('.priority-selector').forEach((el) => {
+            el.remove();
+        });
+        // create a div append it to after the button clicked
+        const prioritySelector = document.createElement('div');
+        prioritySelector.id = `prioritySelector_${id}`;
+        prioritySelector.classList.add('priority-selector');
+        clickedEl.after(prioritySelector);
+        showForm('GET', `/queue/${id}/priority`, prioritySelector.id);
     }
 
 

@@ -21,3 +21,17 @@
 
 // Assessment module
 @import "aatos.scss";
+
+.priority-selector {
+  position: absolute;
+  background-color: $gray-500;
+  border-radius: 0.5rem;
+  padding: 0.2rem;
+  box-shadow: 0.1rem 0.1rem 0.1rem rgba($gray-500, 0.25);
+  .form-check {
+    padding: 0.2rem;
+  }
+  label {
+    cursor: pointer;
+  }
+}

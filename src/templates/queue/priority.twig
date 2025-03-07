@@ -1,62 +1,130 @@
-<h1>Set priority:</h1>
 <form id="queue-priority-form" method="POST" onsubmit="setPriority(); return false;">
     <!-- radio buttons for priority 1 - 5 -->
     {% set selectedPriority = queue_item.priority %}
-    <div class="row container mx-auto">
-        <div class="col form-group">
+    {% set priorityClasses = {
+        0: { 'on': 'selected', 'off': 'd-none' },
+        1: { 'on': 'd-none', 'off': '' }
+    } %}
+    <div class="row no-gutters">
+        <div class="col">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="priority" id="priority1" value="0"
-                        {% if selectedPriority == 0 %} checked {% endif %}
+                <input class="form-check-input d-none" type="radio" name="priority" id="priority1" value="0"
+                        {% if selectedPriority == 0 %} checked {% endif %} onclick="togglePriorityLabel(this)"
                 />
-                <label class="form-check-label" for="priority1">
-                    1
+                <label class="form-check-label pointer" for="priority1">
+                    {% if selectedPriority == 0 %}
+                        {% set classes = priorityClasses[0] %}
+                    {% else %}
+                        {% set classes = priorityClasses[1] %}
+                    {% endif %}
+                    <img class="pointer-icon-on {{ classes.on }}" src="/images/queue/priority-0-on.svg" alt="Lowest priority on" />
+                    <img class="pointer-icon-off {{ classes.off }}" src="/images/queue/priority-0-off.svg" alt="Lowest priority off" />
                 </label>
             </div>
         </div>
-        <div class="col form-group">
+        <div class="col">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="priority" id="priority2" value="1"
-                        {% if selectedPriority == 1 %} checked {% endif %}
+                <input class="form-check-input d-none" type="radio" name="priority" id="priority2" value="1"
+                        {% if selectedPriority == 1 %} checked {% endif %} onclick="togglePriorityLabel(this)"
                 />
-                <label class="form-check-label" for="priority2">
-                    2
+                <label class="form-check-label pointer" for="priority2">
+                    {% if selectedPriority == 1 %}
+                        {% set classes = priorityClasses[0] %}
+                    {% else %}
+                        {% set classes = priorityClasses[1] %}
+                    {% endif %}
+                    <img class="pointer-icon-on {{ classes.on }}" src="/images/queue/priority-1-on.svg" alt="Low priority on" />
+                    <img class="pointer-icon-off {{ classes.off }}" src="/images/queue/priority-1-off.svg" alt="Low priority off" />
                 </label>
             </div>
         </div>
-        <div class="col form-group">
+        <div class="col">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="priority" id="priority3" value="2"
-                        {% if selectedPriority == 2 %} checked {% endif %}
+                <input class="form-check-input d-none" type="radio" name="priority" id="priority3" value="2"
+                        {% if selectedPriority == 2 %} checked {% endif %} onclick="togglePriorityLabel(this)"
                 />
-                <label class="form-check-label" for="priority3">
-                    3
+                <label class="form-check-label pointer" for="priority3">
+                    {% if selectedPriority == 2 %}
+                        {% set classes = priorityClasses[0] %}
+                    {% else %}
+                        {% set classes = priorityClasses[1] %}
+                    {% endif %}
+                    <img class="pointer-icon-on {{ classes.on }}" src="/images/queue/priority-2-on.svg" alt="Medium priority on" />
+                    <img class="pointer-icon-off {{ classes.off }}" src="/images/queue/priority-2-off.svg" alt="Medium priority off" />
                 </label>
             </div>
         </div>
-        <div class="col form-group">
+        <div class="col">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="priority" id="priority4" value="3"
-                        {% if selectedPriority == 3 %} checked {% endif %}
+                <input class="form-check-input d-none" type="radio" name="priority" id="priority4" value="3"
+                        {% if selectedPriority == 3 %} checked {% endif %} onclick="togglePriorityLabel(this)"
                 />
-                <label class="form-check-label" for="priority4">
-                    4
+                <label class="form-check-label pointer" for="priority4">
+                    {% if selectedPriority == 3 %}
+                        {% set classes = priorityClasses[0] %}
+                    {% else %}
+                        {% set classes = priorityClasses[1] %}
+                    {% endif %}
+                    <img class="pointer-icon-on {{ classes.on }}" src="/images/queue/priority-3-on.svg" alt="High priority on" />
+                    <img class="pointer-icon-off {{ classes.off }}" src="/images/queue/priority-3-off.svg" alt="High priority off" />
                 </label>
             </div>
         </div>
-        <div class="col form-group">
+        <div class="col">
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="priority" id="priority5" value="4"
-                        {% if selectedPriority == 4 %} checked {% endif %}
+                <input class="form-check-input d-none" type="radio" name="priority" id="priority5" value="4"
+                        {% if selectedPriority == 4 %} checked {% endif %} onclick="togglePriorityLabel(this)"
                 />
-                <label class="form-check-label" for="priority5">5</label>
+                <label class="form-check-label pointer" for="priority5">
+                    {% if selectedPriority == 4 %}
+                        {% set classes = priorityClasses[0] %}
+                    {% else %}
+                        {% set classes = priorityClasses[1] %}
+                    {% endif %}
+                    <img class="pointer-icon-on {{ classes.on }}" src="/images/queue/priority-4-on.svg" alt="Highest priority on" />
+                    <img class="pointer-icon-off {{ classes.off }}" src="/images/queue/priority-4-off.svg" alt="Highest priority off" />
+                </label>
             </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 <script>
+    // hover effect for priority radio buttons
+    if (typeof priorityLabels === 'undefined') {
+        let priorityLabels = null;
+    }
+    priorityLabels = document.querySelectorAll('.form-check-label');
+
+    priorityLabels.forEach((label) => {
+        label.addEventListener('mouseover', function() {
+            if (label.querySelector('.pointer-icon-on').classList.contains('selected')) {
+                return;
+            }
+            label.querySelector('.pointer-icon-on').classList.remove('d-none');
+            label.querySelector('.pointer-icon-off').classList.add('d-none');
+        });
+        label.addEventListener('mouseout', function() {
+            if (label.querySelector('.pointer-icon-on').classList.contains('selected')) {
+                return;
+            }
+            label.querySelector('.pointer-icon-on').classList.add('d-none');
+            label.querySelector('.pointer-icon-off').classList.remove('d-none');
+        });
+    });
+    function togglePriorityLabel(inputEl) {
+        let priorityLabels = document.querySelectorAll('.form-check-label');
+        priorityLabels.forEach((label) => {
+            // get the input element for the label
+            let inputEl = label.previousElementSibling;
+
+            label.innerHTML = `<img src="/images/queue/priority-${inputEl.value}-off.svg" alt="Priority ${inputEl.value} off" />`;
+        });
+        inputEl.nextElementSibling.innerHTML = `<img src="/images/queue/priority-${inputEl.value}-on.svg" alt="Priority ${inputEl.value} on" />`;
+        setPriority();
+    }
     function setPriority() {
         submitForm("queue-priority-form", "/api/queue/{{ queue_item.id }}/set_priority", "", function(data){
+            priorityLabels = null;
             loadPage('/dashboard/queue', 'content');
         });
     }
