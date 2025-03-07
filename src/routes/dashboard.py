@@ -5,9 +5,28 @@ import json
 
 @get("/dashboard")
 async def get_dashboard(request, response):
+    """
+    Get the dashboard
+    :param request:
+    :param response:
+    :return:
+    """
+
     html = Template.render_twig_template("dashboard.twig")
     return response(html)
 
+@get("/dashboard/home")
+async def get_dashboard_home(request, response):
+    """
+    Get the home grid for the dashboard
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..app.Queue import get_total_transcribed_stats
+    total_transcribed_stats = get_total_transcribed_stats()
+
+    return response(Template.render_twig_template("dashboard/home.twig", data={"total_transcribed_stats": total_transcribed_stats}))
 
 @get("/dashboard/athletes")
 async def get_dashboard_athletes(request, response):
