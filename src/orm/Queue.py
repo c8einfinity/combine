@@ -10,5 +10,3 @@ class Queue(ORM):
     processed= IntegerField(default_value=0)
     player_id = ForeignKeyField(IntegerField("id"), Player, default_value=1)
     priority = IntegerField(default_value=0)
-    processed_count = IntegerField(default_value=0)
-    unprocessed_count = IntegerField(default_value=0)
