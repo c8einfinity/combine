@@ -11,7 +11,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.unprocessed.unprocessed_count + total_transcribed_stats.processed.processed_count - total_transcribed_stats.processed.processed_count  }} / {{ total_transcribed_stats.unprocessed.unprocessed_count + total_transcribed_stats.processed.processed_count }}</h5>
+                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_transcribed - total_transcribed_stats.processed  }} / {{ total_transcribed_stats.total_transcribed }}</h5>
                             <p class="card-text">Videos Transcribed</p>
                         </div>
                         <div class="col-3">
@@ -41,7 +41,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_media.total_media }}</h5>
+                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_media }}</h5>
                             <p class="card-text">Videos Found</p>
                         </div>
                         <div class="col-3">
@@ -56,7 +56,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media.valid_media }}</h5>
+                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media }}</h5>
                             <p class="card-text">Pending Transcripts</p>
                         </div>
                         <div class="col-3">
