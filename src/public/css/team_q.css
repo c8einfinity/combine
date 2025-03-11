@@ -72,11 +72,15 @@ body {
 }
 
 .text-inchworm-green {
-    color: #bcff51;
+    color: #CFFF80;
 }
 
 .text-maastricht-blue {
     color: #012839;
+}
+
+.linear-bar-color-gradient {
+    background-image: linear-gradient(90deg, #D0E17C -0.39%, #9FCD56 33.78%, #489195 50.87%, #00609E 75%, #102D4F 92.09%, #102D4F 100.13%);
 }
 
 .text-granite-gray {
@@ -244,18 +248,24 @@ input[type="checkbox"]:checked:after {
     }
 }
 
-@media (min-width: 768px) {
-    .form-side-graphic-logo-playerq {
-        width: 60%;
-    }
-
-    .form-side-graphic-logo-teamq {
-        width: 50%;
+@media (max-width: 768px) {
+    .sponsor-header {
+        font-size: 3vw;
     }
 }
 
-.form-side-graphic-logo {
-    max-height: 100px;
+@media (min-width: 768px) {
+    .form-side-graphic-logo {
+        height: 100px !important;
+        width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-side-graphic-logo {
+        height: auto;
+        width: 33%;
+    }
 }
 
 .form-side-graphic-row {
@@ -268,7 +278,6 @@ input[type="checkbox"]:checked:after {
         width: 60%;
     }
 }
-
 
 .form-side-graphic-text {
     font-size: 33px;
@@ -463,7 +472,7 @@ input[type="checkbox"]:checked:after {
 .gradient-separator {
     height: 2px;
     width: 100%;
-    background: linear-gradient(90deg, #9FCD56FF, #3E6FB6FF, #012839FF);
+    background-image: linear-gradient(90deg, #E6ECA4 -0.86%, #9FCD56 9.29%, #489195 50.91%, #00609E 75.28%, #102D4F 92.53%, #102D4F 100.65%);
 }
 
 .form-group .error {
@@ -645,11 +654,25 @@ input[type="checkbox"]:checked:after {
     }
 }
 
-.welcome-container--left {
-    background-image: url("/images/player/welcome-screen-image-mb.jpg");
+.background-image-cover {
     background-size: cover;
     background-position: top center;
     background-repeat: no-repeat;
+}
+
+.welcome-container-left {
+    background-image: url("/images/player/welcome-screen-image-mb.jpg");
+}
+
+.background-image-cover-container {
+    background-image: url("/images/background/pdf-background.jpg");
+}
+
+.analytics-title-gradient {
+    background: linear-gradient(90deg, #D0E17C -0.51%, #9FCD56 21.65%, #489195 28.48%, #00609E 49.63%, #102D4F 69.14%, #102D4F 78%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
 }
 
 .welcome-container--right {
@@ -660,7 +683,7 @@ input[type="checkbox"]:checked:after {
 }
 
 @media (min-width: 768px) {
-    .welcome-container--left {
+    .welcome-container-left {
         background-image: url("/images/player/welcome-screen-image-dp.jpg");
         background-position: center;
     }
@@ -824,8 +847,15 @@ input[type="checkbox"]:checked:after {
     border-radius: 20px
 }
 
-.coaching-title {
-    background: linear-gradient(90deg, #7DC037 0%, #03709F 15%, #012839 40%);
+.coaching-title-gradient {
+    background: linear-gradient(90deg, #D0E17C -0.51%, #9FCD56 3.65%, #489195 8.48%, #00609E 15.63%, #102D4F 19.14%, #102D4F 28%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.scouting-title-gradient {
+    background: linear-gradient(90deg, #D0E17C 2.15%, #9FCD56 4.65%, #489195 8.48%, #00609E 15.63%, #102D4F 17.14%, #102D4F 21%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
@@ -900,6 +930,28 @@ input[type="checkbox"]:checked:after {
 
 .dataTables_length select {
     margin-right: 5px;
+}
+
+.sponsor-span,
+.sponsor-disabled {
+    position: relative;
+}
+
+.sponsor-disabled {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+}
+
+#is_sponsor+.sponsor-disabled {
+    display: none;
+}
+
+#is_sponsor[disabled]+.sponsor-disabled {
+    display: inline;
 }
 
 #drop-area,
