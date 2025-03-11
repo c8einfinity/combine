@@ -22,6 +22,15 @@
 // Assessment module
 @import "aatos.scss";
 
+.text-darker-green {
+    color: $darker-green;
+}
+
+.navbar-brand img {
+  height: 2rem;
+  margin: 0 2rem;
+}
+
 .priority-selector {
   position: absolute;
   background-color: $gray-500;

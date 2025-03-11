@@ -9,28 +9,30 @@
 
 
 {% block navigation %}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             <a class="navbar-brand" href="/dashboard">Menu</a>
         </button>
-        <a class="navbar-brand" href="/dashboard">Q Finder</a>
+        <a class="navbar-brand" href="/dashboard">
+            <img src="/images/logos/qfinder-logo-dark.svg" class="img-fluid" alt="QFinder" />
+        </a>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+                <li class="nav-item mx-1">
                     <a class="nav-link" id="homeLink" href="#" role="button" onclick="loadPage('/dashboard/home', 'content'); teamQNavSetActive(this);">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-1">
                     <a class="nav-link" id="athleteLink" href="#" role="button" onclick="loadPage('/dashboard/athletes', 'content'); teamQNavSetActive(this);">Athletes</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-1">
                     <a class="nav-link" href="#">Users</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-1">
                     <a class="nav-link" id="queueLink" href="#" role="button" onclick="loadPage('/dashboard/queue', 'content'); teamQNavSetActive(this);">Queue</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item mx-1">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
 
