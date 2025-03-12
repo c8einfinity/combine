@@ -21,9 +21,11 @@
 
 <script>
     if (typeof queueGrid === 'undefined') {
-        let queueGrid = null;
+        let queueGrid;
     }
+    queueGrid = null;
     $(document).ready(function() {
+
         queueGrid = $('#queue-grid').DataTable({
             "ajax": "/api/queue",
             "columns": [
