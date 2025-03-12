@@ -193,7 +193,13 @@ async def post_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    results = submit_player_results(str(player.first_name), str(player.last_name), request.body["playerText"], str(player.candidate_id))
+    results = submit_player_results(
+        str(player.first_name),
+        str(player.last_name),
+        str(player.image),
+        request.body["playerText"],
+        str(player.candidate_id)
+    )
 
     if "candidate_id" in results:
         player.candidate_id = results["candidate_id"]

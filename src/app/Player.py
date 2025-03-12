@@ -10,9 +10,9 @@ def get_player_results(candidate_id):
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
     return results.json()
 
-def submit_player_results(first_name, last_name, text="", candidate_id=""):
+def submit_player_results(first_name, last_name, image="", text="", candidate_id=""):
 
-    data = {"first_name": first_name, "last_name": last_name,
+    data = {"first_name": first_name, "last_name": last_name, "image": image,
             "candidate_id": candidate_id, "text": text}
 
     results = requests.post(os.getenv("TEAMQ_RESULTS_ENDPOINT"),
