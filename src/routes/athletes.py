@@ -192,20 +192,22 @@ async def post_athlete_results(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
     player.load()
+    if player.image:
+        player.image = base64.b64decode(player.image.value).decode("utf-8")
+    else:
+        player.image = ""
 
     results = submit_player_results(
         str(player.first_name),
         str(player.last_name),
-        str(player.image.value),
+        str(player.image),
         request.body["playerText"],
         str(player.candidate_id)
     )
-    print(f"Type of results: {type(results)}")
 
     if "candidate_id" in results:
         player.candidate_id = results["candidate_id"]
         # restore the image to a string
-        player.image = str(player.image.value)
         player.save()
 
     return response.redirect("/api/athletes/"+request.params["id"]+"/results")
