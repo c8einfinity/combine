@@ -18,7 +18,8 @@
                             {% endif %}
                         </div>
                         <div class="col-8">
-                            <h6 class="text-anton text-maastricht-blue pb-2" onclick="loadTranscript({{ video.id }})"><a href="{{ video.url }}" target="_blank">{{ video.title }} - {{ video.published_at }}</a></h6>
+                            <h6 class="text-anton text-maastricht-blue pb-2"><a role="button" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</a></h6>
+                            <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on YouTube</small></a>
                             <div class="form-group">
                                 <label>Include this video transcript in the results?</label>
                                 <input type="checkbox" class="form-control" onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
