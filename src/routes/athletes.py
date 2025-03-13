@@ -196,13 +196,16 @@ async def post_athlete_results(request, response):
     results = submit_player_results(
         str(player.first_name),
         str(player.last_name),
-        str(player.image),
+        str(player.image.value),
         request.body["playerText"],
         str(player.candidate_id)
     )
+    print(f"Type of results: {type(results)}")
 
     if "candidate_id" in results:
         player.candidate_id = results["candidate_id"]
+        # restore the image to a string
+        player.image = str(player.image.value)
         player.save()
 
     return response.redirect("/api/athletes/"+request.params["id"]+"/results")
@@ -409,7 +412,14 @@ async def post_athletes(request, response):
 @post("/api/athletes/{id}")
 async def post_athletes_id(request, response):
     from ..orm.Player import Player
-    player = Player(request.body)
+    player_params = request.body
+    # get the player image from the database
+    player = Player({"id": player_params["id"]})
+    player.load()
+
+    player_params["image"] = player.image.value
+
+    player = Player(player_params)
     if player.save():
         return response("Player saved")
     else:

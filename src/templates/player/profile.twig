@@ -12,17 +12,17 @@
 
         <ul class="nav nav-tabs justify-content-end">
             <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" aria-current="page" href="#"
+                <a class="nav-link active" role="button" data-toggle="tab" aria-current="page"
                    onclick="showTab(this.innerHTML)">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Videos</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');">Videos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">Links</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">Links</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#" onclick="showTab(this.innerHTML)">PlayerQ</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">PlayerQ</a>
             </li>
         </ul>
 
@@ -91,7 +91,7 @@
                                 {% if player_image != "None" %}
                                     <img class="img-fluid img-thumbnail"
                                          style=" width: 100%"
-                                         src="data:image/png;base64,{{ player_image }}"
+                                         src="data:image;base64,{{ player_image }}"
                                          alt="Athlete Picture">
                                 {% else %}
                                     <img class="img-fluid img-thumbnail" src="/images/avatar.svg"
@@ -113,9 +113,6 @@
             {% include "player/links.twig" %}
         </div>
         <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
-            <script>
-                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')
-            </script>
         </div>
         <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
             <script>
