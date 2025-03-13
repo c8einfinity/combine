@@ -483,8 +483,17 @@ async def get_test_classification(request, response):
                                                     params=[request.params["id"], request.params["media_id"]])
     transcript = player_transcripts.to_list(decode_transcript)[0]
 
+    if "data" not in transcript and "transcription" not in transcript["data"] and len(transcript["data"]["transcription"]) == 0:
+        return response("No data yet.")
+
     if "selected_speaker" in request.params:
         selected_speaker = request.params["selected_speaker"]
+        # update the selected speaker in the transcript
+        player_transcript = PlayerTranscripts({"id": transcript["id"]})
+        player_transcript.load()
+        player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data).decode("utf-8"))
+        player_transcript.selected_speaker = selected_speaker
+        player_transcript.save()
     else:
         selected_speaker = transcript["selected_speaker"]
 
