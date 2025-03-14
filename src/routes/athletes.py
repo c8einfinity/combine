@@ -491,7 +491,8 @@ async def get_test_classification(request, response):
         # update the selected speaker in the transcript
         player_transcript = PlayerTranscripts({"id": transcript["id"]})
         player_transcript.load()
-        player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data).decode("utf-8"))
+        if type(player_transcript.data.value) is str:
+            player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data.value).decode("utf-8"))
         player_transcript.selected_speaker = selected_speaker
         player_transcript.save()
     else:
