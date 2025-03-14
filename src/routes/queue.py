@@ -1,3 +1,5 @@
+import ast
+import base64
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
@@ -61,6 +63,7 @@ async def set_queue_priority(request, response):
     queue_item = Queue({"id": request.params["id"]})
     queue_item.load()
     queue_item.priority = request.body["priority"]
+    queue_item.data = ast.literal_eval(base64.b64decode(queue_item.data.value).decode("utf-8"))
     if queue_item.save():
         return response({"status": "ok"})
 
