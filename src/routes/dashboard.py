@@ -24,9 +24,13 @@ async def get_dashboard_home(request, response):
     :return:
     """
     from ..app.Queue import get_total_transcribed_stats
+    from ..app.Player import get_player_stats
+
     total_transcribed_stats = get_total_transcribed_stats()
 
-    return response(Template.render_twig_template("dashboard/home.twig", data={"total_transcribed_stats": total_transcribed_stats}))
+    player_stats = get_player_stats()
+
+    return response(Template.render_twig_template("dashboard/home.twig", data={"total_transcribed_stats": total_transcribed_stats, "player_stats": player_stats}))
 
 @get("/dashboard/athletes")
 async def get_dashboard_athletes(request, response):
