@@ -16,7 +16,7 @@ from .. import dba
 @get("/api/athletes")
 async def get_athletes(request, response):
     """
-    Gets all the athletes
+    Gets all the athletes for the data grid
     :param request:
     :param response:
     :return:
@@ -43,8 +43,24 @@ async def get_athletes(request, response):
 
     data["draw"] = request.params["draw"]
 
+    # loop through the players and get the transcribe stats
+    for player in data["data"]:
+        player["transcript_stats"] = player_transcript_stats(player["id"])
+
     return response(data)
 
+
+def player_transcript_stats(player_id):
+    """
+    Get the player transcript and media stats
+    :param player_id:
+    :return:
+    """
+    from ..app.Queue import get_player_transcribed_stats
+
+    player_transcripts = get_player_transcribed_stats(player_id)
+
+    return player_transcripts
 
 def decode_metadata(record):
     """

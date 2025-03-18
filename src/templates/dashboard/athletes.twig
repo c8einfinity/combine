@@ -38,6 +38,7 @@
                     <th>Sport</th>
                     <th>Home Town</th>
                     <th>Major</th>
+                    <th>Transcription Status</th>
                     <th>Status</th>
                 </tr>
                 </thead>
@@ -74,6 +75,20 @@
         });
     }
 
+    function getStatStatusClass(status) {
+        if (status === 100) {
+            return 'bg-success';
+        }
+
+        if (status === 0) {
+            return 'bg-danger';
+        }
+        if (status > 1 && status < 100) {
+            return 'bg-warning';
+        }
+
+        return 'bg-secondary';
+    }
     $(document).ready(function () {
         athletesGrid = $("#athletes-grid").DataTable({
             dom: '',
@@ -85,6 +100,24 @@
                 { data: 'sport' },
                 { data: 'home_town' },
                 { data: 'major' },
+                { "render": function(data, type, row) {
+                        let html = '<div class="d-flex" style="grid-gap: 0.5rem;">';
+                        html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+    <span class="bg-dark rounded-left p-1">Media</span>
+    <span class="${getStatStatusClass(row.transcript_stats.total_media > 0 ? 100 : 0)} rounded-right p-1">${row.transcript_stats.total_media}</span>
+</div>`;
+                        html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+    <span class="bg-dark rounded-left p-1">Verified</span>
+    <span class="${getStatStatusClass(Math.round((row.transcript_stats.valid_media / row.transcript_stats.total_media) * 100))} rounded-right p-1">${row.transcript_stats.valid_media}</span>
+</div>`;
+                        html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+    <span class="bg-dark rounded-left p-1">Completed</span>
+    <span class="${getStatStatusClass(Math.round((row.transcript_stats.processed / row.transcript_stats.valid_media) * 100))} rounded-right p-1">${row.transcript_stats.processed}</span>
+</div>`;
+                        html += "</div>";
+                        return html;
+                    }
+                },
                 { "render": function(data, type, row) {
                         let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/${row.id}', 'content')"> Profile </button>`
                         icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`

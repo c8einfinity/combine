@@ -30,11 +30,19 @@ def get_player_transcribed_stats(player_id):
     :return:
     """
     from ..orm.Queue import Queue
-    from ..orm.PlayerMedia import PlayerMedia
+    queue = Queue()
+    unprocessed_queue = queue.__dba__.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 and action = 'transcribe' and player_id = ?", [player_id])
 
-    unprocessed_queue = Queue()
+    processed_queue = queue.__dba__.fetch_one("select count(*) as processed_count from queue where processed = 1 and action = 'transcribe' and player_id = ?", [player_id])
 
-    processed_queue = Queue({"player_id": player_id, "type": "transcribe", "processed": 1})
-    processed_queue.select("sum(processed) as processed_count")
+    total_media = queue.__dba__.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and player_id = ?", [player_id])
 
-    return {}
+    valid_media = queue.__dba__.fetch_one("select count(*) as valid_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1 and player_id = ?", [player_id])
+
+    return {
+        "unprocessed": unprocessed_queue['unprocessed_count'] if unprocessed_queue else 0,
+        "processed": processed_queue['processed_count'] if processed_queue else 0,
+        "total_transcribed": unprocessed_queue['unprocessed_count'] + processed_queue['processed_count'] if unprocessed_queue and processed_queue else 0,
+        "total_media": total_media['total_media_count'] if total_media else 0,
+        "valid_media": valid_media['valid_media_count'] if valid_media else 0,
+    }
