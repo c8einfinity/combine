@@ -55,7 +55,10 @@
 
     usersGrid = null;
 
-    const message = $("#message");
+    if (typeof message === 'undefined') {
+        let message;
+    }
+    message = $("#message");
 
     function addUser() {
         if (document.forms[0].firstName.value === "") {
