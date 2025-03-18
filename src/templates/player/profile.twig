@@ -1,3 +1,5 @@
+{% set user = request.session.get("user") %}
+
 <div class="px-3 py-4">
     <div class="content pt-2 pb-2 px-4">
         <h3 class='col text-anton text-maastricht-blue pb-0'>
@@ -21,9 +23,11 @@
             <li class="nav-item">
                 <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">Links</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">PlayerQ</a>
-            </li>
+            {% if user.user_group_id == "1" %}
+                <li class="nav-item">
+                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">PlayerQ</a>
+                </li>
+            {% endif %}
         </ul>
 
         <div id="tabProfile" class="card pt-3 px-3 tab">

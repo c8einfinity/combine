@@ -1,0 +1,161 @@
+<div class="px-3 py-4">
+    <div class="content container-fluid">
+        <h3 class="text-anton text-maastricht-blue pb-2">USERS</h3>
+        <form id="user" class="card" method="post" onsubmit="return false;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" name="firstName" id="firstName"
+                               placeholder="First Name">
+                    </div>
+                    <div class="col form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
+                    </div>
+                    <div class="col form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                    </div>
+                    <div class="col form-group">
+                        <label for="password">Password</label>
+                        <input type="text" class="form-control" name="password" id="password" placeholder="Password">
+                    </div>
+                    <div class="col form-group">
+                        <label for="userGroupId">User Group</label>
+                        <select class="form-control" name="userGroupId" id="userGroupId">
+                            <option value="">Select User Group</option>
+                            {% for user_group in user_groups %}
+                                <option value="{{ user_group.id }}">{{ user_group.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2 pt-4">
+                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addUser()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+            <table id="users-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                <thead>
+                <!-- table details filled in completely by data tables -->
+                </thead>
+            </table>
+        </div>
+        <div id="message"></div>
+    </div>
+</div>
+<script>
+    var usersGrid = null;
+    const message = $("#message");
+
+    function addUser() {
+        if (document.forms[0].firstName.value === "") {
+            message.html(`<div class="alert alert-danger">First Name is required</div>`);
+            document.forms[0].firstName.focus();
+
+            return;
+        }
+
+        if (document.forms[0].lastName.value === "") {
+            message.html(`<div class="alert alert-danger">Last Name is required</div>`);
+            document.forms[0].lastName.focus();
+
+            return;
+        }
+
+        if (document.forms[0].email.value === "") {
+            message.html(`<div class="alert alert-danger">Email is required</div>`);
+            document.forms[0].email.focus();
+
+            return;
+        }
+
+        if (document.forms[0].password.value === "") {
+            message.html(`<div class="alert alert-danger">Password is required</div>`);
+            document.forms[0].password.focus();
+
+            return;
+        }
+
+        if (document.forms[0].userGroupId.value === "") {
+            message.html(`<div class="alert alert-danger">User Group is required</div>`);
+            document.forms[0].userGroupId.focus();
+
+            return;
+        }
+
+        message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                <span class="sr-only text-maastricht-blue">Adding ...</span>
+            </div></div>`)
+
+        submitForm("user", "/api/users", "", function () {
+            document.forms[0].firstName.value = "";
+            document.forms[0].lastName.value = "";
+
+            usersGrid.ajax.reload();
+
+            message.html(``);
+        });
+    }
+
+    $(document).ready(function () {
+        usersGrid = $("#users-grid").DataTable({
+            dom: "",
+            ajax: "/api/users",
+            columns: [
+                {
+                    "title": "ID",
+                    "data": "id",
+                    "visible": false
+                },
+                {
+                    "title": "First Name",
+                    "data": "first_name"
+                },
+                {
+                    "title": "Last Name",
+                    "data": "last_name"
+                },
+                {
+                    "title": "Email",
+                    "data": "email"
+                },
+                {
+                    "title": "Date Created",
+                    "data": "date_created"
+                },
+                {
+                    "title": "User Group",
+                    "data": "user_group_id"
+                },
+                {
+                    "title": "Status",
+                    "data": "is_active"
+                },
+                {
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        return ` <a class="fas fa-trash float-right" href="#" onclick="deleteUser(${row.id})"></a>`
+                    }
+                }
+            ],
+            language: {
+                emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
+            },
+            processing: true,
+            serverSide: true
+        });
+    });
+
+    function deleteUser(id) {
+        if (confirm("Delete User?")) {
+            deleteUrl(`/api/users/${id}`, null, "message", function () {
+                usersGrid.ajax.reload();
+            });
+        }
+    }
+</script>
