@@ -49,7 +49,12 @@
     </div>
 </div>
 <script>
-    var usersGrid = null;
+    if (typeof usersGrid === 'undefined') {
+        let usersGrid;
+    }
+
+    usersGrid = null;
+
     const message = $("#message");
 
     function addUser() {
