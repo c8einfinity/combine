@@ -89,12 +89,21 @@
 
         return 'bg-secondary';
     }
+
     $(document).ready(function () {
         athletesGrid = $("#athletes-grid").DataTable({
             dom: '',
             ajax: "/api/athletes",
             columns: [
-                { data: 'first_name' },
+                { "render": function (data, type, row) {
+                        if (!row.completed_bio) {
+                            return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom" title="Incomplete Biography">
+    <img src="/images/warning.svg" alt="Incomplete Biography Warning" />${row.first_name}
+</div>`;
+                        }
+                        return row.first_name;
+                    }
+                },
                 { data: 'last_name' },
                 { data: 'date_of_birth' },
                 { data: 'sport' },
