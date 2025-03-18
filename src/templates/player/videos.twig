@@ -21,8 +21,9 @@
                             <h6 class="text-anton text-maastricht-blue pb-2"><a role="button" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</a></h6>
                             <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on YouTube</small></a>
                             <div class="form-group">
-                                <label>Include this video transcript in the results?</label>
-                                <input type="checkbox" class="form-control" onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
+                                <label for="include_{{ video.id }}">Include this video transcript in the results?</label>
+                                <input id="include_{{ video.id }}" type="checkbox" class="form-control"
+                                    onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
                                 {%  if not video.transcript %}
                                 <a href="#" class="fa fa-plus-square" onclick="addToQueue({{ video.id }})"></a>
                                 {% endif %}
