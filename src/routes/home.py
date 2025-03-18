@@ -40,6 +40,8 @@ async def login(request, response):
     if "email" in request.body and user.load("email = ?", [request.body["email"]]):
         # validating
         if  tina4_auth.check_password( str(user.password), request.body["password"]):
+            request.session.set("user", user.to_dict())
+
             return response("<script>window.location.href='/dashboard'</script>")
         else:
             return response('<div class="alert alert-danger">Error - not a user or not a password</div><script>$(".progress-spinner").hide();</script>')
@@ -50,6 +52,8 @@ async def login(request, response):
 @get("/logout")
 async def get_logout(request, response):
     request.session.set("logged_in", False)
+    request.session.set("user", None)
+
     return response.redirect("/")
 
 @get("/session")
