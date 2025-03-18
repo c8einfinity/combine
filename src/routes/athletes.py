@@ -25,6 +25,7 @@ async def get_athletes(request, response):
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
     from ..orm.Player import Player
+    from ..app.Player import player_bio_complete
 
     data_tables_filter = get_data_tables_filter(request)
 
@@ -46,9 +47,9 @@ async def get_athletes(request, response):
     # loop through the players and get the transcribe stats
     for player in data["data"]:
         player["transcript_stats"] = player_transcript_stats(player["id"])
+        player["completed_bio"] = player_bio_complete(player["id"])
 
     return response(data)
-
 
 def player_transcript_stats(player_id):
     """

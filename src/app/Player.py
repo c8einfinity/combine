@@ -21,6 +21,40 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
     return results.json()
 
+def player_bio_complete(player_id):
+    """
+    Check if the player has all the required records
+    :param player_id:
+    :return:
+    """
+    from ..orm.Player import Player
+
+    player = Player({"id": player_id})
+    if player.load():
+        player = player.to_dict()
+        completed_fields = 0
+        if player["username"]:
+            completed_fields += 1
+        if player["first_name"]:
+            completed_fields += 1
+        if player["last_name"]:
+            completed_fields += 1
+        if player["image"]:
+            completed_fields += 1
+        if player["sport"]:
+            completed_fields += 1
+        if player["position"]:
+            completed_fields += 1
+        if player["date_of_birth"]:
+            completed_fields += 1
+        if player["home_town"]:
+            completed_fields += 1
+        if player["team"]:
+            completed_fields += 1
+        return completed_fields == 9
+
+    return None
+
 def get_player_stats():
     """
     Runs a query to return the total number of athletes in the database, and the status of their bio and linked videos
