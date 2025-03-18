@@ -351,7 +351,7 @@ async def post_athlete_transcripts_queue(request, response):
 
     player_media = PlayerMedia({"id": request.params["video_id"]})
     if player_media.load():
-        if player_media.is_valid:
+        if player_media.is_valid.value:
             player_media.is_valid = 0
         else:
             player_media.is_valid = 1
