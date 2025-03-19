@@ -8,8 +8,8 @@
                 <input class="form-control" name="url" placeholder="https://..." >
             </div>
             <div class="col form-group">
-                <label>Link Type</label>
-                <select class="form-control" name="mediaType">
+                <label for="mediaType">Link Type</label>
+                <select class="form-control" id="mediaType" name="mediaType">
                     <option value="video-youtube">You Tube</option>
                     <option value="link-bio">Bio Link</option>
                     <option value="video-generic">Video Link</option>
@@ -42,7 +42,10 @@
                     dom: '',
                     ajax: "/api/athletes/{{ player.id }}/links",
                     columns: [
-                        { data: 'url' },
+                        { "render": function(data, type, row) {
+                                return `<a href="${row.url}" target="_blank">${row.url}</a>`
+                            }
+                        },
                         { data: 'media_type' },
                         { "render": function(data, type, row) {
                                 let icons = `<button class="btn btn-soft-green" onclick="deleteLink(${row.id})"> Delete </button>`
