@@ -99,7 +99,6 @@ def decode_transcript(record):
         record["data"] = str(e)
     return record
 
-
 def decode_player_image(record):
     try:
         record["image"] = ast.literal_eval(base64.b64decode(record["image"]).decode("utf-8"))
@@ -168,10 +167,8 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
                                                     params=[request.params["id"]])
-
     text = ""
     transcripts = player_transcripts.to_list(decode_transcript)
     for transcript in transcripts:
@@ -180,10 +177,17 @@ async def get_athlete_results(request, response):
                 if speaker["speaker"] == transcript["selected_speaker"]:
                     text += speaker["text"]
 
+    results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+
     if str(player.candidate_id) != "":
-        results = get_player_results(str(player.candidate_id))
-    else:
-        results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+        from ..orm.PlayerResult import PlayerResult
+        player_result = PlayerResult().select("data, player_id", "player_id = ?", params=[str(player.id)], order_by=["date_created desc"], limit=1)
+        if player_result:
+            player_result = player_result.to_list()
+            if len(player_result) == 1:
+                results = json.loads(base64.b64decode(str(player_result[0]["data"])).decode("utf-8"))
+        else:
+            results = get_player_results(str(player.candidate_id))
 
     html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
 
@@ -206,6 +210,15 @@ async def post_athlete_results(request, response):
     :param response:
     :return:
     """
+
+    from ..orm.PlayerResult import PlayerResult
+
+    # create hash of the playerText
+    transcription_hash = hash(request.body["playerText"])
+    player_result = PlayerResult({"transcript_hash": transcription_hash})
+    if player_result.load():
+        return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
     player.load()
@@ -226,6 +239,15 @@ async def post_athlete_results(request, response):
         player.candidate_id = results["candidate_id"]
         # restore the image to a string
         player.save()
+
+    player_result = PlayerResult({
+        "player_id": request.params["id"],
+        "transcript_hash": transcription_hash,
+        "transcription": request.body["playerText"],
+        "data": json.dumps({"player": results["player"], "coach": results["coach"], "scout": results["scout"]})
+    })
+
+    player_result.save()
 
     return response.redirect("/api/athletes/"+request.params["id"]+"/results")
 

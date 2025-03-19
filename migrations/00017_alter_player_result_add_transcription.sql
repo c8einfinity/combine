@@ -1,0 +1,1 @@
+alter table player_result add transcription longtext NULL;

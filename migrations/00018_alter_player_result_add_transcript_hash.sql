@@ -1,0 +1,1 @@
+alter table player_result add transcript_hash varchar(255) NULL;

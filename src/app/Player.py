@@ -4,6 +4,11 @@ import os
 import json
 
 def get_player_results(candidate_id):
+    """
+    Fetch results from the API
+    :param candidate_id:
+    :return:
+    """
     results = requests.post(os.getenv("TEAMQ_RESULTS_ENDPOINT"),
                             json={"candidate_id": candidate_id},
                             headers={"Content-Type": "application/json",

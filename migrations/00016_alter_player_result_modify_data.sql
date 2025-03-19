@@ -1,0 +1,1 @@
+alter table player_result MODIFY data longblob NULL;
