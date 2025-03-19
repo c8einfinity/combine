@@ -1,11 +1,12 @@
 import ast
 import json
+import base64
+import hashlib
 from datetime import datetime
 
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-import base64
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
@@ -164,30 +165,35 @@ async def get_athlete_results(request, response):
     """
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
+    from ..orm.PlayerResult import PlayerResult
     player = Player({"id": request.params["id"]})
     player.load()
 
     player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
                                                     params=[request.params["id"]])
     text = ""
-    transcripts = player_transcripts.to_list(decode_transcript)
-    for transcript in transcripts:
-        for speaker in transcript["data"]["transcription"]:
-            if speaker and "speaker" in speaker:
-                if speaker["speaker"] == transcript["selected_speaker"]:
-                    text += speaker["text"]
-
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
-    if str(player.candidate_id) != "":
-        from ..orm.PlayerResult import PlayerResult
-        player_result = PlayerResult().select("data, player_id", "player_id = ?", params=[str(player.id)], order_by=["date_created desc"], limit=1)
-        if player_result:
-            player_result = player_result.to_list()
-            if len(player_result) == 1:
-                results = json.loads(base64.b64decode(str(player_result[0]["data"])).decode("utf-8"))
-        else:
-            results = get_player_results(str(player.candidate_id))
+    player_result = PlayerResult().select("data, player_id, transcription", "player_id = ?", params=[str(player.id)], order_by=["date_created desc"], limit=1)
+    if player_result:
+        player_result = player_result.to_list()
+        if len(player_result) == 1:
+            results = json.loads(base64.b64decode(str(player_result[0]["data"])).decode("utf-8"))
+            text = str(player_result[0]["transcription"])
+
+    if text == "":
+        transcripts = player_transcripts.to_list(decode_transcript)
+        for transcript in transcripts:
+            for speaker in transcript["data"]["transcription"]:
+                if speaker and "speaker" in speaker:
+                    if speaker["speaker"] == transcript["selected_speaker"]:
+                        text += speaker["text"]
+
+        if str(player.candidate_id) != "":
+                results = get_player_results(str(player.candidate_id))
+
+    # remove any none latin characters from text
+    text = ''.join([i if ord(i) < 128 else ' ' for i in text])
 
     html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
 
@@ -214,9 +220,10 @@ async def post_athlete_results(request, response):
     from ..orm.PlayerResult import PlayerResult
 
     # create hash of the playerText
-    transcription_hash = hash(request.body["playerText"])
-    player_result = PlayerResult({"transcript_hash": transcription_hash})
-    if player_result.load():
+    transcription_hash = hashlib.md5(str(request.body["playerText"]).encode('utf-8')).hexdigest()
+    player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
+    player_result = player_result.to_list()
+    if len(player_result) > 0:
         return response.redirect("/api/athletes/"+request.params["id"]+"/results")
 
     from ..orm.Player import Player
@@ -237,7 +244,6 @@ async def post_athlete_results(request, response):
 
     if "candidate_id" in results:
         player.candidate_id = results["candidate_id"]
-        # restore the image to a string
         player.save()
 
     player_result = PlayerResult({
