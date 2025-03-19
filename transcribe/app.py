@@ -30,7 +30,7 @@ audio_pipeline.to(torch.device("cuda"))
 
 asr_pipeline = pipeline(
     "automatic-speech-recognition",
-    model="openai/whisper-base",
+    model="openai/whisper-base.en",
     device="cuda"
 )
 
