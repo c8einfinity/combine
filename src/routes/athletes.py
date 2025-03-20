@@ -10,7 +10,7 @@ from tina4_python.Router import get, post, delete
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
-from ..app.Player import get_player_results, submit_player_results
+from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
 
 
@@ -204,7 +204,12 @@ async def post_upload_picture(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
     player.load()
-    player.image = request.body["picture-upload"]["content"]
+
+    try:
+        player.image = str(resize_profile_image(request.body["picture-upload"]["content"]))
+    except Exception as e:
+        return response(str(e))
+
     player.save()
     return response("<script>loadPage('/api/athletes/"+request.params["id"]+"', 'content')</script>")
 

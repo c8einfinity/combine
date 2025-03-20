@@ -25,7 +25,7 @@
             </li>
             {% if user.user_group_id == "1" %}
                 <li class="nav-item">
-                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">PlayerQ</a>
+                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
                 </li>
             {% endif %}
         </ul>
@@ -38,60 +38,60 @@
                         <div class="col">
                             <input type="hidden" name="id" value="{{ player.id }}">
                             <div class="form-group">
-                                <label>First Name</label>
-                                <input class="form-control" name="firstName" type="text" value="{{ player.first_name }}"
+                                <label for="firstNameInput">First Name</label>
+                                <input class="form-control" id="firstNameInput" name="firstName" type="text" value="{{ player.first_name }}"
                                        placeholder="First Name">
                             </div>
                             <div class="form-group">
-                                <label>Last Name</label>
-                                <input class="form-control" name="lastName" type="text" value="{{ player.last_name }}"
+                                <label for="lastNameInput">Last Name</label>
+                                <input class="form-control" id="lastNameInput" name="lastName" type="text" value="{{ player.last_name }}"
                                        placeholder="Last Name">
                             </div>
                             <div class="form-group">
-                                <label>Height</label>
-                                <input class="form-control" name="height" type="text" value='{{ player.height }}'
+                                <label for="heightInput">Height</label>
+                                <input class="form-control" id="heightInput" name="height" type="text" value='{{ player.height }}'
                                        placeholder="Height">
                             </div>
                             <div class="form-group">
-                                <label>Sport</label>
-                                <input class="form-control" name="sport" disabled type="text" value="{{ player.sport }}"
+                                <label for="sportInput">Sport</label>
+                                <input class="form-control" id="sportInput" name="sport" disabled type="text" value="{{ player.sport }}"
                                        placeholder="Sport">
                             </div>
                             <div class="form-group">
-                                <label>Email</label>
-                                <input class="form-control" name="email" type="text" value="{{ player.email }}"
+                                <label for="emailInput">Email</label>
+                                <input class="form-control" id="emailInput" name="email" type="text" value="{{ player.email }}"
                                        placeholder="Email">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label>Team</label>
-                                <input class="form-control" name="team" type="text" value="{{ player.team }}"
+                                <label for="teamInput">Team</label>
+                                <input class="form-control" id="teamInput" name="team" type="text" value="{{ player.team }}"
                                        placeholder="Team">
                             </div>
                             <div class="form-group">
-                                <label>Position</label>
-                                <input class="form-control" name="position" type="text" value="{{ player.position }}"
+                                <label for="positionInput">Position</label>
+                                <input class="form-control" id="positionInput" name="position" type="text" value="{{ player.position }}"
                                        placeholder="Position">
                             </div>
                             <div class="form-group">
-                                <label>Home Town</label>
-                                <input class="form-control" name="homeTown" type="text" value="{{ player.home_town }}"
+                                <label for="homeTownInput">Home Town</label>
+                                <input class="form-control" id="homeTownInput" name="homeTown" type="text" value="{{ player.home_town }}"
                                        placeholder="Home Town">
                             </div>
                             <div class="form-group">
-                                <label>Major</label>
-                                <input class="form-control" name="major" type="text" value="{{ player.major }}"
+                                <label for="majorInput">Major</label>
+                                <input class="form-control" id="majorInput" name="major" type="text" value="{{ player.major }}"
                                        placeholder="Major">
                             </div>
                             <div class="form-group">
-                                <label>Date Of Birth</label>
-                                <input class="form-control" name="dateOfBirth" type="text"
+                                <label for="dateOfBirthInput">Date Of Birth</label>
+                                <input class="form-control" id="dateOfBirthInput" name="dateOfBirth" type="text"
                                        value="{{ player.date_of_birth }}" placeholder="Date of Birth">
                             </div>
                         </div>
-                        <div class="col">
-                            <div id="profile-image">
+                        <div class="col-md-3">
+                            <div id="profile-image" style="max-width: 250px;">
                                 {% if player_image != "None" %}
                                     <img class="img-fluid img-thumbnail"
                                          style=" width: 100%"
@@ -119,9 +119,6 @@
         <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
         </div>
         <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
-            <script>
-                loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
-            </script>
         </div>
     </div>
 </div>

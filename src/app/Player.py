@@ -1,7 +1,13 @@
 import base64
+import io
+
 import requests
 import os
 import json
+
+from PIL import Image
+from PIL.Image import Resampling
+
 
 def get_player_results(candidate_id):
     """
@@ -78,3 +84,30 @@ def get_player_stats():
         "total_bio_links": player_bio_linked['total_bio_links'],
         "total_videos": player_videos_linked['total_videos']
     }
+
+def resize_profile_image(image_data):
+    """
+    Resize the profile image to under 64kb
+    :param image_data:
+    :return:
+    """
+    image = Image.open(io.BytesIO(base64.b64decode(image_data)))
+    # Convert to RGB if necessary
+    if image.format in ["PNG", "WEBP"]:
+        image = image.convert("RGB")
+
+    # resize the image to max width or height of 420px
+    image.thumbnail((420, 420), Resampling.BICUBIC)
+
+    # Compress the image until it's under 64KB
+    quality = 95
+    while True:
+        buffer = io.BytesIO()
+        image.save(buffer, format="JPEG", quality=quality)
+        if buffer.tell() <= 48 * 1024:  # 64KB
+            break
+        quality -= 5
+        if quality < 10:
+            raise Exception("Cannot resize image to be under 64KB")
+
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")
