@@ -1,0 +1,1 @@
+alter table player_transcripts add column user_verified_speaker integer not null default 0;

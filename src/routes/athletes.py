@@ -593,3 +593,21 @@ async def get_test_classification(request, response):
 
     return response(classification)
 
+@post("/api/athletes/{id}/transcript/{transcript_id}/verified")
+async def post_transcript_verified(request, response):
+    """
+    Sets the transcript as verified using the current logged-in user as the integer in the field
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+
+    player_transcript = PlayerTranscripts({"id": request.params["transcript_id"]})
+    player_transcript.load()
+    if type(player_transcript.data.value) is str:
+        player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data.value).decode("utf-8"))
+    player_transcript.user_verified_speaker = request.body["user_verified_speaker"]
+    player_transcript.save()
+
+    return response("Done!")

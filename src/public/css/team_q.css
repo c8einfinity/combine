@@ -138,11 +138,10 @@ input[type="checkbox"]:checked:after {
 /* BUTTON STYLES */
 .btn-soft-green {
     font-weight: 400;
-    font-family: var(--ff-anton);
+    font-family: var(--ff-anton), Impact, Arial, Helvetica, sans-serif;
     background: var(--soft-green);
     color: var(--navy);
     text-transform: uppercase;
-    border-radius: 0 !important;
 }
 
 .btn-soft-green:hover {
