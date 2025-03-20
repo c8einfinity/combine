@@ -104,10 +104,8 @@ while not terminated:
 
         if len(queue) == 1:
             print("FOUND", queue[0])
-
+            media_file = dba.fetch("select * from player_media where id = "+str(queue[0]["data"]["player_media_id"])).to_list()
             try:
-                media_file = dba.fetch("select * from player_media where id = "+str(queue[0]["data"]["player_media_id"])).to_list()
-
                 video_url = media_file[0]["url"]
                 audio_filename = "audio/"+media_file[0]["url"].replace("https://www.youtube.com/watch?v=", "").strip()+".wav"
 
@@ -130,6 +128,7 @@ while not terminated:
             except Exception as e:
                 print("ERROR", str(e))
                 dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": {"error": str(e)}})
+                dba.update("player_media", {"id": media_file[0]["id"], "is_deleted": 1})
                 dba.commit()
 
 
