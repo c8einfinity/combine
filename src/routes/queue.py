@@ -20,7 +20,7 @@ async def get_queue(request, response):
         where = f" and {data_tables_filter['where']}"
 
     queue = Queue().select(
-        ["t.*", "CONCAT(player.last_name, ' ', player.first_name) as player"],
+        ["t.priority", "t.id", "t.action", "t.date_created", "CONCAT(player.last_name, ', ', player.first_name) as player"],
         join=f"join player on t.player_id = player.id and t.processed = 0{where}",
         order_by=data_tables_filter["order_by"],
         limit=data_tables_filter["length"],
