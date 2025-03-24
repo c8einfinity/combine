@@ -66,6 +66,20 @@ def player_bio_complete(player_id):
 
     return None
 
+def player_report_sent(player_id):
+    """
+    Check if the player results have been sent and created
+    :param player_id:
+    :return:
+    """
+    from ..orm.PlayerResult import PlayerResult
+
+    player_result = PlayerResult().select("id", filter="player_id = ? and data is not NULL", params=[player_id], limit=1, order_by="date_created desc")
+    if len(player_result.to_list()) > 0:
+        return True
+
+    return False
+
 def get_player_stats():
     """
     Runs a query to return the total number of athletes in the database, and the status of their bio and linked videos
