@@ -93,8 +93,12 @@ def resize_profile_image(image_data):
     """
     image = Image.open(io.BytesIO(base64.b64decode(image_data)))
     # Convert to RGB if necessary
-    if image.format in ["PNG", "WEBP"]:
-        image = image.convert("RGB")
+    if image.mode in ("RGBA", "LA") or (image.mode == "P" and "transparency" in image.info):
+        # Create a white background image
+        background = Image.new("RGB", image.size, (255, 255, 255))
+        # Paste the image on the background, using the alpha channel as mask
+        background.paste(image, mask=image.split()[3] if image.mode == "RGBA" else image)
+        image = background
 
     # resize the image to max width or height of 420px
     image.thumbnail((420, 420), Resampling.BICUBIC)

@@ -469,7 +469,12 @@ async def post_athletes_id(request, response):
     player = Player({"id": player_params["id"]})
     player.load()
 
-    player_params["image"] = player.image.value
+    if player.image:
+        player.image = base64.b64decode(player.image.value).decode("utf-8")
+    else:
+        player.image = ""
+
+    player_params["image"] = player.image
 
     player = Player(player_params)
     if player.save():
