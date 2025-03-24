@@ -50,6 +50,8 @@ async def get_athletes(request, response):
         player["transcript_stats"] = player_transcript_stats(player["id"])
         player["completed_bio"] = player_bio_complete(player["id"])
         player["report_sent"] = player_report_sent(player["id"])
+        # Return only the date, Y-m-d format
+        player["date_of_birth"] = player["date_of_birth"].split("T")[0]
 
     return response(data)
 
