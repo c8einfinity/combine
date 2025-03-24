@@ -51,4 +51,4 @@ def get_data_tables_filter(request):
     else:
         length = 10
 
-    return {"length": length, "start" : start, "order_by" : order, "where" :  where};
+    return {"length": length, "start" : start, "order_by" : order, "where" :  where}

@@ -26,7 +26,6 @@ async def get_athletes(request, response):
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
     from ..orm.Player import Player
-    from ..orm.PlayerResult import PlayerResult
     from ..app.Player import player_bio_complete, player_report_sent
 
     data_tables_filter = get_data_tables_filter(request)
