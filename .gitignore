@@ -9,5 +9,5 @@
 /venv/
 
 # ide specific files
-.idea/
+.idea/*
 *.iml
