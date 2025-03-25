@@ -9,7 +9,7 @@ def get_total_transcribed_stats():
     queue = Queue()
     unprocessed_queue = queue.__dba__.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 and action = 'transcribe'")
 
-    processed_queue = queue.__dba__.fetch_one("select count(*) as processed_count from queue where processed = 1 and action = 'transcribe'")
+    processed_queue = queue.__dba__.fetch_one("select count(*) as processed_count from player_transcripts where user_verified_speaker > 0")
 
     total_media = queue.__dba__.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1")
 
@@ -33,7 +33,7 @@ def get_player_transcribed_stats(player_id):
     queue = Queue()
     unprocessed_queue = queue.__dba__.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 and action = 'transcribe' and player_id = ?", [player_id])
 
-    processed_queue = queue.__dba__.fetch_one("select count(*) as processed_count from qfinder.player_transcripts where player_id = ? and user_verified_speaker > 0", [player_id])
+    processed_queue = queue.__dba__.fetch_one("select count(*) as processed_count from player_transcripts where player_id = ? and user_verified_speaker > 0", [player_id])
 
     total_media = queue.__dba__.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and player_id = ?", [player_id])
 
