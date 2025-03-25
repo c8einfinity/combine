@@ -120,11 +120,11 @@
     <span class="${getStatStatusClass(row.transcript_stats.total_media > 0 ? 100 : 0)} rounded-right p-1">${row.transcript_stats.total_media}</span>
 </div>`;
                         html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
-    <span class="bg-dark rounded-left p-1">Verified</span>
+    <span class="bg-dark rounded-left p-1">Videos Verified</span>
     <span class="${getStatStatusClass(Math.round((row.transcript_stats.valid_media / row.transcript_stats.total_media) * 100))} rounded-right p-1">${row.transcript_stats.valid_media}</span>
 </div>`;
                         html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
-    <span class="bg-dark rounded-left p-1">Completed</span>
+    <span class="bg-dark rounded-left p-1">Speaker Verified</span>
     <span class="${getStatStatusClass(Math.round((row.transcript_stats.processed / row.transcript_stats.valid_media) * 100))} rounded-right p-1">${row.transcript_stats.processed}</span>
 </div>`;
                         html += "</div>";
