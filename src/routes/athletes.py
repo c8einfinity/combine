@@ -14,7 +14,7 @@ from ..app.Player import get_player_results, submit_player_results, resize_profi
 from .. import dba
 
 
-@get("/api/athletes")
+@get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
     Gets all the athletes for the data grid
@@ -33,6 +33,20 @@ async def get_athletes(request, response):
     where = "id <> ?"
     if data_tables_filter["where"] != "":
         where += " and " + data_tables_filter["where"]
+
+    if request.params["status"] != "all":
+        if request.params["status"] == "completed-reports":
+            where += " and id in (select player_id from player_result)"
+        if request.params["status"] == "verified-speakers":
+            where += (" and id in (SELECT pt.player_id FROM player_transcripts pt "
+                      "JOIN player_media pm "
+                      "ON pt.player_id = pm.player_id "
+                      "AND pt.user_verified_speaker > 0 "
+                      "AND pm.is_valid = 1 "
+                      "AND pm.media_type = 'video-youtube' "
+                      "GROUP BY pt.player_id HAVING COUNT(pt.id) = COUNT(pm.id))")
+        if request.params["status"] == "verified-videos":
+            where += " and id in (select player_id from player_media where is_valid = 1 and is_deleted = 0)"
 
     players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,

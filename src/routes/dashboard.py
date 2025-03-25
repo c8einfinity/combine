@@ -32,9 +32,9 @@ async def get_dashboard_home(request, response):
 
     return response(Template.render_twig_template("dashboard/home.twig", data={"total_transcribed_stats": total_transcribed_stats, "player_stats": player_stats}))
 
-@get("/dashboard/athletes")
+@get("/dashboard/athletes/{status}")
 async def get_dashboard_athletes(request, response):
-    html = Template.render_twig_template("dashboard/athletes.twig")
+    html = Template.render_twig_template("dashboard/athletes.twig", data={"status": request.params["status"]})
 
     return response(html)
 
