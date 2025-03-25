@@ -111,7 +111,7 @@ def decode_player_image(record):
     return record
 
 
-@get("/api/athletes/{id}")
+@get("/api/athletes/profile/{id}")
 async def get_athlete(request, response):
     """
     :param request:
@@ -625,7 +625,7 @@ async def post_transcript_verified(request, response):
 
     return response("Done!")
 
-@post("player/pdf/download")
+@post("player/pdf/download/{candidate_id}/{report_type}")
 async def athlete_pdf_downloader(request, response):
     """
     This function gets the candidate's id and report type for the PDF downloader.
@@ -634,7 +634,7 @@ async def athlete_pdf_downloader(request, response):
     :return:
     """
 
-    candidate_id = request.body["candidate_id"]
-    report_type = request.body["report_type"]
+    candidate_id = request.params["candidate_id"]
+    report_type = request.params["report_type"]
 
     return response(pdf_downloader(candidate_id, report_type))
