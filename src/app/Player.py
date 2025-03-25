@@ -2,6 +2,7 @@ import base64
 import io
 import requests
 import os
+
 from PIL import Image
 from PIL.Image import Resampling
 
@@ -40,12 +41,10 @@ def player_bio_complete(player_id):
     """
     from ..orm.Player import Player
 
-    player = Player({"id": player_id})
-    if player.load():
-        player = player.to_dict()
+    player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
+    if player.count == 1:
+        player = player[0]
         completed_fields = 0
-        if player["username"]:
-            completed_fields += 1
         if player["first_name"]:
             completed_fields += 1
         if player["last_name"]:
@@ -62,9 +61,23 @@ def player_bio_complete(player_id):
             completed_fields += 1
         if player["team"]:
             completed_fields += 1
-        return completed_fields == 9
+        return completed_fields == 8
 
     return None
+
+def player_report_sent(player_id):
+    """
+    Check if the player results have been sent and created
+    :param player_id:
+    :return:
+    """
+    from ..orm.PlayerResult import PlayerResult
+
+    player_result = PlayerResult().select("id", filter="player_id = ? and data is not NULL", params=[player_id], limit=1, order_by="date_created desc")
+    if len(player_result.to_list()) > 0:
+        return True
+
+    return False
 
 def get_player_stats():
     """
@@ -93,8 +106,12 @@ def resize_profile_image(image_data):
     """
     image = Image.open(io.BytesIO(base64.b64decode(image_data)))
     # Convert to RGB if necessary
-    if image.format in ["PNG", "WEBP"]:
-        image = image.convert("RGB")
+    if image.mode in ("RGBA", "LA") or (image.mode == "P" and "transparency" in image.info):
+        # Create a white background image
+        background = Image.new("RGB", image.size, (255, 255, 255))
+        # Paste the image on the background, using the alpha channel as mask
+        background.paste(image, mask=image.split()[3] if image.mode == "RGBA" else image)
+        image = background
 
     # resize the image to max width or height of 420px
     image.thumbnail((420, 420), Resampling.BICUBIC)
