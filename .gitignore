@@ -11,3 +11,4 @@
 # ide specific files
 .idea/*
 *.iml
+/src/public/css/default.css
