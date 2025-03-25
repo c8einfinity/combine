@@ -12,6 +12,12 @@ poetry add poetry-plugin-export
 poetry export -f requirements.txt --output requirements.txt
 ```
 
+```bash
+docker-compose up
+docker exec -i combine-mysql mysql -u root -p<password> qfinder < <path to file>
+
+```
+
 ## Rabbit MQ
 
 Add a user with the permissions
