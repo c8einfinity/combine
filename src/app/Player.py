@@ -3,7 +3,6 @@ import io
 
 import requests
 import os
-import json
 
 from PIL import Image
 from PIL.Image import Resampling
@@ -40,9 +39,9 @@ def player_bio_complete(player_id):
     """
     from ..orm.Player import Player
 
-    player = Player({"id": player_id})
-    if player.load():
-        player = player.to_dict()
+    player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
+    if player.count == 1:
+        player = player[0]
         completed_fields = 0
         if player["first_name"]:
             completed_fields += 1
@@ -60,7 +59,7 @@ def player_bio_complete(player_id):
             completed_fields += 1
         if player["team"]:
             completed_fields += 1
-        return completed_fields == 9
+        return completed_fields == 8
 
     return None
 
