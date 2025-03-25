@@ -34,6 +34,26 @@ async def post_users(request, response):
     """
     return Users.post_users(request, response)
 
+@get("/api/users/{id}")
+async def get_users_id(request, response):
+    """
+    Route to get a user by ID
+    :param request:
+    :param response:
+    :return:
+    """
+    return Users.get_users_id(request, response)
+
+@post("/api/users/{id}")
+async def post_users_id(request, response):
+    """
+    Route to edit a user
+    :param request:
+    :param response:
+    :return:
+    """
+    return Users.post_users_id(request, response)
+
 @delete("/api/users/{id}")
 async def delete_user(request, response):
     """

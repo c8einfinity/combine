@@ -46,6 +46,7 @@
             </table>
         </div>
         <div id="message"></div>
+        <div id="form"></div>
     </div>
 </div>
 <script>
@@ -103,6 +104,9 @@
         submitForm("user", "/api/users", "", function () {
             document.forms[0].firstName.value = "";
             document.forms[0].lastName.value = "";
+            document.forms[0].email.value = "";
+            document.forms[0].password.value = "";
+            document.forms[0].userGroupId.value = "";
 
             usersGrid.ajax.reload();
 
@@ -147,7 +151,11 @@
                 {
                     "orderable": false,
                     "render": function (data, type, row) {
-                        return ` <a class="fas fa-trash float-right" href="#" onclick="deleteUser(${row.id})"></a>`
+                        let actions = ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
+
+                        actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
+
+                        return actions
                     }
                 }
             ],
@@ -158,6 +166,10 @@
             serverSide: true
         });
     });
+
+    function editUser(id) {
+        showForm("edit", `/api/users/${id}?formToken={{ formToken() }}`)
+    }
 
     function deleteUser(id) {
         if (confirm("Delete User?")) {

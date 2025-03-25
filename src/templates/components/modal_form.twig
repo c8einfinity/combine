@@ -1,0 +1,38 @@
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered player-results-modal" role="document">
+        <div class="modal-content white-label">
+            <div class="modal-header border-0">
+                <h3 class="modal-title text-maastricht-blue text-anton" id="exampleModalLabel">{{ title }}</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="gradient-separator mb-0"></div>
+            <div class="modal-body vendor-edits p-0">
+                {{ content }}
+            </div>
+            {% if result is undefined and result != 1 %}
+                <div class="modal-footer">
+                    {% if not error %}
+                        <button type="button" class="btn btn-soft-green" onclick="{{ onclick }}">
+                            {{ "Save" if "Edit" in title else "Ok" }}
+                        </button>
+                        <button type="button" class="btn btn-white-uppercase" data-dismiss="modal">Cancel</button>
+                    {% else %}
+                        <button type="button" class="btn btn-soft-green" data-dismiss="modal">Ok</button>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#formModal').modal();
+
+    $('#formModal').on('hidden.bs.modal', function () {
+        $(this).removeData();
+        $('.modal-backdrop').remove();
+    });
+</script>

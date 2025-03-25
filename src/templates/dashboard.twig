@@ -1,4 +1,5 @@
 {% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 {% extends "base.twig" %}
 
 {% block head_content %}
@@ -38,6 +39,14 @@
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="usersLink" href="#" role="button"
                            onclick="loadPage('/api/users/landing', 'content'); teamQNavSetActive(this);">Users</a>
+                    </li>
+                {% endif %}
+                {% if user.user_group_id == "1" %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" id="usersLink" href="#" role="button"
+                           onclick="loadPage('/api/user_groups/landing', 'content'); teamQNavSetActive(this);">
+                            User Groups
+                        </a>
                     </li>
                 {% endif %}
                 {% if user.user_group_id == "1" %}

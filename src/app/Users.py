@@ -71,6 +71,46 @@ class Users:
         return response(user)
 
     @staticmethod
+    def get_users_id(request, response):
+        from ..orm.User import User
+
+        user = User({"id": request.params["id"]})
+        user.load()
+
+        data = {
+            "user": user.to_dict(),
+            "user_groups": UserGroup.get_user_group_data()
+        }
+
+        html = Template.render_twig_template("forms/edit_user.twig", data)
+        title = "EDIT USER"
+        on_click = (f"if ( $('#usersModalForm').valid() ) {{ "
+                    f"saveForm('usersModalForm', '/api/users/{str(user.id)}', 'message'); "
+                    f"$('#formModal').modal('hide');}}")
+
+        form_html = Template.render_twig_template("components/modal_form.twig",
+                                                  {"content": html, "title": title, "onclick": on_click})
+
+        return response(form_html)
+
+    @staticmethod
+    def post_users_id(request, response):
+        """
+        Function to edit a user
+        :param request:
+        :param response:
+        :return:
+        """
+        from ..orm.User import User
+
+        user = User({"id": request.body["id"]})
+
+        if user.save():
+            return response("User saved")
+        else:
+            return response("Failed to save user!")
+
+    @staticmethod
     def delete_user(request, response):
         """
         Function to delete a user

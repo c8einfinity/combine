@@ -1,11 +1,13 @@
+import json
 import os
-
 import tina4_python
+from .. import dba
+from ..app.Roles import Roles
+from ..app.UserGroup import UserGroup
 from tina4_python import Debug, tina4_auth
 from tina4_python.Router import get, post
 from tina4_python.Queue import Queue, Config, Producer
 from tina4_python.Template import Template
-from .. import dba
 
 
 config = Config()
@@ -40,6 +42,14 @@ async def login(request, response):
     if "email" in request.body and user.load("email = ?", [request.body["email"]]):
         # validating
         if  tina4_auth.check_password( str(user.password), request.body["password"]):
+            user_group = UserGroup.get_user_group_data_by_id(user.user_group_id)
+
+            if "permissions" in user_group and user_group["permissions"] and user_group["permissions"] != "None":
+                permissions = json.loads(user_group["permissions"])
+            else:
+                permissions = Roles.get_initial_roles_permission_list()["access_list"]
+
+            request.session.set("permissions", permissions)
             request.session.set("user", user.to_dict())
 
             return response("<script>window.location.href='/dashboard'</script>")
