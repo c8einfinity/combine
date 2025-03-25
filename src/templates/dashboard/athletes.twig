@@ -30,7 +30,7 @@
         <div id="message"></div>
         <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
             <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs mb-1">
                 <li class="nav-item">
                     <a role="button" class="nav-link {% if status == "all" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
                 </li>
@@ -47,7 +47,7 @@
                 {% endif %}
             </ul>
 
-            <table id="athletes-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+            <table id="athletes-grid" class="table" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Player Id</th>
