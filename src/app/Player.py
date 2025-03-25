@@ -44,8 +44,6 @@ def player_bio_complete(player_id):
     if player.load():
         player = player.to_dict()
         completed_fields = 0
-        if player["username"]:
-            completed_fields += 1
         if player["first_name"]:
             completed_fields += 1
         if player["last_name"]:
