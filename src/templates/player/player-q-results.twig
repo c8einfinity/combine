@@ -27,7 +27,7 @@
         <form id="text-submit">
             <label class="sr-only" for="playerText">Transcription Text</label>
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
-            <div class="row my-2 align-items-center">
+            <div class="col my-2 align-items-center">
                 <div class="col">
                     <b>Word Count:</b> <span id="wordCount">0</span>
                 </div>
@@ -44,9 +44,11 @@
     </div>
 </div>
 <script>
+    let type = []
     function showResultTab(tabName) {
         $(".result-tab").hide();
         $("#" + tabName).show();
+        type = tabName.split("-")
     }
 
     showResultTab("player-report");
@@ -73,9 +75,20 @@
     $('#wordCount').html(countWords('playerText'));
 
     function submitPlayerText() {
-        submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function(data) {
+        submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function() {
             loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
         });
+    }
+
+    function downloadPDF(candidate_id) {
+        data = {
+            "candidate_id": candidate_id,
+            "report_type": type[0]
+        }
+
+        submitForm("pdf-download", "player/pdf/download", data, function() {
+            loadPage("/api/athletes/{{ player.id }}/results', 'tabPlayerQ")
+        })
     }
 
 </script>

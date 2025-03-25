@@ -4,13 +4,13 @@ import base64
 import hashlib
 from datetime import datetime
 
-from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
+from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
-from ..app.Player import get_player_results, submit_player_results, resize_profile_image
+from ..app.Player import get_player_results, submit_player_results, resize_profile_image, pdf_downloader
 from .. import dba
 
 
@@ -616,3 +616,17 @@ async def post_transcript_verified(request, response):
     player_transcript.save()
 
     return response("Done!")
+
+@post("player/pdf/download")
+async def athlete_pdf_downloader(request, response):
+    """
+    This function gets the candidate's id and report type for the PDF downloader.
+    :param request:
+    :param response:
+    :return:
+    """
+
+    candidate_id = request.body["candidate_id"]
+    report_type = request.body["report_type"]
+
+    return response(pdf_downloader(candidate_id, report_type))

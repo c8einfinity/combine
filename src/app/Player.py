@@ -1,13 +1,9 @@
 import base64
 import io
-
 import requests
 import os
-import json
-
 from PIL import Image
 from PIL.Image import Resampling
-
 
 def get_player_results(candidate_id):
     """
@@ -15,10 +11,14 @@ def get_player_results(candidate_id):
     :param candidate_id:
     :return:
     """
-    results = requests.post(os.getenv("TEAMQ_RESULTS_ENDPOINT"),
+
+    team_q_endpoint = os.getenv("TEAMQ_ENDPOINT")
+
+    results = requests.post(f"{team_q_endpoint}/recruit/assessment",
                             json={"candidate_id": candidate_id},
                             headers={"Content-Type": "application/json",
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
+
     return results.json()
 
 def submit_player_results(first_name, last_name, image="", text="", candidate_id=""):
@@ -111,3 +111,15 @@ def resize_profile_image(image_data):
             raise Exception("Cannot resize image to be under 64KB")
 
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+def pdf_downloader(candidate_id, report_type):
+    """
+    This function downloads the player report PDF.
+    :param candidate_id:
+    :param report_type:
+    :return:
+    """
+
+    team_q_endpoint = os.getenv("TEAMQ_ENDPOINT")
+
+    return requests.get(f"{team_q_endpoint}/player/{candidate_id}/pdf/report/{report_type}/download")
