@@ -20,7 +20,6 @@ google = "^3.0.0"
 weasyprint = "^64.1"
 wkhtmltopdf = "^0.2"
 pdfkit = "^1.0.0"
-pydub = "^0.25.1"
 transformers = "^4.50.0"
 pyannote-audio = "^3.3.2"
 

@@ -3424,18 +3424,6 @@ files = [
 markers = {dev = "sys_platform == \"linux\" or sys_platform == \"darwin\" or platform_python_implementation == \"PyPy\""}
 
 [[package]]
-name = "pydub"
-version = "0.25.1"
-description = "Manipulate audio with an simple and easy high level interface"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "pydub-0.25.1-py2.py3-none-any.whl", hash = "sha256:65617e33033874b59d87db603aa1ed450633288aefead953b30bded59cb599a6"},
-    {file = "pydub-0.25.1.tar.gz", hash = "sha256:980a33ce9949cab2a569606b65674d748ecbca4f0796887fd6f46173a7b0d30f"},
-]
-
-[[package]]
 name = "pydyf"
 version = "0.11.0"
 description = "A low-level PDF generator."
@@ -5610,4 +5598,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "52bd71467d7076e4354e3018fb1280bf9fb3d9262e8e9f031f5dec567000c5f8"
+content-hash = "ed91a1763ca9e52273fc6045c762bbd17828a5bd87ec2371c85ebd48d8a14b0c"
