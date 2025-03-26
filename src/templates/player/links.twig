@@ -4,13 +4,13 @@
         <input type="hidden" name="player_id" value="{{ player.id }}" >
         <div class="row">
             <div class="col form-group">
-                <label>Link Url</label>
-                <input class="form-control" name="url" placeholder="https://..." >
+                <label for="linkUrl">Link Url</label>
+                <input class="form-control" id="linkUrl" name="url" placeholder="https://..." >
             </div>
             <div class="col form-group">
                 <label for="mediaType">Link Type</label>
                 <select class="form-control" id="mediaType" name="mediaType">
-                    <option value="video-youtube">You Tube</option>
+                    <option value="video-youtube">YouTube</option>
                     <option value="link-bio">Bio Link</option>
                     <option value="video-generic">Video Link</option>
                     <option value="link-generic">Generic Link</option>

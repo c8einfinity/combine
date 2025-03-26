@@ -2,7 +2,9 @@ import ast
 import json
 import base64
 import hashlib
+import requests
 from datetime import datetime
+from urllib.parse import urlparse, parse_qs
 
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
@@ -506,6 +508,19 @@ async def post_athlete_links(request, response):
 
     player_media = PlayerMedia(request.body)
     player_media.player_id = request.params["id"]
+
+    if request.body["mediaType"] == "video-youtube":
+        from ..app.Scraper import get_youtube_info
+        # strip out the video id from the url "?v=" param
+        parsed_url = urlparse(request.body["url"])
+        params = parse_qs(parsed_url.query)
+        if params.get("v"):
+            video_id = params.get("v")[0]
+            video_meta = get_youtube_info(video_id)
+            if video_meta:
+                player_media.is_valid = 1
+                player_media.metadata = video_meta
+
     if player_media.save():
         return response("Player Media saved")
     else:
