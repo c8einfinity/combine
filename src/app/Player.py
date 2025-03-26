@@ -12,10 +12,7 @@ def get_player_results(candidate_id):
     :param candidate_id:
     :return:
     """
-
-    team_q_endpoint = os.getenv("TEAMQ_ENDPOINT")
-
-    results = requests.post(f"{team_q_endpoint}/recruit/assessment",
+    results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
                             json={"candidate_id": candidate_id},
                             headers={"Content-Type": "application/json",
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
@@ -27,7 +24,7 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     data = {"first_name": first_name, "last_name": last_name, "image": image,
             "candidate_id": candidate_id, "text": text}
 
-    results = requests.post(os.getenv("TEAMQ_RESULTS_ENDPOINT"),
+    results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
                             json=data,
                             headers={"Content-Type": "application/json",
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
