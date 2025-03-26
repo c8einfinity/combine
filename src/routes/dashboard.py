@@ -1,3 +1,4 @@
+from tina4_python.Constant import HTTP_OK, TEXT_HTML
 from tina4_python.Template import Template
 from tina4_python.Router import get, post
 import random
@@ -11,9 +12,10 @@ async def get_dashboard(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
-    html = Template.render_twig_template("dashboard.twig")
-    return response(html)
+    return response(Template.render_twig_template("dashboard.twig"))
 
 @get("/dashboard/home")
 async def get_dashboard_home(request, response):
@@ -23,6 +25,9 @@ async def get_dashboard_home(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..app.Queue import get_total_transcribed_stats
     from ..app.Player import get_player_stats
 
@@ -32,9 +37,12 @@ async def get_dashboard_home(request, response):
 
     return response(Template.render_twig_template("dashboard/home.twig", data={"total_transcribed_stats": total_transcribed_stats, "player_stats": player_stats}))
 
-@get("/dashboard/athletes")
+@get("/dashboard/athletes/{status}")
 async def get_dashboard_athletes(request, response):
-    html = Template.render_twig_template("dashboard/athletes.twig")
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
+    html = Template.render_twig_template("dashboard/athletes.twig", data={"status": request.params["status"]})
 
     return response(html)
 
@@ -46,6 +54,9 @@ async def get_dashboard_queue(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     return response(Template.render_twig_template("dashboard/queue.twig"))
 
 def decode_metadata(record):

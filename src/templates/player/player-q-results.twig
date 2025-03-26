@@ -104,7 +104,7 @@
                         Download Report
                     </a>
                     <a
-                        href="/api/athletes/{{ player.id }}/report/player"
+                        href="/api/athlete/{{ player.id }}/report/player"
                         target="_blank"
                         class="p-1"
                         style="
@@ -160,7 +160,7 @@
                         Download Report
                     </a>
                     <a
-                        href="/api/athletes/{{ player.id }}/report/coaching"
+                        href="/api/athlete/{{ player.id }}/report/coaching"
                         target="_blank"
                         class="p-1"
                         style="
@@ -216,7 +216,7 @@
                         Download Report
                     </a>
                     <a
-                        href="/api/athletes/{{ player.id }}/report/scouting"
+                        href="/api/athlete/{{ player.id }}/report/scouting"
                         target="_blank"
                         class="p-1"
                         style="
@@ -271,8 +271,8 @@
     $('#wordCount').html(countWords('playerText'));
 
     function submitPlayerText() {
-        submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function() {
-            loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
+        submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "",  function(data) {
+            loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
         });
     }
 </script>

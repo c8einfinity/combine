@@ -3,8 +3,11 @@ import json
 import base64
 import hashlib
 import os
+import requests
 from datetime import datetime
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
+from urllib.parse import urlparse, parse_qs
+from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 from ..app.Scraper import get_youtube_videos, chunk_text
@@ -13,7 +16,7 @@ from ..app.Player import get_player_results, submit_player_results, resize_profi
 from .. import dba
 
 
-@get("/api/athletes")
+@get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
     Gets all the athletes for the data grid
@@ -32,6 +35,20 @@ async def get_athletes(request, response):
     where = "id <> ?"
     if data_tables_filter["where"] != "":
         where += " and " + data_tables_filter["where"]
+
+    if request.params["status"] != "all":
+        if request.params["status"] == "completed-reports":
+            where += " and id in (select player_id from player_result)"
+        if request.params["status"] == "verified-speakers":
+            where += (" and id in (SELECT pt.player_id FROM player_transcripts pt "
+                      "JOIN player_media pm "
+                      "ON pt.player_id = pm.player_id "
+                      "AND pt.user_verified_speaker > 0 "
+                      "AND pm.is_valid = 1 "
+                      "AND pm.media_type = 'video-youtube' "
+                      "GROUP BY pt.player_id HAVING COUNT(pt.id) = COUNT(pm.id))")
+        if request.params["status"] == "verified-videos":
+            where += " and id in (select player_id from player_media where is_valid = 1 and is_deleted = 0)"
 
     players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
@@ -110,13 +127,16 @@ def decode_player_image(record):
     return record
 
 
-@get("/api/athletes/profile/{id}")
+@get("/api/athlete/{id}")
 async def get_athlete(request, response):
     """
     :param request:
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -136,7 +156,7 @@ async def get_athlete(request, response):
         return response("Player error, or player not found")
 
 
-@get("/api/athletes/{id}/report")
+@get("/api/athlete/{id}/report")
 async def get_athlete_full_report(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
@@ -196,7 +216,7 @@ async def get_athlete_report(request, response):
 
     return response(html)
 
-@get("/api/athletes/{id}/results")
+@get("/api/athlete/{id}/results")
 async def get_athlete_results(request, response):
     """
     Get athlete results
@@ -204,6 +224,9 @@ async def get_athlete_results(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
     from ..orm.PlayerResult import PlayerResult
@@ -249,7 +272,7 @@ async def get_athlete_results(request, response):
 
     return response(html)
 
-@post("/api/athletes/{id}/upload-picture")
+@post("/api/athlete/{id}/upload-picture")
 async def post_upload_picture(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
@@ -261,9 +284,9 @@ async def post_upload_picture(request, response):
         return response(str(e))
 
     player.save()
-    return response("<script>loadPage('/api/athletes/"+request.params["id"]+"', 'content')</script>")
+    return response("<script>loadPage('/api/athlete/"+request.params["id"]+"', 'content')</script>")
 
-@post("/api/athletes/{id}/results")
+@post("/api/athlete/{id}/results")
 async def post_athlete_results(request, response):
     """
     Update
@@ -279,7 +302,7 @@ async def post_athlete_results(request, response):
     player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
     player_result = player_result.to_list()
     if len(player_result) > 0:
-        return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+        return response.redirect("/api/athlete/"+request.params["id"]+"/results")
 
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
@@ -310,11 +333,14 @@ async def post_athlete_results(request, response):
 
     player_result.save()
 
-    return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+    return response.redirect("/api/athlete/"+request.params["id"]+"/results")
 
 
-@get("/api/athletes/{id}/videos")
+@get("/api/athlete/{id}/videos")
 async def get_athlete_videos(request, response):
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -347,7 +373,7 @@ async def get_athlete_videos(request, response):
     return response(html)
 
 
-@post("/api/athletes/{id}/videos")
+@post("/api/athlete/{id}/videos")
 async def post_athlete_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
@@ -372,9 +398,9 @@ async def post_athlete_videos(request, response):
     player_media.is_sorted = 1
     player_media.save()
 
-    return response.redirect("/api/athletes/"+request.params["id"]+"/videos")
+    return response.redirect("/api/athlete/"+request.params["id"]+"/videos")
 
-@get("/api/athletes/{id}/videos/{video_id}/transcript")
+@get("/api/athlete/{id}/videos/{video_id}/transcript")
 async def get_athlete_transcripts(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
@@ -403,7 +429,7 @@ async def get_athlete_transcripts(request, response):
     return response(html)
 
 
-@post("/api/athletes/{id}/videos/{video_id}/transcript/queue")
+@post("/api/athlete/{id}/videos/{video_id}/transcript/queue")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.Queue import Queue
     queue = Queue()
@@ -416,7 +442,7 @@ async def post_athlete_transcripts_queue(request, response):
     return response("Queued!")
 
 
-@post("/api/athletes/{id}/videos/{video_id}/remove")
+@post("/api/athlete/{id}/videos/{video_id}/remove")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -428,7 +454,7 @@ async def post_athlete_transcripts_queue(request, response):
     return response("Removed!")
 
 
-@post("/api/athletes/{id}/videos/{video_id}/include")
+@post("/api/athlete/{id}/videos/{video_id}/include")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -444,8 +470,25 @@ async def post_athlete_transcripts_queue(request, response):
     return response("Done!")
 
 
-@get("/api/athletes/{id}/links")
+@get("/api/athlete/{id}/links")
 async def get_athlete_links(request, response):
+    """
+    Route to return the links template.
+    :param request:
+    :param response:
+    :return:
+    """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
+    data = {
+        "player_id": request.params["id"]
+    }
+
+    return response(Template.render_twig_template("player/links.twig", data))
+
+@get("/api/athlete/{id}/links_data")
+async def get_athlete_links_data(request, response):
     if "draw" not in request.params:
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
@@ -511,7 +554,7 @@ async def post_athletes(request, response):
     return response(player)
 
 
-@post("/api/athletes/{id}")
+@post("/api/athlete/{id}")
 async def post_athletes_id(request, response):
     from ..orm.Player import Player
     player_params = request.body
@@ -533,19 +576,32 @@ async def post_athletes_id(request, response):
         return response("Failed to save player!")
 
 
-@post("/api/athletes/{id}/links")
+@post("/api/athlete/{id}/links")
 async def post_athlete_links(request, response):
     from ..orm.PlayerMedia import PlayerMedia
 
     player_media = PlayerMedia(request.body)
     player_media.player_id = request.params["id"]
+
+    if request.body["mediaType"] == "video-youtube":
+        from ..app.Scraper import get_youtube_info
+        # strip out the video id from the url "?v=" param
+        parsed_url = urlparse(request.body["url"])
+        params = parse_qs(parsed_url.query)
+        if params.get("v"):
+            video_id = params.get("v")[0]
+            video_meta = get_youtube_info(video_id)
+            if video_meta:
+                player_media.is_valid = 1
+                player_media.metadata = video_meta
+
     if player_media.save():
         return response("Player Media saved")
     else:
         return response("Failed to save media!")
 
 
-@delete("/api/athletes/{id}")
+@delete("/api/athlete/{id}")
 async def delete_athlete(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
@@ -568,7 +624,7 @@ async def delete_athlete(request, response):
         return response("Failed to delete player!")
 
 
-@delete("/api/athletes/{id}/links/{link_id}")
+@delete("/api/athlete/{id}/links/{link_id}")
 async def delete_athlete_link(request, response):
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -579,7 +635,7 @@ async def delete_athlete_link(request, response):
         return response("Failed to delete media!")
 
 
-@get("/api/athletes/{id}/transcripts/{media_id}/classification")
+@get("/api/athlete/{id}/transcripts/{media_id}/classification")
 async def get_test_classification(request, response):
     from ..app.Scraper import aatos, classification_text
     from ..orm.PlayerTranscripts import PlayerTranscripts
@@ -653,7 +709,7 @@ async def get_test_classification(request, response):
 
     return response(classification)
 
-@post("/api/athletes/{id}/transcript/{transcript_id}/verified")
+@post("/api/athlete/{id}/transcript/{transcript_id}/verified")
 async def post_transcript_verified(request, response):
     """
     Sets the transcript as verified using the current logged-in user as the integer in the field

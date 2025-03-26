@@ -1,16 +1,16 @@
 <div class="card-body">
     <h5 class="card-title text-anton text-maastricht-blue pb-2">Links</h5>
     <form id="linkDetails" onsubmit="return false">
-        <input type="hidden" name="player_id" value="{{ player.id }}" >
+        <input type="hidden" name="player_id" value="{{ player_id }}" >
         <div class="row">
             <div class="col form-group">
-                <label>Link Url</label>
-                <input class="form-control" name="url" placeholder="https://..." >
+                <label for="linkUrl">Link Url</label>
+                <input class="form-control" id="linkUrl" name="url" placeholder="https://..." >
             </div>
             <div class="col form-group">
                 <label for="mediaType">Link Type</label>
                 <select class="form-control" id="mediaType" name="mediaType">
-                    <option value="video-youtube">You Tube</option>
+                    <option value="video-youtube">YouTube</option>
                     <option value="link-bio">Bio Link</option>
                     <option value="video-generic">Video Link</option>
                     <option value="link-generic">Generic Link</option>
@@ -40,7 +40,7 @@
             $(document).ready(function () {
                 linksGrid = $("#links-grid").DataTable({
                     dom: '',
-                    ajax: "/api/athletes/{{ player.id }}/links",
+                    ajax: "/api/athlete/{{ player_id }}/links_data",
                     columns: [
                         { "render": function(data, type, row) {
                                 return `<a href="${row.url}" target="_blank">${row.url}</a>`
@@ -62,7 +62,7 @@
             });
 
             function addLink() {
-                submitForm('linkDetails', '/api/athletes/{{ player.id }}/links', 'linkMessage', function() {
+                submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function() {
                     linksGrid.ajax.reload();
                 });
 
@@ -70,7 +70,7 @@
 
             function deleteLink(link_id) {
                 if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athletes/{{ player.id }}/links/${link_id}`, null, 'linkMessage', function (){
+                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function (){
                         linksGrid.ajax.reload();
                     })
                 }

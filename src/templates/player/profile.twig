@@ -1,4 +1,5 @@
 {% set user = request.session.get("user") %}
+{% set logged_in = request.session.get("logged_in") %}
 
 <div class="px-3 py-4">
     <div class="content pt-2 pb-2 px-4">
@@ -18,14 +19,14 @@
                    onclick="showTab(this.innerHTML)">Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');">Videos</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">Links</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
             </li>
             {% if user.user_group_id == "1" %}
                 <li class="nav-item">
-                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
+                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
                 </li>
             {% endif %}
         </ul>
@@ -103,18 +104,17 @@
                                          alt="Athlete Picture">
                                 {% endif %}
                             </div>
-                            <input id="file-upload" name="picture-upload" type="file" accept="image/*"  onchange="submitForm('profileDetails', '/api/athletes/{{ player.id }}/upload-picture', 'profile-image')">
+                            <input id="file-upload" name="picture-upload" type="file" accept="image/*"  onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')">
                         </div>
                     </div>
                 </form>
                 <div id="profileMessage"></div>
                 <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
-                        onclick="submitForm('profileDetails', '/api/athletes/{{ player.id }}', 'profileMessage')"> Save
+                        onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')"> Save
                 </button>
             </div>
         </div>
         <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
-            {% include "player/links.twig" %}
         </div>
         <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
         </div>

@@ -45,28 +45,28 @@
                 <span class="sr-only text-maastricht-blue">Loading...</span>
             </div></div>`)
 
-            loadPage(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
+            loadPage(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
         }
 
         function addToQueue(videoId) {
-            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function(data){
-                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
 
         function toggleIncludeVideo(videoId) {
-            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function(data){
-                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos');
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
 
         function removeVideo(videoId) {
-            postUrl(`/api/athletes/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function(data){
-                loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function(data){
+                loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')
             });
         }
 
         loadTranscript({{ ns.load_video_id }})
     </script>
-    <!-- <button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos', 'tabVideos')"> Refresh </button> -->
+    <!-- <button class="btn btn-soft-green" onclick="loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')"> Refresh </button> -->
 </div>
