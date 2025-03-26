@@ -9,6 +9,6 @@
 /venv/
 
 # ide specific files
-.idea/*
+/.idea/
 *.iml
 /src/public/css/default.css
