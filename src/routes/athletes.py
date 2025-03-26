@@ -228,7 +228,7 @@ async def post_upload_picture(request, response):
         return response(str(e))
 
     player.save()
-    return response("<script>loadPage('/api/athletes/"+request.params["id"]+"', 'content')</script>")
+    return response("<script>loadPage('/api/athlete/"+request.params["id"]+"', 'content')</script>")
 
 @post("/api/athlete/{id}/results")
 async def post_athlete_results(request, response):
@@ -246,7 +246,7 @@ async def post_athlete_results(request, response):
     player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
     player_result = player_result.to_list()
     if len(player_result) > 0:
-        return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+        return response.redirect("/api/athlete/"+request.params["id"]+"/results")
 
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
@@ -277,7 +277,7 @@ async def post_athlete_results(request, response):
 
     player_result.save()
 
-    return response.redirect("/api/athletes/"+request.params["id"]+"/results")
+    return response.redirect("/api/athlete/"+request.params["id"]+"/results")
 
 
 @get("/api/athlete/{id}/videos")
@@ -339,7 +339,7 @@ async def post_athlete_videos(request, response):
     player_media.is_sorted = 1
     player_media.save()
 
-    return response.redirect("/api/athletes/"+request.params["id"]+"/videos")
+    return response.redirect("/api/athlete/"+request.params["id"]+"/videos")
 
 @get("/api/athlete/{id}/videos/{video_id}/transcript")
 async def get_athlete_transcripts(request, response):
