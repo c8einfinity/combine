@@ -125,15 +125,3 @@ def resize_profile_image(image_data):
             raise Exception("Cannot resize image to be under 64KB")
 
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
-
-def pdf_downloader(candidate_id, report_type):
-    """
-    This function downloads the player report PDF.
-    :param candidate_id:
-    :param report_type:
-    :return:
-    """
-
-    team_q_endpoint = os.getenv("TEAMQ_ENDPOINT")
-
-    return requests.get(f"{team_q_endpoint}/player/{candidate_id}/pdf/report/{report_type}/download")

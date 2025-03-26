@@ -80,16 +80,9 @@
     </div>
 </div>
 <script>
-    if (typeof type === 'undefined') {
-        let type;
-    }
-
-    type = [];
-
     function showResultTab(tabName) {
         $(".result-tab").hide();
         $("#" + tabName).show();
-        type = tabName.split("-")
     }
 
     showResultTab("player-report");
@@ -120,13 +113,6 @@
             loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
         });
     }
-
-    function downloadPDF() {
-        postUrl(`player/pdf/download/{{ player.candidate_id }}/${type[0]}?formToken={{ form_token }}`,"", "", function(){
-             loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
-        })
-    }
-
 </script>
 
 
