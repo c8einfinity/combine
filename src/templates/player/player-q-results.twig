@@ -7,9 +7,6 @@
     </div>
     <div class="col">
         <ul class="nav nav-tabs">
-            <li>
-                <h5 class="text-anton text-maastricht-blue pb-2 p-2">Player Q Results</h5>
-            </li>
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#" onclick="showResultTab('player-report')">Player</a>
             </li>
@@ -28,15 +25,68 @@
             <label class="sr-only" for="playerText">Transcription Text</label>
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
         </form>
-        <div>
-            <div style="margin: 10px 0 1rem -10px">
-                <b>Word Count:</b> <span id="wordCount">0</span>
+        <div class="d-flex justify-content-between mt-3">
+            <div>
+                <b
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 600;
+                        font-size: 14px;
+                        color: #000000;
+                    "
+                >
+                    Word Count:
+                </b>
+                <span
+                    id="wordCount"
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 400;
+                        font-size: 14px;
+                        color: #000000;
+                    "
+                >
+                    0
+                </span>
             </div>
-            <div class="row justify-content-between w-100">
-                <a
-                        onclick="downloadPDF()"
-                        class="p-2"
+            <a
+             href="/api/athletes/{{ player.id }}/report"
+             target="_blank"
+             class="p-1"
+             style="
+                color: #000000;
+                background-color: #CFFF80;
+                text-align: center;
+                text-decoration: none;
+                font-family: 'Inter', 'Arial', sans-serif;
+                border-radius: 5px;
+                font-weight: 600;
+                font-size: 14px;
+                width: 140px;
+                height: 30px;
+             "
+            >
+                View Full Report
+            </a>
+        </div>
+    </div>
+    <div class="col">
+        <div id="player-report" class="pt-1 pb-3 px-1 result-tab">
+            <div class="d-flex justify-content-between">
+                <h5
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 700;
+                        font-size: 24px;
+                        color: #000000;
+                    "
+                >
+                    Player Results
+                </h5>
+                <div class="row justify-content-between">
+                    <a
                         href="#"
+                        class="p-1"
                         style="
                             color: #CFFF80;
                             background-color: #000000;
@@ -46,35 +96,37 @@
                             border-radius: 5px;
                             font-weight: 600;
                             font-size: 14px;
-                            width: 49%
+                            width: 140px;
+                            height: 30px;
+                            margin-right: 10px;
                         "
-                >
-                    Download Report
-                </a>
-                <a
-                        class="p-2"
+                    >
+                        Download Report
+                    </a>
+                    <a
+                        href="/api/athletes/{{ player.id }}/report/player"
+                        target="_blank"
+                        class="p-1"
                         style="
                             color: #000000;
-                            text-decoration: none;
                             background-color: #CFFF80;
                             text-align: center;
+                            text-decoration: none;
                             font-family: 'Inter', 'Arial', sans-serif;
                             border-radius: 5px;
                             font-weight: 600;
                             font-size: 14px;
-                            width: 49%;
-                            margin-right: -1.5rem
+                            width: 109px;
+                            height: 30px;
+                            margin-right: 13px;
                         "
-                        href="/api/athletes/{{ player.id }}/report"
-                        target="_blank"
-                >
-                    View Report
-                </a>
+                    >
+                        View Report
+                    </a>
+                </div>
             </div>
+            {{ results.player }}
         </div>
-    </div>
-    <div class="col">
-        <div id="player-report" class="pt-1 pb-3 px-1 result-tab">{{ results.player }}</div>
         <div id="coach-report" class="pt-1 pb-3 px-1 result-tab">{{ results.coach }}</div>
         <div id="scout-report" class="pt-1 pb-3 px-1 result-tab">{{ results.scout }}</div>
     </div>

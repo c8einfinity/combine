@@ -158,6 +158,33 @@ async def get_athlete_full_report(request, response):
 
     return response(html)
 
+@get("/api/athletes/{id}/report/{report_type}")
+async def get_athlete_report(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    report_type = request.params["report_type"]
+    player.load()
+
+    if player.image.value is not None:
+        player_image = base64.b64decode(player.image.value).decode("utf-8")
+    else:
+        player_image = "None"
+
+
+    if str(player.candidate_id) != "":
+        results = get_player_results(str(player.candidate_id))
+    else:
+        results = {"full_report": {"pages": []}}
+
+    html = Template.render_twig_template("player/reports/full_report.twig", {
+        "player": player.to_dict(),
+        "player_image": player_image,
+        "full_report": results[report_type]["pdf"],
+        "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")
+    })
+
+    return response(html)
+
 @get("/api/athletes/{id}/results")
 async def get_athlete_results(request, response):
     """
