@@ -1,7 +1,7 @@
 <div class="card-body">
     <h5 class="card-title text-anton text-maastricht-blue pb-2">Links</h5>
     <form id="linkDetails" onsubmit="return false">
-        <input type="hidden" name="player_id" value="{{ player.id }}" >
+        <input type="hidden" name="player_id" value="{{ player_id }}" >
         <div class="row">
             <div class="col form-group">
                 <label>Link Url</label>
@@ -40,7 +40,7 @@
             $(document).ready(function () {
                 linksGrid = $("#links-grid").DataTable({
                     dom: '',
-                    ajax: "/api/athlete/{{ player.id }}/links",
+                    ajax: "/api/athlete/{{ player_id }}/links_data",
                     columns: [
                         { "render": function(data, type, row) {
                                 return `<a href="${row.url}" target="_blank">${row.url}</a>`
@@ -62,7 +62,7 @@
             });
 
             function addLink() {
-                submitForm('linkDetails', '/api/athlete/{{ player.id }}/links', 'linkMessage', function() {
+                submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function() {
                     linksGrid.ajax.reload();
                 });
 
@@ -70,7 +70,7 @@
 
             function deleteLink(link_id) {
                 if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athlete/{{ player.id }}/links/${link_id}`, null, 'linkMessage', function (){
+                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function (){
                         linksGrid.ajax.reload();
                     })
                 }

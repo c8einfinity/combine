@@ -1,4 +1,5 @@
 {% set user = request.session.get("user") %}
+{% set logged_in = request.session.get("logged_in") %}
 
 <div class="px-3 py-4">
     <div class="content pt-2 pb-2 px-4">
@@ -21,7 +22,7 @@
                 <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML)">Links</a>
+                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
             </li>
             {% if user.user_group_id == "1" %}
                 <li class="nav-item">
@@ -114,7 +115,6 @@
             </div>
         </div>
         <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
-            {% include "player/links.twig" %}
         </div>
         <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
         </div>

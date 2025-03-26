@@ -1,8 +1,9 @@
 # Copyright 2025 Code Infinity
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
-from tina4_python.Router import get, post, delete
 from ..app.Users import Users
+from tina4_python.Constant import HTTP_OK, TEXT_HTML
+from tina4_python.Router import get, post, delete
 
 @get("api/users/landing")
 async def get_users_landing(request, response):
@@ -12,6 +13,9 @@ async def get_users_landing(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     return Users.get_users_landing(response)
 
 @get("/api/users")
