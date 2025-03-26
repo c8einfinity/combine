@@ -3,9 +3,7 @@ import json
 import base64
 import hashlib
 import os
-import requests
 from datetime import datetime
-from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
 from urllib.parse import urlparse, parse_qs
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
@@ -183,7 +181,7 @@ async def get_athlete_full_report(request, response):
 
     return response(html)
 
-@get("/api/athletes/{id}/report/{report_type}")
+@get("/api/athlete/{id}/report/{report_type}")
 async def get_athlete_report(request, response):
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
