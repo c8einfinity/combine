@@ -134,6 +134,9 @@ async def get_athlete(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -182,6 +185,9 @@ async def get_athlete_results(request, response):
     :param response:
     :return:
     """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
     from ..orm.PlayerResult import PlayerResult
@@ -284,6 +290,9 @@ async def post_athlete_results(request, response):
 
 @get("/api/athlete/{id}/videos")
 async def get_athlete_videos(request, response):
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
 
@@ -415,6 +424,23 @@ async def post_athlete_transcripts_queue(request, response):
 
 @get("/api/athlete/{id}/links")
 async def get_athlete_links(request, response):
+    """
+    Route to return the links template.
+    :param request:
+    :param response:
+    :return:
+    """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
+    data = {
+        "player_id": request.params["id"]
+    }
+
+    return response(Template.render_twig_template("player/links.twig", data))
+
+@get("/api/athlete/{id}/links_data")
+async def get_athlete_links_data(request, response):
     if "draw" not in request.params:
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 

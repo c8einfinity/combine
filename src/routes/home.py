@@ -6,7 +6,7 @@ from tina4_python.Router import get, post
 from tina4_python.Queue import Queue, Config, Producer
 from tina4_python.Template import Template
 from .. import dba
-
+from ..app.SessionHandler import SessionHandler
 
 config = Config()
 config.queue_type = 'rabbitmq'
@@ -27,10 +27,22 @@ producer = Producer(queue, delivery_callback=tell_me)
 
 @get("/")
 async def index(request, response):
-    request.session.set("logged_in", False)
+    SessionHandler.unset_user_session(request)
 
     html = Template.render("index.twig")
     return response(html)
+
+@get("/login")
+async def get_login(request, response):
+    """
+    Route to get the login template.
+    :param request:
+    :param response:
+    :return:
+    """
+    SessionHandler.unset_user_session(request)
+
+    return response(Template.render("auth/login.twig"))
 
 @post("/login")
 async def login(request, response):
@@ -40,7 +52,7 @@ async def login(request, response):
     if "email" in request.body and user.load("email = ?", [request.body["email"]]):
         # validating
         if  tina4_auth.check_password( str(user.password), request.body["password"]):
-            request.session.set("user", user.to_dict())
+            SessionHandler.set_user_session(request, user.to_dict())
 
             return response("<script>window.location.href='/dashboard'</script>")
         else:
@@ -51,8 +63,7 @@ async def login(request, response):
 
 @get("/logout")
 async def get_logout(request, response):
-    request.session.set("logged_in", False)
-    request.session.set("user", None)
+    SessionHandler.unset_user_session(request)
 
     return response.redirect("/")
 
