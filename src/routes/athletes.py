@@ -2,12 +2,11 @@ import ast
 import json
 import base64
 import hashlib
+import os
 from datetime import datetime
-
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
@@ -154,7 +153,13 @@ async def get_athlete_full_report(request, response):
     else:
         results = {"full_report": {"pages": []}}
 
-    html = Template.render_twig_template("player/reports/full_report.twig", {"player": player.to_dict(), "player_image": player_image, "full_report": results["full_report"], "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")})
+    html = Template.render_twig_template("player/reports/full_report.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "player": player.to_dict(),
+        "player_image": player_image,
+        "full_report": results["full_report"],
+        "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")
+    })
 
     return response(html)
 
@@ -182,6 +187,7 @@ async def get_athlete_report(request, response):
             report.append(page)
 
     html = Template.render_twig_template("player/reports/report.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
         "player": player.to_dict(),
         "player_image": player_image,
         "report": report,
@@ -230,7 +236,16 @@ async def get_athlete_results(request, response):
     # remove any none latin characters from text
     text = ''.join([i if ord(i) < 128 else ' ' for i in text])
 
-    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
+    html = Template.render_twig_template("player/player-q-results.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "player": player.to_dict(),
+        "results": {
+            "player": results["player"]["html"],
+            "coach": results["coach"]["html"],
+            "scout": results["scout"]["html"]
+        },
+        "text": text
+    })
 
     return response(html)
 
