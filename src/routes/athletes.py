@@ -170,16 +170,21 @@ async def get_athlete_report(request, response):
     else:
         player_image = "None"
 
-
     if str(player.candidate_id) != "":
         results = get_player_results(str(player.candidate_id))
     else:
         results = {"full_report": {"pages": []}}
 
-    html = Template.render_twig_template("player/reports/full_report.twig", {
+    report = []
+
+    for page in results["full_report"]["pages"]:
+        if page["category"] == report_type:
+            report.append(page)
+
+    html = Template.render_twig_template("player/reports/report.twig", {
         "player": player.to_dict(),
         "player_image": player_image,
-        "full_report": results[report_type]["pdf"],
+        "report": report,
         "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")
     })
 
