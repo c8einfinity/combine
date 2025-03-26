@@ -151,7 +151,7 @@
                     "orderable": false
                 },
                 { "render": function(data, type, row) {
-                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/${row.id}', 'content')"> Profile </button>`
+                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
                         icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                         return icons
                     }
@@ -167,7 +167,7 @@
 
     function deleteAthlete(id) {
         if (confirm("Delete Athlete ?")) {
-            deleteUrl(`/api/athletes/${id}`, null, 'message', function (){
+            deleteUrl(`/api/athlete/${id}`, null, 'message', function (){
                 athletesGrid.ajax.reload();
             })
         }

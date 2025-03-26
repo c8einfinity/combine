@@ -40,7 +40,7 @@
             $(document).ready(function () {
                 linksGrid = $("#links-grid").DataTable({
                     dom: '',
-                    ajax: "/api/athletes/{{ player.id }}/links",
+                    ajax: "/api/athlete/{{ player.id }}/links",
                     columns: [
                         { "render": function(data, type, row) {
                                 return `<a href="${row.url}" target="_blank">${row.url}</a>`
@@ -62,7 +62,7 @@
             });
 
             function addLink() {
-                submitForm('linkDetails', '/api/athletes/{{ player.id }}/links', 'linkMessage', function() {
+                submitForm('linkDetails', '/api/athlete/{{ player.id }}/links', 'linkMessage', function() {
                     linksGrid.ajax.reload();
                 });
 
@@ -70,7 +70,7 @@
 
             function deleteLink(link_id) {
                 if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athletes/{{ player.id }}/links/${link_id}`, null, 'linkMessage', function (){
+                    deleteUrl(`/api/athlete/{{ player.id }}/links/${link_id}`, null, 'linkMessage', function (){
                         linksGrid.ajax.reload();
                     })
                 }

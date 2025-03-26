@@ -68,7 +68,7 @@
 
     function submitUserVerification(inputElement) {
         if (inputElement.checked) {
-            submitForm("speaker_form", "/api/athletes/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function() {
+            submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function() {
                 loadTranscript({{ transcripts[0].player_media_id }});
             });
         }
@@ -81,7 +81,7 @@
                 <span class="sr-only text-maastricht-blue">Loading...</span>
             </div></div>`)
 
-        loadPage(`/api/athletes/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
+        loadPage(`/api/athlete/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
     }
 </script>
 {% else %}
@@ -89,7 +89,7 @@
 {% endif %}
 {% else %}
 <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - None</h5>
-<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/{{ player.id }}/videos?search=1', 'tabVideos')"> Find Videos </button>
+<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/{{ player.id }}/videos?search=1', 'tabVideos')"> Find Videos </button>
 {% endif %}
 
 <div style="display:none"> {{ RANDOM()~"ID" }} </div>
