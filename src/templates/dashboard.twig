@@ -33,7 +33,7 @@
                 {% endif %}
                 <li class="nav-item mx-1">
                     <a class="nav-link" id="athleteLink" href="#" role="button"
-                       onclick="loadPage('/dashboard/athletes', 'content'); teamQNavSetActive(this);">Athletes</a>
+                       onclick="loadPage('/dashboard/athletes/all', 'content'); teamQNavSetActive(this);">Athletes</a>
                 </li>
                 {% if user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
@@ -71,7 +71,7 @@
             loadPage('/dashboard/home', 'content');
             teamQNavSetActive($('#homeLink')[0]);
         {% else %}
-            loadPage('/dashboard/athletes', 'content')
+            loadPage('/dashboard/athletes/all', 'content')
             teamQNavSetActive($("#athleteLink")[0]);
         {% endif %}
 

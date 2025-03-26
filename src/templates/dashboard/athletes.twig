@@ -1,3 +1,4 @@
+{% set user = request.session.get("user") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">ATHLETES</h3>
@@ -27,9 +28,26 @@
             </div>
         </form>
         <div id="message"></div>
-
         <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-            <table id="athletes-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+            <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
+            <ul class="nav nav-tabs mb-1">
+                <li class="nav-item">
+                    <a role="button" class="nav-link {% if status == "all" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                </li>
+                <li class="nav-item">
+                    <a role="button" class="nav-link {% if status == "verified-videos" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos Verified</a>
+                </li>
+                <li class="nav-item">
+                    <a role="button" class="nav-link {% if status == "verified-speakers" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker Verified</a>
+                </li>
+                {% if user.user_group_id == "1" %}
+                <li>
+                    <a role="button" class="nav-link {% if status == "completed-reports" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report Complete</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <table id="athletes-grid" class="table" style="width: 100%">
                 <thead>
                 <tr>
                     <th>Player Id</th>
@@ -94,7 +112,7 @@
     $(document).ready(function () {
         athletesGrid = $("#athletes-grid").DataTable({
             dom: '',
-            ajax: "/api/athletes",
+            ajax: "/api/athletes/{{ status }}",
             columns: [
                 { data: "id", visible: false },
                 { "render": function (data, type, row) {
@@ -133,7 +151,7 @@
                     "orderable": false
                 },
                 { "render": function(data, type, row) {
-                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athletes/${row.id}', 'content')"> Profile </button>`
+                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
                         icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                         return icons
                     }
@@ -149,7 +167,7 @@
 
     function deleteAthlete(id) {
         if (confirm("Delete Athlete ?")) {
-            deleteUrl(`/api/athletes/${id}`, null, 'message', function (){
+            deleteUrl(`/api/athlete/${id}`, null, 'message', function (){
                 athletesGrid.ajax.reload();
             })
         }

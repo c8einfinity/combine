@@ -32,7 +32,7 @@
                     <b>Word Count:</b> <span id="wordCount">0</span>
                 </div>
                 <div class="col-3">
-                    <a class="btn btn-secondary" href="/api/athletes/{{ player.id }}/report" target="_blank" >View Report</a>
+                    <a class="btn btn-secondary" href="/api/athlete/{{ player.id }}/report" target="_blank" >View Report</a>
                 </div>
             </div>
         </form>
@@ -73,8 +73,8 @@
     $('#wordCount').html(countWords('playerText'));
 
     function submitPlayerText() {
-        submitForm("text-submit", "/api/athletes/{{ player.id }}/results", "",  function(data) {
-            loadPage('/api/athletes/{{ player.id }}/results', 'tabPlayerQ')
+        submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "",  function(data) {
+            loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
         });
     }
 
