@@ -4,37 +4,47 @@
         <div class="col-12" id="videoFeedback"></div>
         <div class="col-4">
             <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
-            <div class="row" style="overflow: auto; ">
                 {%  if videos %}
                     {% for video in videos %}
-                        <div class="col-4">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe width="420" height="315"
-                                        src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}">
-                                </iframe>
-                            </div>
-                            {% if ns.load_video_id == 0 and video %}
-                                {%  set ns.load_video_id = video.id %}
-                            {% endif %}
-                        </div>
-                        <div class="col-8">
-                            <h6 class="text-anton text-maastricht-blue pb-2"><a role="button" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</a></h6>
-                            <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on YouTube</small></a>
-                            <div class="form-group">
-                                <label for="include_{{ video.id }}">Include this video transcript in the results?</label>
-                                <input id="include_{{ video.id }}" type="checkbox" class="form-control"
-                                    onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
-                                {%  if not video.transcript %}
-                                <a href="#" class="fa fa-plus-square" onclick="addToQueue({{ video.id }})"></a>
+                        {% set borderColor = "border-dark" %}
+                        {% if video.transcript_verified %}
+                            {% set borderColor = "border-success" %}
+                        {% endif %}
+                        <div class="row p-2 mb-2 border rounded bg-light {{ borderColor }}">
+                            <div class="col-12"><h6 class="text-anton text-maastricht-blue pb-2"><a role="button" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</a></h6></div>
+                            <div class="col-4">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe width="420" height="315"
+                                            src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}">
+                                    </iframe>
+                                </div>
+                                {% if ns.load_video_id == 0 and video %}
+                                    {%  set ns.load_video_id = video.id %}
                                 {% endif %}
-                                <a href="#" class="fa fa-minus-square" style="color: orangered" onclick="removeVideo({{ video.id }})"></a>
+                            </div>
+                            <div class="col-8">
+                                <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on YouTube</small></a>
+                                <div class="form-check">
+                                    <input id="include_{{ video.id }}" type="checkbox" class="form-check-input"
+                                           onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
+                                    <label for="include_{{ video.id }}" class="form-check-label">Include this video transcript in the results?</label>
+                                </div>
+                                <div class="row py-2" style="font-size: 0.8rem;">
+                                    <div class="col-6">
+                                {%  if not video.transcript %}
+                                        <a role="button" onclick="addToQueue({{ video.id }})"><i class="fa fa-plus-square text-primary"></i> Transcribe</a>
+                                {% endif %}
+                                    </div>
+                                    <div class="col-6">
+                                        <a role="button" onclick="removeVideo({{ video.id }})"><i class="fa fa-minus-square" style="color: orangered"></i> Remove Video</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
                 {%  else %}
                     <div class="alert alert-info">No videos available</div>
                 {%  endif %}
-            </div>
         </div>
         <div class="col-8" id="videoTranscript">
         </div>

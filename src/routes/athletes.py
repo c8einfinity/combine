@@ -2,7 +2,9 @@ import ast
 import json
 import base64
 import hashlib
+import requests
 from datetime import datetime
+from urllib.parse import urlparse, parse_qs
 
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
@@ -98,14 +100,15 @@ def decode_metadata(record):
     record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
 
     transcript = dba.fetch_one("select * from player_transcripts where player_media_id = ?", [record["id"]])
+    record["transcript_verified"] = False
+    record["transcript"] = None
 
     if transcript:
         try:
             record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
+            record["transcript_verified"] = transcript["user_verified_speaker"] > 0
         except Exception as e:
             record["transcript"] = str(e)
-    else:
-        record["transcript"] = None
 
     return record
 
@@ -532,6 +535,19 @@ async def post_athlete_links(request, response):
 
     player_media = PlayerMedia(request.body)
     player_media.player_id = request.params["id"]
+
+    if request.body["mediaType"] == "video-youtube":
+        from ..app.Scraper import get_youtube_info
+        # strip out the video id from the url "?v=" param
+        parsed_url = urlparse(request.body["url"])
+        params = parse_qs(parsed_url.query)
+        if params.get("v"):
+            video_id = params.get("v")[0]
+            video_meta = get_youtube_info(video_id)
+            if video_meta:
+                player_media.is_valid = 1
+                player_media.metadata = video_meta
+
     if player_media.save():
         return response("Player Media saved")
     else:

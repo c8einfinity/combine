@@ -5,7 +5,7 @@
 // Bootstrap Color Overrides
 
 $white: #fff !default;
-$gray-100: #f8f9fc !default;
+$gray-100: #F9F9F9 !default;
 $gray-200: #eaecf4 !default;
 $gray-300: #dddfeb !default;
 $gray-400: #d1d3e2 !default;
@@ -16,17 +16,26 @@ $gray-800: #5a5c69 !default;
 $gray-900: #3a3b45 !default;
 $black: #000 !default;
 
-$blue: #4e73de !default;
+$blue: #315E98 !default;
 $indigo: #6610f2 !default;
 $purple: #6f42c1 !default;
 $pink: #e83e8c !default;
-$red: #e74a3b !default;
+$red: #DC2B2B !default;
 $orange: #fd7e14 !default;
-$yellow: #f6c23e !default;
-$green: #1cc88a !default;
+$yellow: #FFB71B !default;
+$green: #9AC750 !default;
 $darker-green: #9AC750 !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
+
+$primary:       $blue !default;
+$secondary:     $gray-600 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $yellow !default;
+$danger:        $red !default;
+$light:         $gray-100 !default;
+$dark:          #454545 !default;
 
 // Custom Colors
 $brand-google: #ea4335 !default;

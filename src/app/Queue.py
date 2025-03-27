@@ -37,7 +37,7 @@ def get_player_transcribed_stats(player_id):
 
     total_media = queue.__dba__.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and player_id = ?", [player_id])
 
-    valid_media = queue.__dba__.fetch_one("select count(*) as valid_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1 and player_id = ?", [player_id])
+    valid_media = queue.__dba__.fetch_one("select count(*) as valid_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1 and is_sorted = 1 and player_id = ?", [player_id])
 
     return {
         "unprocessed": unprocessed_queue['unprocessed_count'] if unprocessed_queue else 0,
