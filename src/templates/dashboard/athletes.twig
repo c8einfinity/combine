@@ -117,9 +117,9 @@
                 { data: "id", visible: false },
                 { "render": function (data, type, row) {
                         if (!row.completed_bio || row.report_sent) {
-                            return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom" title="Incomplete Biography">
-    ${row.report_sent ? '<img src="/images/player/report-sent.svg" alt="Report Sent" />' : ""}
-    ${!row.completed_bio ? '<img src="/images/warning.svg" alt="Incomplete Biography Warning" />' : ""}
+                            return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom">
+    ${row.report_sent ? '<img src="/images/player/report-sent.svg" alt="Report Sent" title="Report sent" />' : ""}
+    ${!row.completed_bio ? '<img src="/images/warning.svg" alt="Incomplete Biography Warning" title="Incomplete Biography" />' : ""}
     ${row.first_name}
 </div>`;
                         }
