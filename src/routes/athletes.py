@@ -100,14 +100,15 @@ def decode_metadata(record):
     record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
 
     transcript = dba.fetch_one("select * from player_transcripts where player_media_id = ?", [record["id"]])
+    record["transcript_verified"] = False
+    record["transcript"] = None
 
     if transcript:
         try:
             record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
+            record["transcript_verified"] = transcript["user_verified_speaker"] > 0
         except Exception as e:
             record["transcript"] = str(e)
-    else:
-        record["transcript"] = None
 
     return record
 
