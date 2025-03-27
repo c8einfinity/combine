@@ -20,9 +20,9 @@
     </div>
 
     <div class="form-group">
-        <label for="user_group_id">Role</label>
+        <label for="user_group_id">User Group</label>
         <select class="form-control" name="user_group_id" id="user_group_id">
-            <option value="">Select Role</option>
+            <option value="">Select User Group</option>
             {% for user_group in user_groups %}
                 <option value="{{ user_group.id }}">{{ user_group.name }}</option>
             {% endfor %}
@@ -33,3 +33,21 @@
 
     {{ "usersModalForm" | formToken }}
 </form>
+
+<script>
+    $("#usersModalForm").validate({
+        rules: {
+            first_name: {
+                required: true
+            },
+            last_name: {
+                required: true
+            },
+            user_group_id: {
+                required: true
+            }
+        }
+    });
+
+    $('#user_group_id option[value="{{ user.user_group_id }}"]').attr("selected", "selected");
+</script>

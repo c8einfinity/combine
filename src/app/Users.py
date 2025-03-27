@@ -1,7 +1,7 @@
 # Copyright 2025 Code Infinity
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
-from ..app.UserGroup import UserGroup
+from ..app.UserGroups import UserGroups
 from ..app.Utility import get_data_tables_filter
 from tina4_python import tina4_auth
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
@@ -16,7 +16,7 @@ class Users:
         :return:
         """
         data = {
-            "user_groups": UserGroup.get_user_group_data()
+            "user_groups": UserGroups.get_user_group_data()
         }
 
         return response(Template.render_twig_template("dashboard/users.twig", data))
@@ -79,7 +79,7 @@ class Users:
 
         data = {
             "user": user.to_dict(),
-            "user_groups": UserGroup.get_user_group_data()
+            "user_groups": UserGroups.get_user_group_data()
         }
 
         html = Template.render_twig_template("forms/edit_user.twig", data)
@@ -104,11 +104,25 @@ class Users:
         from ..orm.User import User
 
         user = User({"id": request.body["id"]})
+        user.load()
+
+        if "password" in request.body and request.body["password"]:
+            request.body["password"] = tina4_auth.hash_password(request.body["password"])
+        else:
+            request.body["password"] = user.password.value
+
+        request.body["email"] = user.email.value
+
+        user = User(request.body)
+
+        message = "Failed to save user!"
+        message_type = "danger"
 
         if user.save():
-            return response("User saved")
-        else:
-            return response("Failed to save user!")
+            message = "User saved"
+            message_type = "info"
+
+        return response(f"<script>showMessage('{message}', '{message_type}'); usersGrid.ajax.reload();</script>")
 
     @staticmethod
     def delete_user(request, response):
@@ -122,7 +136,11 @@ class Users:
 
         user = User({"id": request.params["id"]})
 
+        message = "Failed to delete user!"
+        message_type = "danger"
+
         if user.delete():
-            return response("User deleted")
-        else:
-            return response("Failed to delete user!")
+            message = "User deleted"
+            message_type = "info"
+
+        return response(f"<script>showMessage('{message}', '{message_type}'); usersGrid.ajax.reload();</script>")

@@ -1,21 +1,18 @@
+{% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">Transcription Queue</h3>
-        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-            <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
-                <thead>
-                    <tr>
-                        <th>Priority</th>
-                        <th>Id</th>
-                        <th>Queue Action</th>
-                        <th>Date Created</th>
-                        <th>Player</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
-            <div id="message"></div>
-        </div>
+        {% if permissions.Queue.visible == "1" or user.user_group_id == "1" %}
+            <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+                <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                    <thead>
+                    <!-- table details filled in completely by data tables -->
+                    </thead>
+                </table>
+                <div id="message"></div>
+            </div>
+        {% endif %}
     </div>
 </div>
 
@@ -29,31 +26,41 @@
         queueGrid = $('#queue-grid').DataTable({
             "ajax": "/api/queue",
             "columns": [
+                {% if permissions.Queue.edit == "1" or user.user_group_id == "1" %}
+                    {
+                        "title": "Priority",
+                        "render": function (data, type, row) {
+                            return `<a role="button" onclick="showPrioritySelector(this, ${row.id})"><img src="/images/queue/priority-${row.priority}-on.svg" alt="Current Priority" /></a>`;
+                        }
+                    },
+                {% endif %}
                 {
-                    "render": function (data, type, row) {
-                        return `<a role="button" onclick="showPrioritySelector(this, ${row.id})"><img src="/images/queue/priority-${row.priority}-on.svg" alt="Current Priority" /></a>`;
-                    }
-                },
-                {
+                    "title": "Id",
                     "data": "id"
                 },
                 {
+                    "title": "Queue Action",
                     "data": "action"
                 },
                 {
+                    "title": "Date Created",
                     "data": "date_created"
                 },
                 {
+                    "title": "Player",
                     "data": "player"
                 },
-                {
-                    "render": function (data, type, row) {
-                        let actions = [
-                            `<a role="button" class="fas fa-trash" onclick="deleteQueueItem(${row.id})"></a>`
-                        ];
-                        return actions.join("");
+                {% if permissions.Queue.delete == "1" or user.user_group_id == "1" %}
+                    {
+                        "title": "Actions",
+                        "render": function (data, type, row) {
+                            let actions = [
+                                `<a role="button" class="fas fa-trash" onclick="deleteQueueItem(${row.id})"></a>`
+                            ];
+                            return actions.join("");
+                        }
                     }
-                }
+                {% endif %}
             ],
             language: {
                 emptyTable: `{% include ('snippets/datatable_empty.twig') %}`

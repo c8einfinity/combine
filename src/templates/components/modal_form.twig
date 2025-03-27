@@ -12,18 +12,16 @@
             <div class="modal-body vendor-edits p-0">
                 {{ content }}
             </div>
-            {% if result is undefined and result != 1 %}
-                <div class="modal-footer">
-                    {% if not error %}
-                        <button type="button" class="btn btn-soft-green" onclick="{{ onclick }}">
-                            {{ "Save" if "Edit" in title else "Ok" }}
-                        </button>
-                        <button type="button" class="btn btn-white-uppercase" data-dismiss="modal">Cancel</button>
-                    {% else %}
-                        <button type="button" class="btn btn-soft-green" data-dismiss="modal">Ok</button>
-                    {% endif %}
-                </div>
-            {% endif %}
+            <div class="modal-footer">
+                {% if not error %}
+                    <button type="button" class="btn btn-soft-green" onclick="{{ onclick }}">
+                        {{ "Save" if "Edit" in title|capitalize else "Ok" }}
+                    </button>
+                    <button type="button" class="btn btn-white-uppercase" data-dismiss="modal">Cancel</button>
+                {% else %}
+                    <button type="button" class="btn btn-soft-green" data-dismiss="modal">Ok</button>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

@@ -1,80 +1,86 @@
+{% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 <div class="card-body">
     <h5 class="card-title text-anton text-maastricht-blue pb-2">Links</h5>
-    <form id="linkDetails" onsubmit="return false">
-        <input type="hidden" name="player_id" value="{{ player_id }}" >
-        <div class="row">
-            <div class="col form-group">
-                <label for="linkUrl">Link Url</label>
-                <input class="form-control" id="linkUrl" name="url" placeholder="https://..." >
-            </div>
-            <div class="col form-group">
-                <label for="mediaType">Link Type</label>
-                <select class="form-control" id="mediaType" name="mediaType">
-                    <option value="video-youtube">YouTube</option>
-                    <option value="link-bio">Bio Link</option>
-                    <option value="video-generic">Video Link</option>
-                    <option value="link-generic">Generic Link</option>
-                </select>
-            </div>
-            <div class="col form-group">
-                <br/>
-                <button class="btn btn-soft-green rounded-0" onclick="addLink()">
-                    Add
-                </button>
-            </div>
-        </div>
-    </form>
-    <div id="linkMessage"></div>
-    <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-        <table id="links-grid" class="table text-maastricht-blue m-0" style="width: 100%">
-            <thead>
-            <tr>
-                <th>Link Url</th>
-                <th>Link Type</th>
-                <th>Status</th>
-            </tr>
-            </thead>
-        </table>
-        <script>
-            var linksGrid = null
-            $(document).ready(function () {
-                linksGrid = $("#links-grid").DataTable({
-                    dom: '',
-                    ajax: "/api/athlete/{{ player_id }}/links_data",
-                    columns: [
-                        { "render": function(data, type, row) {
-                                return `<a href="${row.url}" target="_blank">${row.url}</a>`
+    {% if permissions.Links.visible == "1" or user.user_group_id == "1" %}
+        {% if permissions.Links.create == "1" or user.user_group_id == "1" %}
+            <form id="linkDetails" onsubmit="return false">
+                <input type="hidden" name="player_id" value="{{ player_id }}" >
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="linkUrl">Link Url</label>
+                        <input class="form-control" id="linkUrl" name="url" placeholder="https://..." >
+                    </div>
+                    <div class="col form-group">
+                        <label for="mediaType">Link Type</label>
+                        <select class="form-control" id="mediaType" name="mediaType">
+                            <option value="video-youtube">YouTube</option>
+                            <option value="link-bio">Bio Link</option>
+                            <option value="video-generic">Video Link</option>
+                            <option value="link-generic">Generic Link</option>
+                        </select>
+                    </div>
+                    <div class="col form-group">
+                        <br/>
+                        <button class="btn btn-soft-green rounded-0" onclick="addLink()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        {% endif %}
+        <div id="linkMessage"></div>
+        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+            <table id="links-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>Link Url</th>
+                    <th>Link Type</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+            </table>
+            <script>
+                var linksGrid = null
+                $(document).ready(function () {
+                    linksGrid = $("#links-grid").DataTable({
+                        dom: '',
+                        ajax: "/api/athlete/{{ player_id }}/links_data",
+                        columns: [
+                            { "render": function(data, type, row) {
+                                    return `<a href="${row.url}" target="_blank">${row.url}</a>`
+                                }
+                            },
+                            { data: 'media_type' },
+                            { "render": function(data, type, row) {
+                                    let icons = `<button class="btn btn-soft-green" onclick="deleteLink(${row.id})"> Delete </button>`
+                                    return icons
+                                }
                             }
+                        ],
+                        language: {
+                            emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
                         },
-                        { data: 'media_type' },
-                        { "render": function(data, type, row) {
-                                let icons = `<button class="btn btn-soft-green" onclick="deleteLink(${row.id})"> Delete </button>`
-                                return icons
-                            }
-                        }
-                    ],
-                    language: {
-                        emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
-                    },
-                    processing: true,
-                    serverSide: true
-                });
-            });
-
-            function addLink() {
-                submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function() {
-                    linksGrid.ajax.reload();
+                        processing: true,
+                        serverSide: true
+                    });
                 });
 
-            }
-
-            function deleteLink(link_id) {
-                if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function (){
+                function addLink() {
+                    submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function() {
                         linksGrid.ajax.reload();
-                    })
+                    });
+
                 }
-            }
-        </script>
-    </div>
+
+                function deleteLink(link_id) {
+                    if (confirm("Delete Link ?")) {
+                        deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function (){
+                            linksGrid.ajax.reload();
+                        })
+                    }
+                }
+            </script>
+        </div>
+    {% endif %}
 </div>

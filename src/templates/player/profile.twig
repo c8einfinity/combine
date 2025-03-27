@@ -1,125 +1,134 @@
 {% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 {% set logged_in = request.session.get("logged_in") %}
 
 <div class="px-3 py-4">
     <div class="content pt-2 pb-2 px-4">
-        <h3 class='col text-anton text-maastricht-blue pb-0'>
-            {% if player_image != "None" %}
-                <img class="img-fluid img-thumbnail"
-                     style=" width: 64px"
-                     src="data:image/png;base64,{{ player_image }}"
-                     alt="Athlete Picture">
-            {% endif %}
-            PLAYER: {{ player.first_name }} {{ player.last_name }}
-        </h3>
+        {% if permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+            <h3 class='col text-anton text-maastricht-blue pb-0'>
+                {% if player_image != "None" %}
+                    <img class="img-fluid img-thumbnail"
+                         style=" width: 64px"
+                         src="data:image/png;base64,{{ player_image }}"
+                         alt="Athlete Picture">
+                {% endif %}
+                PLAYER: {{ player.first_name }} {{ player.last_name }}
+            </h3>
 
-        <ul class="nav nav-tabs justify-content-end">
-            <li class="nav-item">
-                <a class="nav-link active" role="button" data-toggle="tab" aria-current="page"
-                   onclick="showTab(this.innerHTML)">Profile</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
-            </li>
-            {% if user.user_group_id == "1" %}
+            <ul class="nav nav-tabs justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
+                    <a class="nav-link active" role="button" data-toggle="tab" aria-current="page"
+                       onclick="showTab(this.innerHTML)">Profile</a>
                 </li>
-            {% endif %}
-        </ul>
+                {% if permissions.Videos.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item">
+                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
+                    </li>
+                {% endif %}
+                {% if permissions.Links.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item">
+                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
+                    </li>
+                {% endif %}
+                {% if permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item">
+                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
+                    </li>
+                {% endif %}
+            </ul>
 
-        <div id="tabProfile" class="card pt-3 px-3 tab">
-            <div class="card-body">
-                <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
-                <form id="profileDetails" onsubmit="return false;">
-                    <div class="row">
-                        <div class="col">
-                            <input type="hidden" name="id" value="{{ player.id }}">
-                            <div class="form-group">
-                                <label for="firstNameInput">First Name</label>
-                                <input class="form-control" id="firstNameInput" name="firstName" type="text" value="{{ player.first_name }}"
-                                       placeholder="First Name">
+            <div id="tabProfile" class="card pt-3 px-3 tab">
+                <div class="card-body">
+                    <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
+                    {% if permissions.Profile.edit == "1" or user.user_group_id == "1" %}
+                        <form id="profileDetails" onsubmit="return false;">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="hidden" name="id" value="{{ player.id }}">
+                                    <div class="form-group">
+                                        <label for="firstNameInput">First Name</label>
+                                        <input class="form-control" id="firstNameInput" name="firstName" type="text" value="{{ player.first_name }}"
+                                               placeholder="First Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastNameInput">Last Name</label>
+                                        <input class="form-control" id="lastNameInput" name="lastName" type="text" value="{{ player.last_name }}"
+                                               placeholder="Last Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="heightInput">Height</label>
+                                        <input class="form-control" id="heightInput" name="height" type="text" value='{{ player.height }}'
+                                               placeholder="Height">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="sportInput">Sport</label>
+                                        <input class="form-control" id="sportInput" name="sport" disabled type="text" value="{{ player.sport }}"
+                                               placeholder="Sport">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="emailInput">Email</label>
+                                        <input class="form-control" id="emailInput" name="email" type="text" value="{{ player.email }}"
+                                               placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="teamInput">Team</label>
+                                        <input class="form-control" id="teamInput" name="team" type="text" value="{{ player.team }}"
+                                               placeholder="Team">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="positionInput">Position</label>
+                                        <input class="form-control" id="positionInput" name="position" type="text" value="{{ player.position }}"
+                                               placeholder="Position">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="homeTownInput">Home Town</label>
+                                        <input class="form-control" id="homeTownInput" name="homeTown" type="text" value="{{ player.home_town }}"
+                                               placeholder="Home Town">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="majorInput">Major</label>
+                                        <input class="form-control" id="majorInput" name="major" type="text" value="{{ player.major }}"
+                                               placeholder="Major">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dateOfBirthInput">Date Of Birth</label>
+                                        <input class="form-control" id="dateOfBirthInput" name="dateOfBirth" type="text"
+                                               value="{{ player.date_of_birth }}" placeholder="Date of Birth">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div id="profile-image" style="max-width: 250px;">
+                                        {% if player_image != "None" %}
+                                            <img class="img-fluid img-thumbnail"
+                                                 style=" width: 100%"
+                                                 src="data:image;base64,{{ player_image }}"
+                                                 alt="Athlete Picture">
+                                        {% else %}
+                                            <img class="img-fluid img-thumbnail" src="/images/avatar.svg"
+                                                 style=" width: 100%"
+                                                 alt="Athlete Picture">
+                                        {% endif %}
+                                    </div>
+                                    <input id="file-upload" name="picture-upload" type="file" accept="image/*"  onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="lastNameInput">Last Name</label>
-                                <input class="form-control" id="lastNameInput" name="lastName" type="text" value="{{ player.last_name }}"
-                                       placeholder="Last Name">
-                            </div>
-                            <div class="form-group">
-                                <label for="heightInput">Height</label>
-                                <input class="form-control" id="heightInput" name="height" type="text" value='{{ player.height }}'
-                                       placeholder="Height">
-                            </div>
-                            <div class="form-group">
-                                <label for="sportInput">Sport</label>
-                                <input class="form-control" id="sportInput" name="sport" disabled type="text" value="{{ player.sport }}"
-                                       placeholder="Sport">
-                            </div>
-                            <div class="form-group">
-                                <label for="emailInput">Email</label>
-                                <input class="form-control" id="emailInput" name="email" type="text" value="{{ player.email }}"
-                                       placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="teamInput">Team</label>
-                                <input class="form-control" id="teamInput" name="team" type="text" value="{{ player.team }}"
-                                       placeholder="Team">
-                            </div>
-                            <div class="form-group">
-                                <label for="positionInput">Position</label>
-                                <input class="form-control" id="positionInput" name="position" type="text" value="{{ player.position }}"
-                                       placeholder="Position">
-                            </div>
-                            <div class="form-group">
-                                <label for="homeTownInput">Home Town</label>
-                                <input class="form-control" id="homeTownInput" name="homeTown" type="text" value="{{ player.home_town }}"
-                                       placeholder="Home Town">
-                            </div>
-                            <div class="form-group">
-                                <label for="majorInput">Major</label>
-                                <input class="form-control" id="majorInput" name="major" type="text" value="{{ player.major }}"
-                                       placeholder="Major">
-                            </div>
-                            <div class="form-group">
-                                <label for="dateOfBirthInput">Date Of Birth</label>
-                                <input class="form-control" id="dateOfBirthInput" name="dateOfBirth" type="text"
-                                       value="{{ player.date_of_birth }}" placeholder="Date of Birth">
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div id="profile-image" style="max-width: 250px;">
-                                {% if player_image != "None" %}
-                                    <img class="img-fluid img-thumbnail"
-                                         style=" width: 100%"
-                                         src="data:image;base64,{{ player_image }}"
-                                         alt="Athlete Picture">
-                                {% else %}
-                                    <img class="img-fluid img-thumbnail" src="/images/avatar.svg"
-                                         style=" width: 100%"
-                                         alt="Athlete Picture">
-                                {% endif %}
-                            </div>
-                            <input id="file-upload" name="picture-upload" type="file" accept="image/*"  onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')">
-                        </div>
-                    </div>
-                </form>
-                <div id="profileMessage"></div>
-                <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
-                        onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')"> Save
-                </button>
+                        </form>
+                    {% endif %}
+                    <div id="profileMessage"></div>
+                    <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
+                            onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')"> Save
+                    </button>
+                </div>
             </div>
-        </div>
-        <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
-        </div>
-        <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
-        </div>
-        <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
-        </div>
+            <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
+            </div>
+            <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
+            </div>
+            <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
+            </div>
+        {% endif %}
     </div>
 </div>
 <script>

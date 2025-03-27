@@ -1,0 +1,57 @@
+<form id="userGroupModalForm" class="m-4" method="post" onsubmit="return false;">
+    <div class="row">
+        <div class="col-12 form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" id="name" placeholder="Name"
+                   value="{{ user_group_permissions.name }}">
+        </div>
+        <div class="col-12">
+            <p>Permissions</p>
+            <a class="small" href="#" onclick="selectAll()">Select All</a> |
+            <a class="small" href="#" onclick="selectNone()">Select None</a>
+            <table class="table w-100 mt-3">
+                <thead>
+                <tr>
+                    <th class="px-0">Category</th>
+                    {% for permissions_header in user_group_permissions.permissions_list[0].permissions %}
+                        <th class="text-center px-0">{{ permissions_header|capitalize }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for user_group_permission in user_group_permissions.permissions_list %}
+                    <tr class="user-group-permissions-record">
+                        <td class="px-0">{{ user_group_permission.access_point }}</td>
+                        {% for permission in user_group_permission.permissions %}
+                            <td class="text-center px-0">
+                                {% set permission_value = user_group_permission.permissions[permission] %}
+                                {% if permission_value != "-" %}
+                                    {% set checked = "" if permission_value == "0" else "checked" %}
+                                    <input class="form-check-input m-0" type="checkbox" id="checkboxNoLabel"
+                                           name="{{ user_group_permission.access_point }}_{{ permission }}"
+                                            {{ checked }}/>
+                                {% else %}
+                                    <input class="text-center border-0" size="1" maxlength="1"
+                                           name="{{ user_group_permission.access_point }}_{{ permission }}"
+                                           value="{{ permission_value }}"/>
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {{ "userGroupModalForm" | formToken }}
+</form>
+
+<script>
+    $("#userGroupModalForm").validate({
+        rules: {
+            name: {
+                required: true
+            }
+        }
+    });
+</script>

@@ -1,35 +1,31 @@
+{% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
-        <h3 class="text-anton text-maastricht-blue pb-2">USER GROUPS</h3>
-        <form id="user_group" class="card" method="post" onsubmit="return false;">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-                    </div>
-                    <div class="col-12">
-                        {% with roles = roles %}
-                            {% include "snippets/roles.twig" %}
-                        {% endwith %}
-                    </div>
-                    <input id="roles" type="hidden" name="role_test[test][testy]" value="0"/>
-                    <div class="col-12 col-md-2 pt-4">
-                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addUserGroup()">
-                            Add
-                        </button>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-10">
+                <h3 class="text-anton text-maastricht-blue pb-2">USER GROUPS</h3>
             </div>
-        </form>
-        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-            <table id="user-groups-grid" class="table text-maastricht-blue m-0" style="width: 100%">
-                <thead>
-                <!-- table details filled in completely by data tables -->
-                </thead>
-            </table>
+            {% if (permissions.User_Groups.visible == "1" and permissions.User_Groups.create == "1" )
+                or user.user_group_id == "1" %}
+                <div class="col-2">
+                    <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="getUserGroupFormModal()">
+                        + Add User Group
+                    </button>
+                </div>
+            {% endif %}
         </div>
-        <div id="message"></div>
+        {% if permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+            <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+                <table id="user-groups-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                    <thead>
+                    <!-- table details filled in completely by data tables -->
+                    </thead>
+                </table>
+            </div>
+            <div id="message"></div>
+            <div id="form"></div>
+        {% endif %}
     </div>
 </div>
 <script>
@@ -69,7 +65,17 @@
                 {
                     "orderable": false,
                     "render": function (data, type, row) {
-                        return ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`
+                        let actions = "";
+
+                        {% if permissions.Users.edit == "1" or user.user_group_id == "1" %}
+                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal(${row.id})"></a>`;
+                        {% endif %}
+
+                        {% if permissions.Users.delete == "1" or user.user_group_id == "1" %}
+                            actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
+                        {% endif %}
+
+                        return actions;
                     }
                 }
             ],
@@ -108,14 +114,14 @@
     }
 
     /**
-     * Function to prepare the roles data for submission.
+     * Function to prepare the user group permissions data for submission.
      * @returns {*[]}
      */
-    function prepareRolesSubmission() {
-        const roles = [];
-        const roleRows = $(".roles-record");
+    function prepareUserGroupPermissionsSubmission() {
+        const userGroupPermissions = [];
+        const userGroupPermissionsRows = $(".user-group-permissions-record");
 
-        roleRows.each(function () {
+        userGroupPermissionsRows.each(function () {
             const permissions = {};
             const permissionsList = $(`input[name^="${this.children[0].innerHTML}"]`);
 
@@ -129,14 +135,20 @@
                 permissions[this.name.split("_").pop()] = this.value;
             });
 
-            roles.push({
+            userGroupPermissions.push({
                 "access_point": this.children[0].innerHTML,
                 "permissions": permissions
             });
         });
 
-        return roles;
+        return userGroupPermissions;
     }
+
+    if (typeof message === 'undefined') {
+        let message;
+    }
+
+    message = $("#message");
 
     /**
      * Function to reset the form, reload the table, and reset the message.
@@ -146,28 +158,32 @@
 
         selectNone();
         userGroupsGrid.ajax.reload();
-        $("#message").html(``);
+        message.html(``);
     }
 
     /**
      * Function to add a user group.
      */
-    function addUserGroup() {
+    function addUserGroup(id) {
         if (document.forms[0].name.value === "") {
-            $("#message").html(`<div class="alert alert-danger">Name is required</div>`);
+            message.html(`<div class="alert alert-danger">Name is required</div>`);
             document.forms[0].name.focus();
 
             return;
         }
 
-        $("#message").html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+        message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                 <span class="sr-only text-maastricht-blue">Adding ...</span>
             </div></div>`);
 
         const formData = new FormData();
 
+        if (id) {
+            formData.append("id", id);
+        }
+
         formData.append("name", $("#name").val());
-        formData.append("permissions", JSON.stringify(prepareRolesSubmission()));
+        formData.append("permissions", JSON.stringify(prepareUserGroupPermissionsSubmission()));
 
         const errorMessage = `Something went wrong adding the user group.`;
 
@@ -195,11 +211,21 @@
     }
 
     /**
+     * Function to get the user group form modal to add or edit records.
+     * @param id
+     */
+    function getUserGroupFormModal(id) {
+        const idParam = (id) ? `id=${id}&` : "";
+
+        showForm("edit", `/api/user_groups/form?${idParam}formToken={{ formToken() }}`);
+    }
+
+    /**
      * Function to delete a user group.
      * @param id
      */
     function deleteUserGroup(id) {
-        if (confirm("Delete User Group?")) {
+        if (confirm("Delete User Group? All users' permissions in this user group will be reset.")) {
             deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
                 userGroupsGrid.ajax.reload();
             });

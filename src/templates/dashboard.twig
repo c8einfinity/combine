@@ -2,15 +2,6 @@
 {% set permissions = request.session.get("permissions") %}
 {% extends "base.twig" %}
 
-{% block head_content %}
-    <script src="/js/emoji.js"></script>
-    <script src="/js/reconnecting-websocket.js"></script>
-    <link href="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.css"
-          rel="stylesheet">
-    <script src="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.js"></script>
-{% endblock %}
-
-
 {% block navigation %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -24,24 +15,26 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                {% if user.user_group_id == "1" %}
+                {% if permissions.Home.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="homeLink" href="#" role="button"
                            onclick="loadPage('/dashboard/home', 'content'); teamQNavSetActive(this);">Home<span
                                     class="sr-only">(current)</span></a>
                     </li>
                 {% endif %}
+                {% if permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
                 <li class="nav-item mx-1">
                     <a class="nav-link" id="athleteLink" href="#" role="button"
                        onclick="loadPage('/dashboard/athletes/all', 'content'); teamQNavSetActive(this);">Athletes</a>
                 </li>
-                {% if user.user_group_id == "1" %}
+                {% endif %}
+                {% if permissions.Users.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="usersLink" href="#" role="button"
                            onclick="loadPage('/api/users/landing', 'content'); teamQNavSetActive(this);">Users</a>
                     </li>
                 {% endif %}
-                {% if user.user_group_id == "1" %}
+                {% if permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="usersLink" href="#" role="button"
                            onclick="loadPage('/api/user_groups/landing', 'content'); teamQNavSetActive(this);">
@@ -49,7 +42,7 @@
                         </a>
                     </li>
                 {% endif %}
-                {% if user.user_group_id == "1" %}
+                {% if permissions.Queue.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="queueLink" href="#" role="button"
                            onclick="loadPage('/dashboard/queue', 'content'); teamQNavSetActive(this);">Queue</a>
@@ -65,7 +58,12 @@
 
 
 {% block content_public %}
+    {# Todo: ChanBos -> Remove #}
+    {{ dump(permissions) }}
+{#    {{ dump(permissions.Home) }}#}
+{#    {{ dump(permissions.Home.visible) }}#}
     <div id="content"></div>
+    {# Todo: ChanBos -> Figure out landing page #}
     <script>
         {% if user.user_group_id == "1" %}
             loadPage('/dashboard/home', 'content');
