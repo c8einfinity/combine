@@ -1,7 +1,10 @@
-<div class="px-3 py-4" style="width: 50%">
-    <div class="content pt-4 pb-5 px-4">
-        <div class="row">
-            <h3>{{ video.title }}</h3>
+<div class="content container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="progress rounded-pill my-2">
+                <div class="progress-bar progress-bar-qfinder" role="progressbar" style="width: {{ ((videos_processed / (remaining_videos + videos_processed)) * 100)|round }}%" aria-valuenow="{{ videos_processed }}" aria-valuemin="0" aria-valuemax="{{ remaining_videos + videos_processed }}">{{ videos_processed }} of {{ remaining_videos + videos_processed }}</div>
+            </div>
+            <h3 class="text-center mt-4">{{ video.title }}</h3>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe width="420" height="315"
                         src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}?rel=0">
@@ -9,30 +12,32 @@
 
             </div>
             <div class="col">
-            <a href="{% if video %}{{ video.url }}{% endif %}" target="_blank">Click here to watch the video directly on YouTube if it does not display in the frame above</a>
-            <form id="videoInformation" method="post" onsubmit="return false">
-                {{  ("SomeValue"~RANDOM()) | formToken }}
-                <input type="hidden" name="player_id" value="{{ player.id }}">
-                <input type="hidden" name="player_media_id" value="{{ video.id }}">
-                <input id="is_valid" type="hidden" name="is_valid" value="0">
-                <br>
-                <div class="row">
-                    <div class="col">
-                        <button class="btn btn-danger" onclick="document.getElementById('is_valid').value = 0;  updateVideo()">NO</button>
+                {% if video %}
+                <a href="{{ video.url }}" class="d-block text-center w-100 py-1" target="_blank">Click here to watch the video directly on YouTube if it does not display in the frame above.</a>
+                {% endif %}
+                <form id="videoInformation" method="post" onsubmit="return false">
+                    {{  ("SomeValue"~RANDOM()) | formToken }}
+                    <input type="hidden" name="player_id" value="{{ player.id }}">
+                    <input type="hidden" name="player_media_id" value="{{ video.id }}">
+                    <input id="is_valid" type="hidden" name="is_valid" value="0">
+                    <br>
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-success w-100" onclick="document.getElementById('is_valid').value = 1; updateVideo()">
+                                <i class="fa fa-check-circle"></i> Yes
+                            </button>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <p class="text-center font-weight-bold">Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?
+                            <br />Would you like to transcribe the video?</p>
+                        </div>
+                        <div class="col-2">
+                            <button class="btn btn-danger w-100" onclick="document.getElementById('is_valid').value = 0;  updateVideo()">
+                                <i class="fa fa-times-circle"></i> NO
+                            </button>
+                        </div>
                     </div>
-                    <div clss="col">
-                    <h4>Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?</h4>
-                    </div>
-                    <div class="col">
-                        <button class="btn btn-primary" style="float: right" onclick="document.getElementById('is_valid').value = 1; updateVideo()">Yes</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col"></div>
-                    <div class="col"><h4 class="text-center">{{ counter }}</h4></div>
-                    <div class="col"></div>
-                </div>
-            </form>
+                </form>
             </div>
             <script>
                 function updateVideo() {
