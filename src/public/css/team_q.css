@@ -6,7 +6,7 @@
 
 /* Colors */
 :root {
-    --light-soft-green: #CFFF80;
+    --inchworm-green: #CFFF80;
     --soft-green: #BCFF51;
     --soft-green-hover: #ABF536;
     --navy: #012839;
@@ -74,14 +74,12 @@ body {
 }
 
 .download-btn:hover {
-    background-color: var(--light-soft-green);
-    color: #000000;
+    color: var(--inchworm-green) !important;
 }
 
 .view-btn {
-    color: #000000;
-    background-color: var(--light-soft-green);
-    font-family: 'Inter', 'Arial', sans-serif;
+    color: #000000 !important;
+    background-color: var(--inchworm-green);
     border-radius: 5px;
     font-weight: 600;
     font-size: 14px;
@@ -102,7 +100,7 @@ body {
 }
 
 .text-inchworm-green {
-    color: var(--light-soft-green);
+    color: var(--inchworm-green);
 }
 
 .text-maastricht-blue {
