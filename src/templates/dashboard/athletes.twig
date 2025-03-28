@@ -114,14 +114,15 @@
             dom: '',
             ajax: "/api/athletes/{{ status }}",
             columns: [
-                { data: "id", visible: false },
-                { "render": function (data, type, row) {
+                { data: "id", visible: false, searchable: false},
+                { data: 'first_name',
+                    render: function (data, type, row) {
                         if (!row.completed_bio || row.report_sent) {
                             return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom">
-    ${row.report_sent ? '<img src="/images/player/report-sent.svg" alt="Report Sent" title="Report sent" />' : ""}
-    ${!row.completed_bio ? '<img src="/images/warning.svg" alt="Incomplete Biography Warning" title="Incomplete Biography" />' : ""}
-    ${row.first_name}
-</div>`;
+                                        ${row.report_sent ? '<img src="/images/player/report-sent.svg" alt="Report Sent" title="Report sent" />' : ""}
+                                        ${!row.completed_bio ? '<img src="/images/warning.svg" alt="Incomplete Biography Warning" title="Incomplete Biography" />' : ""}
+                                        ${row.first_name}
+                                    </div>`;
                         }
                         return row.first_name;
                     }
@@ -131,7 +132,8 @@
                 { data: 'sport' },
                 { data: 'home_town' },
                 { data: 'major' },
-                { "render": function(data, type, row) {
+                { searchable: false,
+                    render: function(data, type, row) {
                         let html = '<div class="d-flex" style="grid-gap: 0.5rem;">';
                         html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
     <span class="bg-dark rounded-left p-1">Media</span>
@@ -148,9 +150,10 @@
                         html += "</div>";
                         return html;
                     },
-                    "orderable": false
+                    orderable: false
                 },
-                { "render": function(data, type, row) {
+                { searchable: false,
+                    render: function(data, type, row) {
                         let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
                         icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                         return icons

@@ -67,11 +67,9 @@
     showHideTranscript("{{ selectedSpeaker }}", 0);
 
     function submitUserVerification(inputElement) {
-        if (inputElement.checked) {
-            submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function() {
-                loadTranscript({{ transcripts[0].player_media_id }});
-            });
-        }
+        submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function() {
+            loadTranscript({{ transcripts[0].player_media_id }});
+        });
     }
 
     function doClassification(speakerName, refresh) {
