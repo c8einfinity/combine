@@ -22,6 +22,8 @@
 // Assessment module
 @import "aatos.scss";
 
+$gradient: linear-gradient(90deg, #E6ECA4 -0.86%, #9FCD56 9.29%, #489195 50.91%, #00609E 75.28%, #102D4F 92.53%, #102D4F 100.65%);
+
 .text-darker-green {
     color: $darker-green;
 }
@@ -58,4 +60,10 @@ h1, h2, h3, h4, h5, h6 {
   bottom: 0.2rem;
   left: 0.2rem;
   font-size: 0.5rem;
+}
+
+/* Custom progress bar background that uses the CI gradient as background */
+.progress-bar-qfinder {
+  background: $gradient;
+  border-radius: inherit;
 }

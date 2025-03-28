@@ -1,4 +1,4 @@
-{% if video %}
+    {% if video %}
 {% set user = request.session.get("user") %}
 <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
 
@@ -54,7 +54,7 @@
 </div>
 <script>
     function showHideTranscript(speakerName, refresh) {
-        if (speakerName == "ALL") {
+        if (speakerName === "ALL") {
             $('.speaker').show();
         } else {
             $('.speaker').hide();

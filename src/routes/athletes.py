@@ -98,14 +98,15 @@ def decode_metadata(record):
     record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
 
     transcript = dba.fetch_one("select * from player_transcripts where player_media_id = ?", [record["id"]])
+    record["transcript_verified"] = False
+    record["transcript"] = None
 
     if transcript:
         try:
             record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
+            record["transcript_verified"] = transcript["user_verified_speaker"] > 0
         except Exception as e:
             record["transcript"] = str(e)
-    else:
-        record["transcript"] = None
 
     return record
 
@@ -356,11 +357,12 @@ async def get_athlete_videos(request, response):
             player_media.metadata = you_tube_link["metadata"]
             player_media.save()
 
-    videos = PlayerMedia().select(limit=1, skip=0, filter="media_type like 'video%' and is_deleted = 0 and is_sorted = 0 and player_id = ?", params=[request.params["id"]])
+    videos = PlayerMedia().select(skip=0, filter="media_type like 'video%' and is_deleted = 0 and is_sorted = 0 and player_id = ?", params=[request.params["id"]])
 
     if videos.count > 0:
         video = videos.to_list(decode_metadata)[0]
-        html = Template.render_twig_template("player/sorter.twig", {"video": video, "player": player.to_dict()})
+        videos_processed = PlayerMedia().select("count(*) as count", limit="1", filter="player_id = ? and media_type like 'video%' and is_deleted = 0 and is_valid = 1 and is_sorted = 1", params=[request.params["id"]])
+        html = Template.render_twig_template("player/sorter.twig", {"remaining_videos": videos.count, "videos_processed": videos_processed.to_list()[0]['count'], "video": video, "player": player.to_dict()})
 
     else:
         videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ",
