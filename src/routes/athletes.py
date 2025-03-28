@@ -111,7 +111,6 @@ def decode_metadata(record):
 
     return record
 
-
 def remove_repeated_text(input_string):
     words = input_string.split()
     seen = set()
@@ -148,6 +147,30 @@ def decode_player_image(record):
     except Exception as e:
         record["image"] = str(e)
     return record
+
+@get("/api/receptiviti/export")
+async def get_receptiviti_export(request, response):
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+
+    file_name = "transcript_export.csv"
+
+    headers = {
+        "Content-Disposition": f"attachment; filename={file_name}",
+        "Content-Type": "text/csv"
+    }
+
+    player_transcripts = PlayerTranscripts().select("*", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000)
+    text = "media_id,text\n"
+    transcripts = player_transcripts.to_list(decode_transcript)
+    for transcript in transcripts:
+        text += str(transcript["player_media_id"])+",\""
+        for speaker in transcript["data"]["transcription"]:
+            if speaker and "speaker" in speaker:
+                if speaker["speaker"] == transcript["selected_speaker"]:
+                    text += speaker["text"].replace("\n", "").replace("\"", "")
+        text += "\"\n"
+    return response(text, 200, "text/csv", headers_in=headers)
+
 
 
 @get("/api/athlete/{id}")

@@ -139,3 +139,4 @@ async def post_media_sorter(request, response):
     player_media.save()
 
     return response.redirect("/media/sorter")
+
