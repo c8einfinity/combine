@@ -11,4 +11,5 @@
 # ide specific files
 /.idea/
 *.iml
+/output/login-pdfkit.pdf
 /src/public/css/default.css
