@@ -14,6 +14,8 @@ from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
+from itertools import groupby
+
 
 
 @get("/api/athletes/{status}")
@@ -131,6 +133,8 @@ def decode_transcript(record):
         transcription = []
         for speaker in record["data"]["transcription"]:
             text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
+            text = text.replace("-", "").strip()
+            text = ''.join(k for k, g in groupby(text))
             if text != "" and len(text) > 1:
                 speaker["text"] = remove_repeated_text(text)
                 transcription.append(speaker)
