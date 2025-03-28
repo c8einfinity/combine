@@ -7,9 +7,6 @@
     </div>
     <div class="col">
         <ul class="nav nav-tabs">
-            <li>
-                <h5 class="text-anton text-maastricht-blue pb-2 p-2">Player Q Results</h5>
-            </li>
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#" onclick="showResultTab('player-report')">Player</a>
             </li>
@@ -27,20 +24,132 @@
         <form id="text-submit">
             <label class="sr-only" for="playerText">Transcription Text</label>
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
-            <div class="row my-2 align-items-center">
-                <div class="col">
-                    <b>Word Count:</b> <span id="wordCount">0</span>
-                </div>
-                <div class="col-3">
-                    <a class="btn btn-secondary" href="/api/athlete/{{ player.id }}/report" target="_blank" >View Report</a>
-                </div>
-            </div>
         </form>
+        <div class="d-flex justify-content-between mt-3">
+            <div>
+                <b
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 600;
+                        font-size: 14px;
+                        color: #000000;
+                    "
+                >
+                    Word Count:
+                </b>
+                <span
+                    id="wordCount"
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 400;
+                        font-size: 14px;
+                        color: #000000;
+                    "
+                >
+                    0
+                </span>
+            </div>
+            <a
+                href="/api/athlete/{{ player.id }}/report"
+                target="_blank"
+                class="p-1 btn text-inchworm-green text-inter view-btn"
+                style="width: 140px;"
+            >
+                View Full Report
+            </a>
+        </div>
     </div>
     <div class="col">
-        <div id="player-report" class="pt-1 pb-3 px-1 result-tab">{{ results.player }}</div>
-        <div id="coach-report" class="pt-1 pb-3 px-1 result-tab">{{ results.coach }}</div>
-        <div id="scout-report" class="pt-1 pb-3 px-1 result-tab">{{ results.scout }}</div>
+        <div id="player-report" class="pt-1 pb-3 px-1 result-tab">
+            <div class="d-flex justify-content-between">
+                <h5
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 700;
+                        font-size: 24px;
+                        color: #000000;
+                    "
+                >
+                    Player Results
+                </h5>
+                <div class="row justify-content-between">
+                    <a
+                        href="{{ url }}/player/{{ player.candidate_id }}/pdf/report/player/download"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter download-btn"
+                    >
+                        Download Report
+                    </a>
+                    <a
+                        href="/api/athlete/{{ player.id }}/report/player"
+                        target="_blank"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter view-btn"
+                    >
+                        View Report
+                    </a>
+                </div>
+            </div>
+            {{ results.player }}
+        </div>
+        <div id="coach-report" class="pt-1 pb-3 px-1 result-tab">
+            <div class="d-flex justify-content-between">
+                <h5
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 700;
+                        font-size: 24px;
+                        color: #000000;
+                    "
+                >
+                    Coaching Results
+                </h5>
+                <div class="row justify-content-between">
+                    <a
+                        href="{{ url }}/player/{{ player.candidate_id }}/pdf/report/coach/download"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter download-btn"
+                    >
+                        Download Report
+                    </a>
+                    <a
+                        href="/api/athlete/{{ player.id }}/report/coaching"
+                        target="_blank"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter view-btn"
+                    >
+                        View Report
+                    </a>
+                </div>
+            </div>
+            {{ results.coach }}
+        </div>
+        <div id="scout-report" class="pt-1 pb-3 px-1 result-tab">
+            <div class="d-flex justify-content-between">
+                <h5
+                    style="
+                        font-family: 'Inter', 'Arial', sans-serif;
+                        font-weight: 700;
+                        font-size: 24px;
+                        color: #000000;
+                    "
+                >
+                    Scouting Results
+                </h5>
+                <div class="row justify-content-between">
+                    <a
+                        href="{{ url }}/player/{{ player.candidate_id }}/pdf/report/scout/download"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter download-btn"
+                    >
+                        Download Report
+                    </a>
+                    <a
+                        href="/api/athlete/{{ player.id }}/report/scouting"
+                        target="_blank"
+                        class="p-1 btn mr-2 text-inchworm-green text-inter view-btn"
+                    >
+                        View Report
+                    </a>
+                </div>
+            </div>
+            {{ results.scout }}
+        </div>
     </div>
 </div>
 <script>
@@ -73,12 +182,8 @@
     $('#wordCount').html(countWords('playerText'));
 
     function submitPlayerText() {
-        submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "",  function(data) {
+        submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "",  function() {
             loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
         });
     }
-
 </script>
-
-
-
