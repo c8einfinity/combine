@@ -163,15 +163,15 @@ async def get_receptiviti_export(request, response):
         "Content-Type": "text/csv"
     }
 
-    player_transcripts = PlayerTranscripts().select("*", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
-    text = "media_id,text\n"
+    player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
+    text = "player_id,candidate_id,text\n"
     transcripts = player_transcripts.to_list(decode_transcript)
     player_id = ""
     for transcript in transcripts:
         if player_id != transcript["player_id"]:
             if player_id != "":
                 text += "\"\n"
-            text += str(transcript["player_id"])+",\""
+            text += str(transcript["player_id"])+",\""+str(transcript["candidate_id"])+"\",\""
             player_id = transcript["player_id"]
 
         for speaker in transcript["data"]["transcription"]:
