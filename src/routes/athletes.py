@@ -217,7 +217,7 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and user_verified_speaker = 1 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
                                                     params=[request.params["id"]])
     text = ""
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
