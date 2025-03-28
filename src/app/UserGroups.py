@@ -78,7 +78,7 @@ class UserGroups:
             },
             {
                 "access_point": "PlayerQ",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "-")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "-")
             },
             {
                 "access_point": "Users",

@@ -1,69 +1,66 @@
 {% set user = request.session.get("user") %}
+{% set permissions = request.session.get("permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">ATHLETES</h3>
-        <form id="athlete" class="card" method="post" onsubmit="return false;">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
+        {% if permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
+            {% if permissions.Athletes.create == "1" or user.user_group_id == "1" %}
+                <form id="athlete" class="card" method="post" onsubmit="return false;">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First Name">
+                            </div>
+                            <div class="col form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
+                            </div>
+                            <div class="col form-group">
+                                <label for="sport">Sport</label>
+                                <select class="form-control" name="sport" id="sport">
+                                    <option>Football</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2 pt-4">
+                                <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addAthlete()">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
-                    </div>
-                    <div class="col form-group">
-                        <label for="sport">Sport</label>
-                        <select class="form-control" name="sport" id="sport">
-                            <option>Football</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-2 pt-4">
-                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addAthlete()">
-                            Add
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div id="message"></div>
-        <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-            <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
-            <ul class="nav nav-tabs mb-1">
-                <li class="nav-item">
-                    <a role="button" class="nav-link {% if status == "all" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
-                </li>
-                <li class="nav-item">
-                    <a role="button" class="nav-link {% if status == "verified-videos" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos Verified</a>
-                </li>
-                <li class="nav-item">
-                    <a role="button" class="nav-link {% if status == "verified-speakers" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker Verified</a>
-                </li>
-                {% if user.user_group_id == "1" %}
-                <li>
-                    <a role="button" class="nav-link {% if status == "completed-reports" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report Complete</a>
-                </li>
-                {% endif %}
-            </ul>
-
-            <table id="athletes-grid" class="table" style="width: 100%">
-                <thead>
-                <tr>
-                    <th>Player Id</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Date of Birth</th>
-                    <th>Sport</th>
-                    <th>Home Town</th>
-                    <th>Major</th>
-                    <th>Transcription Status</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-            </table>
+                </form>
+            {% endif %}
             <div id="message"></div>
-        </div>
+            <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
+                <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
+                <ul class="nav nav-tabs mb-1">
+                    <li class="nav-item">
+                        <a role="button" class="nav-link {% if status == "all" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                    </li>
+                    <li class="nav-item">
+                        <a role="button" class="nav-link {% if status == "verified-videos" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos Verified</a>
+                    </li>
+                    <li class="nav-item">
+                        <a role="button" class="nav-link {% if status == "verified-speakers" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker Verified</a>
+                    </li>
+                    {% if user.user_group_id == "1" %}
+                    <li>
+                        <a role="button" class="nav-link {% if status == "completed-reports" %}active{% endif %}" data-toggle="tab" onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report Complete</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <table id="athletes-grid" class="table" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <!-- table details filled in completely by data tables -->
+                    </tr>
+                    </thead>
+                </table>
+                <div id="message"></div>
+            </div>
+        {% endif %}
     </div>
 </div>
 <script>
@@ -114,8 +111,15 @@
             dom: '',
             ajax: "/api/athletes/{{ status }}",
             columns: [
-                { data: "id", visible: false, searchable: false},
-                { data: 'first_name',
+                {
+                    title: "",
+                    data: "id",
+                    visible: false,
+                    searchable: false
+                },
+                {
+                    title: "First Name",
+                    data: 'first_name',
                     render: function (data, type, row) {
                         if (!row.completed_bio || row.report_sent) {
                             return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom">
@@ -127,12 +131,29 @@
                         return row.first_name;
                     }
                 },
-                { data: 'last_name' },
-                { data: 'date_of_birth' },
-                { data: 'sport' },
-                { data: 'home_town' },
-                { data: 'major' },
-                { searchable: false,
+                {
+                    title: "Last Name",
+                    data: 'last_name'
+                },
+                {
+                    title: "Date of Birth",
+                    data: 'date_of_birth'
+                },
+                {
+                    title: "Sport",
+                    data: 'sport'
+                },
+                {
+                    title: "Home Town",
+                    data: 'home_town'
+                },
+                {
+                    title: "Major",
+                    data: 'major'
+                },
+                {
+                    title: "Transcription Status",
+                    searchable: false,
                     render: function(data, type, row) {
                         let html = '<div class="d-flex" style="grid-gap: 0.5rem;">';
                         html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
@@ -152,13 +173,22 @@
                     },
                     orderable: false
                 },
-                { searchable: false,
-                    render: function(data, type, row) {
-                        let icons = `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
-                        icons = icons + ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
-                        return icons
+                {% if permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+                {
+                    "title": "Status",
+                    "render": function(data, type, row) {
+                        return `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
+                    }
+                },
+                {% endif %}
+                {% if permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
+                {
+                    "orderable": false,
+                    "render": function(data, type, row) {
+                        return ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                     }
                 }
+                {% endif %}
             ],
             language: {
                 emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
