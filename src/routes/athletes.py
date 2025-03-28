@@ -8,15 +8,11 @@ from urllib.parse import urlparse, parse_qs
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-
-
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
 from itertools import groupby
-
-
 
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
@@ -180,8 +176,6 @@ async def get_receptiviti_export(request, response):
                     text += speaker["text"].replace("\n", "").replace("\"", "")
 
     return response(text, 200, "text/csv", headers_in=headers)
-
-
 
 @get("/api/athlete/{id}")
 async def get_athlete(request, response):
