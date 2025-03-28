@@ -6,9 +6,11 @@ import requests
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 
+from dulwich.ignore import translate
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
+from torch.fx.experimental.proxy_tensor import track_tensor
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
@@ -163,16 +165,22 @@ async def get_receptiviti_export(request, response):
         "Content-Type": "text/csv"
     }
 
-    player_transcripts = PlayerTranscripts().select("*", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000)
+    player_transcripts = PlayerTranscripts().select("*", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
     text = "media_id,text\n"
     transcripts = player_transcripts.to_list(decode_transcript)
+    player_id = ""
     for transcript in transcripts:
-        text += str(transcript["player_media_id"])+",\""
+        if player_id != transcript["player_id"]:
+            if player_id != "":
+                text += "\"\n"
+            text += str(transcript["player_id"])+",\""
+            player_id = transcript["player_id"]
+
         for speaker in transcript["data"]["transcription"]:
             if speaker and "speaker" in speaker:
                 if speaker["speaker"] == transcript["selected_speaker"]:
                     text += speaker["text"].replace("\n", "").replace("\"", "")
-        text += "\"\n"
+
     return response(text, 200, "text/csv", headers_in=headers)
 
 
