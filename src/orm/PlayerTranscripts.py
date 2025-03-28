@@ -11,4 +11,5 @@ class PlayerTranscripts(ORM):
     player_id = ForeignKeyField(IntegerField("id"), Player, default_value=1)
     classification = BlobField(default_value="{}")
     selected_speaker = StringField(default_value="SPEAKER00")
-    user_verified_speaker = IntegerField(default_value=0)
+    verified_user_id = IntegerField(default_value=0)
+    verified_at = DateTimeField(default_value=None)

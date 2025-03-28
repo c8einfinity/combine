@@ -45,7 +45,7 @@ async def get_athletes(request, response):
             where += (" and id in (SELECT pt.player_id FROM player_transcripts pt "
                       "JOIN player_media pm "
                       "ON pt.player_id = pm.player_id "
-                      "AND pt.user_verified_speaker > 0 "
+                      "AND pt.verified_user_id > 0 "
                       "AND pm.is_valid = 1 "
                       "AND pm.media_type = 'video-youtube' "
                       "GROUP BY pt.player_id HAVING COUNT(pt.id) = COUNT(pm.id))")
@@ -107,7 +107,7 @@ def decode_metadata(record):
     if transcript:
         try:
             record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
-            record["transcript_verified"] = transcript["user_verified_speaker"] > 0
+            record["transcript_verified"] = transcript["verified_user_id"] > 0
         except Exception as e:
             record["transcript"] = str(e)
 
@@ -163,7 +163,7 @@ async def get_receptiviti_export(request, response):
         "Content-Type": "text/csv"
     }
 
-    player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
+    player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
     text = "player_id,candidate_id,text\n"
     transcripts = player_transcripts.to_list(decode_transcript)
     player_id = ""
@@ -250,7 +250,7 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and user_verified_speaker > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
                                                     params=[request.params["id"]])
     text = ""
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
@@ -684,13 +684,17 @@ async def get_test_classification(request, response):
 
             chunks = chunk_text(text, 5000)
             for chunk in chunks:
-                result = aatos.generate("Classify each line of numbered text using the CLASSIFICATION RULES:\nText:"+chunk+"\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
-                                                             "Human", "AI",
-                                                             "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                                                            _context="CLASSIFICATION RULES:\n"+classification_text,
-                                        _stop_tokens=["Human:"])
+                try:
+                    result = aatos.generate("Classify each line of numbered text using the CLASSIFICATION RULES:\nText:"+chunk+"\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
+                                                                 "Human", "AI",
+                                                                 "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                                                                _context="CLASSIFICATION RULES:\n"+classification_text,
+                                            _stop_tokens=["Human:"])
 
-                classification += result["output"]
+                    classification += result["output"]
+                except Exception as e:
+                    print("Error in classification:", e)
+                    return response("Could not classify text.")
 
             dba.execute("update player_transcripts set selected_speaker = ? where id = ?", [selected_speaker,  transcript["id"]])
             dba.commit()
@@ -732,7 +736,8 @@ async def post_transcript_verified(request, response):
     player_transcript.load()
     if type(player_transcript.data.value) is str:
         player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data.value).decode("utf-8"))
-    player_transcript.user_verified_speaker = request.body["user_verified_speaker"]
+    player_transcript.verified_user_id = request.body["verified_user_id"]
+    player_transcript.verified_at = datetime.now()
     player_transcript.save()
 
     return response("Done!")
