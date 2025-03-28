@@ -22,14 +22,14 @@ def get_data_tables_filter(request):
     for column in columns:
         column_name = column["data"] #check this
 
-        if column["searchable"] and search["value"]:
+        if column["searchable"] and search["value"] and not column_name.isdigit():
             list_of_column_names.append(column_name)
 
-        for search_value in search_values:
-            if search_value != "":
-                filter_value = column_name+" like '%"+search_value+"%'"
-                if filter_value not in filter:
-                    filter.append(filter_value)
+            for search_value in search_values:
+                if search_value != "":
+                    filter_value = column_name+" like '%"+search_value+"%'"
+                    if filter_value not in filter:
+                        filter.append(filter_value)
     ordering = []
 
     if order_by:

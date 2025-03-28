@@ -32,7 +32,7 @@ async def get_athletes(request, response):
 
     data_tables_filter = get_data_tables_filter(request)
 
-    where = "id <> ?"
+    where = "id <> 0"
     if data_tables_filter["where"] != "":
         where += " and " + data_tables_filter["where"]
 
@@ -52,7 +52,6 @@ async def get_athletes(request, response):
 
     players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
-                              [0],
                               order_by=data_tables_filter["order_by"],
                               limit=data_tables_filter["length"],
                               skip=data_tables_filter["start"], )
@@ -113,9 +112,32 @@ def decode_metadata(record):
     return record
 
 
+def remove_repeated_text(input_string):
+    words = input_string.split()
+    seen = set()
+    result = []
+
+    for word in words:
+        if word not in seen:
+            seen.add(word)
+            result.append(word)
+
+    return ' '.join(result)
+
 def decode_transcript(record):
     try:
         record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
+
+        # clean up of funny chars & duplicated text
+        transcription = []
+        for speaker in record["data"]["transcription"]:
+            text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
+            if text != "" and len(text) > 1:
+                speaker["text"] = remove_repeated_text(text)
+                transcription.append(speaker)
+
+        record["data"]["transcription"] = transcription
+
     except Exception as e:
         record["data"] = str(e)
     return record
@@ -195,7 +217,7 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and user_verified_speaker = 1 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
                                                     params=[request.params["id"]])
     text = ""
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
@@ -205,7 +227,6 @@ async def get_athlete_results(request, response):
         player_result = player_result.to_list()
         if len(player_result) == 1:
             results = json.loads(base64.b64decode(str(player_result[0]["data"])).decode("utf-8"))
-            text = str(player_result[0]["transcription"])
 
     if text == "":
         transcripts = player_transcripts.to_list(decode_transcript)
@@ -219,7 +240,7 @@ async def get_athlete_results(request, response):
                 results = get_player_results(str(player.candidate_id))
 
     # remove any none latin characters from text
-    text = ''.join([i if ord(i) < 128 else ' ' for i in text])
+    text = ''.join([i if ord(i) < 128 else '' for i in text])
 
     html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
 
@@ -617,7 +638,8 @@ async def get_test_classification(request, response):
     counter = 1
     for speaker in transcript["data"]["transcription"]:
         if speaker["speaker"] == selected_speaker:
-            text += str(counter)+"."+ speaker["text"] + "\n\n"
+            speaker_text = ''.join([i if ord(i) < 128 else ' ' for i in speaker["text"]])
+            text += str(counter)+"."+ speaker_text + "\n\n"
             counter += 1
 
     #print("<pre style='width:200px'>",text, "<pre>")
