@@ -5,12 +5,10 @@ import hashlib
 import requests
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
-
-from dulwich.ignore import translate
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-from torch.fx.experimental.proxy_tensor import track_tensor
+
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
