@@ -5,15 +5,17 @@ import hashlib
 import requests
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
-
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
+
 
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
+from itertools import groupby
+
 
 
 @get("/api/athletes/{status}")
@@ -43,7 +45,7 @@ async def get_athletes(request, response):
             where += (" and id in (SELECT pt.player_id FROM player_transcripts pt "
                       "JOIN player_media pm "
                       "ON pt.player_id = pm.player_id "
-                      "AND pt.user_verified_speaker > 0 "
+                      "AND pt.verified_user_id > 0 "
                       "AND pm.is_valid = 1 "
                       "AND pm.media_type = 'video-youtube' "
                       "GROUP BY pt.player_id HAVING COUNT(pt.id) = COUNT(pm.id))")
@@ -105,12 +107,11 @@ def decode_metadata(record):
     if transcript:
         try:
             record["transcript"] = ast.literal_eval(base64.b64decode(transcript["data"]).decode("utf-8"))
-            record["transcript_verified"] = transcript["user_verified_speaker"] > 0
+            record["transcript_verified"] = transcript["verified_user_id"] > 0
         except Exception as e:
             record["transcript"] = str(e)
 
     return record
-
 
 def remove_repeated_text(input_string):
     words = input_string.split()
@@ -132,6 +133,8 @@ def decode_transcript(record):
         transcription = []
         for speaker in record["data"]["transcription"]:
             text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
+            text = text.replace("-", "").strip()
+            text = ''.join(k for k, g in groupby(text))
             if text != "" and len(text) > 1:
                 speaker["text"] = remove_repeated_text(text)
                 transcription.append(speaker)
@@ -148,6 +151,36 @@ def decode_player_image(record):
     except Exception as e:
         record["image"] = str(e)
     return record
+
+@get("/api/receptiviti/export")
+async def get_receptiviti_export(request, response):
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+
+    file_name = "transcript_export.csv"
+
+    headers = {
+        "Content-Disposition": f"attachment; filename={file_name}",
+        "Content-Type": "text/csv"
+    }
+
+    player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
+    text = "player_id,candidate_id,text\n"
+    transcripts = player_transcripts.to_list(decode_transcript)
+    player_id = ""
+    for transcript in transcripts:
+        if player_id != transcript["player_id"]:
+            if player_id != "":
+                text += "\"\n"
+            text += str(transcript["player_id"])+",\""+str(transcript["candidate_id"])+"\",\""
+            player_id = transcript["player_id"]
+
+        for speaker in transcript["data"]["transcription"]:
+            if speaker and "speaker" in speaker:
+                if speaker["speaker"] == transcript["selected_speaker"]:
+                    text += speaker["text"].replace("\n", "").replace("\"", "")
+
+    return response(text, 200, "text/csv", headers_in=headers)
+
 
 
 @get("/api/athlete/{id}")
@@ -217,7 +250,7 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and user_verified_speaker = 1 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
                                                     params=[request.params["id"]])
     text = ""
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
@@ -651,13 +684,17 @@ async def get_test_classification(request, response):
 
             chunks = chunk_text(text, 5000)
             for chunk in chunks:
-                result = aatos.generate("Classify each line of numbered text using the CLASSIFICATION RULES:\nText:"+chunk+"\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
-                                                             "Human", "AI",
-                                                             "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                                                            _context="CLASSIFICATION RULES:\n"+classification_text,
-                                        _stop_tokens=["Human:"])
+                try:
+                    result = aatos.generate("Classify each line of numbered text using the CLASSIFICATION RULES:\nText:"+chunk+"\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
+                                                                 "Human", "AI",
+                                                                 "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                                                                _context="CLASSIFICATION RULES:\n"+classification_text,
+                                            _stop_tokens=["Human:"])
 
-                classification += result["output"]
+                    classification += result["output"]
+                except Exception as e:
+                    print("Error in classification:", e)
+                    return response("Could not classify text.")
 
             dba.execute("update player_transcripts set selected_speaker = ? where id = ?", [selected_speaker,  transcript["id"]])
             dba.commit()
@@ -699,7 +736,8 @@ async def post_transcript_verified(request, response):
     player_transcript.load()
     if type(player_transcript.data.value) is str:
         player_transcript.data = ast.literal_eval(base64.b64decode(player_transcript.data.value).decode("utf-8"))
-    player_transcript.user_verified_speaker = request.body["user_verified_speaker"]
+    player_transcript.verified_user_id = request.body["verified_user_id"]
+    player_transcript.verified_at = datetime.now()
     player_transcript.save()
 
     return response("Done!")

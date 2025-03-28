@@ -15,7 +15,7 @@
     {% set userVerified = "" %}
     {% if transcripts|length == 1 %}
         {% set selectedSpeaker = transcripts[0].selected_speaker %}
-        {% set userVerified = transcripts[0].user_verified_speaker %}
+        {% set userVerified = transcripts[0].verified_user_id %}
     {% endif %}
 <form id="speaker_form" class="form-inline d-flex mb-2" style="grid-gap: 1rem;">
     <div class="form-group flex-column">
@@ -30,7 +30,7 @@
         </select>
     </div>
     <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" name="user_verified_speaker" id="user_verification" {% if userVerified %}checked{% endif %} onclick="submitUserVerification(this)" value="{{ user.id }}">
+        <input type="checkbox" class="form-check-input" name="verified_user_id" id="user_verification" {% if userVerified %}checked{% endif %} onclick="submitUserVerification(this)" value="{{ user.id }}">
         <label for="user_verification" class="d-flex flex-column align-items-start">
             <span class="d-block">Verified by User</span>
             <i class="d-block w-100"><small>Clicking this confirms you have verified this speaker.</small></i>
