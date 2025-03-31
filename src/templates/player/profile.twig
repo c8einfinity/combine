@@ -1,46 +1,50 @@
 {% set user = request.session.get("user") %}
-{% set permissions = request.session.get("permissions") %}
 {% set logged_in = request.session.get("logged_in") %}
-
 <div class="px-3 py-4">
-    <div class="content pt-2 pb-2 px-4">
-        {% if permissions.Profile.visible == "1" or user.user_group_id == "1" %}
-            <h3 class='col text-anton text-maastricht-blue pb-0'>
-                {% if player_image != "None" %}
-                    <img class="img-fluid img-thumbnail"
-                         style=" width: 64px"
-                         src="data:image/png;base64,{{ player_image }}"
-                         alt="Athlete Picture">
-                {% endif %}
-                PLAYER: {{ player.first_name }} {{ player.last_name }}
-            </h3>
-
-            <ul class="nav nav-tabs justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link active" role="button" data-toggle="tab" aria-current="page"
-                       onclick="showTab(this.innerHTML)">Profile</a>
-                </li>
-                {% if permissions.Videos.visible == "1" or user.user_group_id == "1" %}
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
-                    </li>
-                {% endif %}
-                {% if permissions.Links.visible == "1" or user.user_group_id == "1" %}
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
-                    </li>
-                {% endif %}
-                {% if permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
-                    <li class="nav-item">
-                        <a class="nav-link" role="button" data-toggle="tab" onclick="showTab(this.innerHTML); loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
-                    </li>
-                {% endif %}
-            </ul>
-
-            <div id="tabProfile" class="card pt-3 px-3 tab">
-                <div class="card-body">
-                    <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
-                    {% if permissions.Profile.edit == "1" or user.user_group_id == "1" %}
+    <div class="container-fluid card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    {% if player_image != "None" %}
+                        <img class="img-fluid img-thumbnail rounded-circle profile-img"
+                             src="data:image;base64,{{ player_image }}"
+                             alt="Athlete Picture">
+                    {% endif %}
+                </div>
+                <div class="col-12 col-md-11">
+                    <div class="row">
+                        <div class="col-4">
+                            <h3 class='text-anton text-maastricht-blue'>{{ player.first_name }} {{ player.last_name }}</h3>
+                        </div>
+                        <div class="col-1 offset-4">
+                            <a class="btn btn-outline-dark btn-block" role="button"
+                               onclick="showTab(this)">Profile</a>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-outline-dark btn-block" role="button"
+                               onclick="showTab(this);
+                               loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
+                        </div>
+                        <div class="col-1">
+                            <a class="btn btn-outline-dark btn-block" role="button"
+                               onclick="showTab(this);
+                               loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
+                        </div>
+                        {% if user.user_group_id == "1" %}
+                            <div class="col-1">
+                                <a class="btn btn-outline-dark btn-block" role="button"
+                                   onclick="showTab(this);
+                                   loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr class="hor-line-gradient" />
+                </div>
+            </div>
+            <div class="row">
+                <div id="tabProfile" class="col-12 tab">
+                    <div class="card-body">
+                        <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
                         <form id="profileDetails" onsubmit="return false;">
                             <div class="row">
                                 <div class="col">
@@ -115,28 +119,32 @@
                                 </div>
                             </div>
                         </form>
-                    {% endif %}
-                    <div id="profileMessage"></div>
-                    <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
-                            onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')"> Save
-                    </button>
+                        <div id="profileMessage"></div>
+                        <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
+                                onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')"> Save
+                        </button>
+                    </div>
                 </div>
+                <div id="tabLinks" class="col-12 p-4 tab">
+                </div>
+                <div id="tabVideos" class="col-12 p-4 tab">
+                </div>
+                <div id="tabPlayerQ" class="col-12 p-4 tab">
             </div>
-            <div id="tabLinks" class="card pt-3 pb-3 px-3 tab">
-            </div>
-            <div id="tabVideos" class="card pt-3 pb-3 px-3 tab">
-            </div>
-            <div id="tabPlayerQ" class="card pt-3 pb-3 px-3 tab">
-            </div>
-        {% endif %}
+        </div>
+        </div>
     </div>
 </div>
 <script>
-    function showTab(tabName) {
+    function showTab(tabElement) {
+        // remove active class from all tabs
+        $(".btn-outline-dark").removeClass("active");
+        // add active class to the clicked tab
+        $(tabElement).addClass("active");
         $(".tab").hide();
-        $("#tab" + tabName).show();
+        $("#tab" + tabElement.innerHTML).show();
     }
-    showTab("Profile");
+    showTab($('.btn-outline-dark')[0]);
 </script>
 
 <!-- {{ RANDOM()~"ID" }} -->
