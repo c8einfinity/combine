@@ -9,7 +9,7 @@
 /venv/
 
 # ide specific files
-.idea/
+/.idea/
 *.iml
 /output/login-pdfkit.pdf
 /src/public/css/default.css
