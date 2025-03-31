@@ -153,11 +153,23 @@
                 },
                 {
                     "title": "User Group",
-                    "data": "user_group_id"
+                    "data": "user_group_id",
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        const userGroups = {{ user_groups|tojson|safe }};
+                        if (userGroups !== undefined) {
+                            return userGroups.find(userGroup => userGroup.id === data).name;
+                        }
+                        return data;
+                    }
                 },
                 {
                     "title": "Status",
-                    "data": "is_active"
+                    "data": "is_active",
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        return data === 1 ? "Active" : "Inactive";
+                    }
                 },
                 {
                     "orderable": false,
