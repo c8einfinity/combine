@@ -336,7 +336,7 @@ async def get_athlete_results(request, response):
     else:
         candidate_id = player.candidate_id
 
-    print(f"candidate id: {candidate_id})
+    print(f"candidate id: {candidate_id}")
 
     html = Template.render_twig_template("player/player-q-results.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
