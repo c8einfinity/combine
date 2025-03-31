@@ -217,7 +217,6 @@ async def get_athlete_full_report(request, response):
     else:
         player_image = "None"
 
-
     if str(player.candidate_id) != "":
         results = get_player_results(str(player.candidate_id))
     else:
@@ -225,6 +224,7 @@ async def get_athlete_full_report(request, response):
 
     html = Template.render_twig_template("player/reports/full_report.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
+        "candidate_id": results["candidate_id"],
         "player": player.to_dict(),
         "player_image": player_image,
         "full_report": results["full_report"],
@@ -258,6 +258,7 @@ async def get_athlete_report(request, response):
 
     html = Template.render_twig_template("player/reports/report.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
+        "candidate_id": results["candidate_id"],
         "player": player.to_dict(),
         "player_image": player_image,
         "report": report,
@@ -310,6 +311,7 @@ async def get_athlete_results(request, response):
 
     html = Template.render_twig_template("player/player-q-results.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
+        "candidate_id": results["candidate_id"],
         "player": player.to_dict(),
         "results": {
             "player": results["player"]["html"],
