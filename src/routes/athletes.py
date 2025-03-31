@@ -2,14 +2,13 @@ import ast
 import json
 import base64
 import hashlib
-import requests
+import os
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-
-
+import re
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
@@ -125,6 +124,15 @@ def remove_repeated_text(input_string):
 
     return ' '.join(result)
 
+def replace_repeats(text):
+    # Use regex to find repeated characters outside of words
+    pattern = re.compile(r'(\s|^)(.)\2+(\s|$)')
+
+    # Replace the repeated characters with a single instance
+    result = pattern.sub(lambda m: m.group(1) + m.group(2) + m.group(3), text)
+
+    return result
+
 def decode_transcript(record):
     try:
         record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
@@ -134,9 +142,9 @@ def decode_transcript(record):
         for speaker in record["data"]["transcription"]:
             text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
             text = text.replace("-", "").strip()
-            text = ''.join(k for k, g in groupby(text))
+
             if text != "" and len(text) > 1:
-                speaker["text"] = remove_repeated_text(text)
+                speaker["text"] = remove_repeated_text(replace_repeats(text))+" "
                 transcription.append(speaker)
 
         record["data"]["transcription"] = transcription
@@ -229,7 +237,46 @@ async def get_athlete_full_report(request, response):
     else:
         results = {"full_report": {"pages": []}}
 
-    html = Template.render_twig_template("player/reports/full_report.twig", {"player": player.to_dict(), "player_image": player_image, "full_report": results["full_report"], "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")})
+    html = Template.render_twig_template("player/reports/full_report.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "player": player.to_dict(),
+        "player_image": player_image,
+        "full_report": results["full_report"],
+        "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")
+    })
+
+    return response(html)
+
+@get("/api/athlete/{id}/report/{report_type}")
+async def get_athlete_report(request, response):
+    from ..orm.Player import Player
+    player = Player({"id": request.params["id"]})
+    report_type = request.params["report_type"]
+    player.load()
+
+    if player.image.value is not None:
+        player_image = base64.b64decode(player.image.value).decode("utf-8")
+    else:
+        player_image = "None"
+
+    if str(player.candidate_id) != "":
+        results = get_player_results(str(player.candidate_id))
+    else:
+        results = {"full_report": {"pages": []}}
+
+    report = []
+
+    for page in results["full_report"]["pages"]:
+        if page["category"] == report_type:
+            report.append(page)
+
+    html = Template.render_twig_template("player/reports/report.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "player": player.to_dict(),
+        "player_image": player_image,
+        "report": report,
+        "current_date": datetime.now().strftime("%m/%d/%Y %H:%M")
+    })
 
     return response(html)
 
@@ -275,7 +322,16 @@ async def get_athlete_results(request, response):
     # remove any none latin characters from text
     text = ''.join([i if ord(i) < 128 else '' for i in text])
 
-    html = Template.render_twig_template("player/player-q-results.twig", {"player": player.to_dict(), "results": {"player": results["player"]["html"], "coach": results["coach"]["html"], "scout": results["scout"]["html"]}, "text": text})
+    html = Template.render_twig_template("player/player-q-results.twig", {
+        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "player": player.to_dict(),
+        "results": {
+            "player": results["player"]["html"],
+            "coach": results["coach"]["html"],
+            "scout": results["scout"]["html"]
+        },
+        "text": text
+    })
 
     return response(html)
 
