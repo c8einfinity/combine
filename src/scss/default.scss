@@ -67,3 +67,21 @@ h1, h2, h3, h4, h5, h6 {
   background: $gradient;
   border-radius: inherit;
 }
+
+.hor-line-gradient {
+  background: $gradient;
+  height: 2px;
+  border: none;
+}
+
+.profile-img {
+  border: none;
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0 10px 13px 0 #00000024;
+  &:hover {
+    box-shadow: 0 4px 4px 0 #0000001A;
+  }
+}
