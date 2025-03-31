@@ -2,19 +2,16 @@ import ast
 import json
 import base64
 import hashlib
-import requests
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
-
-
+import re
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
-from itertools import groupby
 
 
 
@@ -125,6 +122,15 @@ def remove_repeated_text(input_string):
 
     return ' '.join(result)
 
+def replace_repeats(text):
+    # Use regex to find repeated characters outside of words
+    pattern = re.compile(r'(\s|^)(.)\2+(\s|$)')
+
+    # Replace the repeated characters with a single instance
+    result = pattern.sub(lambda m: m.group(1) + m.group(2) + m.group(3), text)
+
+    return result
+
 def decode_transcript(record):
     try:
         record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
@@ -134,9 +140,9 @@ def decode_transcript(record):
         for speaker in record["data"]["transcription"]:
             text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
             text = text.replace("-", "").strip()
-            text = ''.join(k for k, g in groupby(text))
+
             if text != "" and len(text) > 1:
-                speaker["text"] = remove_repeated_text(text)
+                speaker["text"] = remove_repeated_text(replace_repeats(text))+" "
                 transcription.append(speaker)
 
         record["data"]["transcription"] = transcription
