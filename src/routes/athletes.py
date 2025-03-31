@@ -15,8 +15,6 @@ from ..app.Player import get_player_results, submit_player_results, resize_profi
 from .. import dba
 from itertools import groupby
 
-
-
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
@@ -236,9 +234,14 @@ async def get_athlete_full_report(request, response):
     else:
         results = {"full_report": {"pages": []}}
 
+    if "candidate_id" in results and results["candidate_id"] != "":
+        candidate_id = results["candidate_id"]
+    else:
+        candidate_id = player.candidate_id
+
     html = Template.render_twig_template("player/reports/full_report.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
-        "candidate_id": results["candidate_id"],
+        "candidate_id": candidate_id,
         "player": player.to_dict(),
         "player_image": player_image,
         "full_report": results["full_report"],
@@ -270,9 +273,14 @@ async def get_athlete_report(request, response):
         if page["category"] == report_type:
             report.append(page)
 
+    if "candidate_id" in results and results["candidate_id"] != "":
+        candidate_id = results["candidate_id"]
+    else:
+        candidate_id = player.candidate_id
+
     html = Template.render_twig_template("player/reports/report.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
-        "candidate_id": results["candidate_id"],
+        "candidate_id": candidate_id,
         "player": player.to_dict(),
         "player_image": player_image,
         "report": report,
@@ -323,9 +331,14 @@ async def get_athlete_results(request, response):
     # remove any none latin characters from text
     text = ''.join([i if ord(i) < 128 else '' for i in text])
 
+    if "candidate_id" in results and results["candidate_id"] != "":
+        candidate_id = results["candidate_id"]
+    else:
+        candidate_id = player.candidate_id
+
     html = Template.render_twig_template("player/player-q-results.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
-        "candidate_id": results["candidate_id"],
+        "candidate_id": candidate_id,
         "player": player.to_dict(),
         "results": {
             "player": results["player"]["html"],
