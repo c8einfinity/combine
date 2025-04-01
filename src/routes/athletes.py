@@ -62,8 +62,11 @@ async def get_athletes(request, response):
     # loop through the players and get the transcribe stats
     for player in data["data"]:
         player["transcript_stats"] = player_transcript_stats(player["id"])
+        # player["transcript_stats"] = {"total_media": 0, "total_transcribed": 0, "total_verified": 0}
         player["completed_bio"] = player_bio_complete(player["id"])
+        # player["completed_bio"] = False
         player["report_sent"] = player_report_sent(player["id"])
+        # player["report_sent"] = False
         # Return only the date, Y-m-d format
         player["date_of_birth"] = player["date_of_birth"].split("T")[0]
 
@@ -374,6 +377,7 @@ async def post_athlete_results(request, response):
     """
 
     from ..orm.PlayerResult import PlayerResult
+    from ..app.Player import split_trim_minify
 
     # create hash of the playerText
     transcription_hash = hashlib.md5(str(request.body["playerText"]).encode('utf-8')).hexdigest()
@@ -401,6 +405,20 @@ async def post_athlete_results(request, response):
     if "candidate_id" in results:
         player.candidate_id = results["candidate_id"]
         player.save()
+
+    if "player" in results:
+        results["player"]["html"] = split_trim_minify(results["player"]["html"])
+        if "pdf" in results["player"]:
+            del results["player"]["pdf"]
+    if "coach" in results:
+        results["coach"]["html"] = split_trim_minify(results["coach"]["html"])
+        if "pdf" in results["coach"]:
+            del results["coach"]["pdf"]
+    if "scout" in results:
+        results["scout"]["html"] = split_trim_minify(results["scout"]["html"])
+        if "pdf" in results["scout"]:
+            del results["scout"]["pdf"]
+
 
     player_result = PlayerResult({
         "player_id": request.params["id"],

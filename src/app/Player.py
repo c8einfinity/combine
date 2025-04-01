@@ -19,6 +19,13 @@ def get_player_results(candidate_id):
 
     return results.json()
 
+def split_trim_minify(text):
+    # Split the text by new lines
+    lines = text.split('\n')
+    # Trim each line and join them into one line
+    minified_text = ' '.join(line.strip() for line in lines)
+    return minified_text
+
 def submit_player_results(first_name, last_name, image="", text="", candidate_id=""):
 
     data = {"first_name": first_name, "last_name": last_name, "image": image,
@@ -41,24 +48,8 @@ def player_bio_complete(player_id):
     player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
     if player.count == 1:
         player = player[0]
-        completed_fields = 0
-        if player["first_name"]:
-            completed_fields += 1
-        if player["last_name"]:
-            completed_fields += 1
-        if player["image"]:
-            completed_fields += 1
-        if player["sport"]:
-            completed_fields += 1
-        if player["position"]:
-            completed_fields += 1
-        if player["date_of_birth"]:
-            completed_fields += 1
-        if player["home_town"]:
-            completed_fields += 1
-        if player["team"]:
-            completed_fields += 1
-        return completed_fields == 8
+        required_fields = ["first_name", "last_name", "image", "sport", "position", "date_of_birth", "home_town", "team"]
+        return all(player[field] for field in required_fields)
 
     return None
 
