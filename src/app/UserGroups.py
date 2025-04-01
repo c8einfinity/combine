@@ -58,43 +58,53 @@ class UserGroups:
         return [
             {
                 "access_point": "Home",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-"),
+                "depends": ""
             },
             {
                 "access_point": "Athletes",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "0"),
+                "depends": ""
             },
             {
                 "access_point": "Profile",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "-")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "-"),
+                "depends": "Athletes"
             },
             {
                 "access_point": "Videos",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0"),
+                "depends": "Profile"
             },
             {
                 "access_point": "Links",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "0"),
+                "depends": "Profile"
             },
             {
                 "access_point": "PlayerQ",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "-")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "-", "-"),
+                "depends": "Profile"
             },
             {
                 "access_point": "Users",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "0", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "0", "0"),
+                "depends": ""
             },
             {
                 "access_point": "User Groups",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "0", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "0", "0", "0"),
+                "depends": ""
             },
             {
                 "access_point": "Queue",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0"),
+                "depends": ""
             },
             {
                 "access_point": "Receptiviti CSV",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-"),
+                "depends": ""
             }
         ]
 
@@ -169,9 +179,7 @@ class UserGroups:
             nav_element_id = navigation_data["nav_element_id"]
 
         for permission in permissions:
-            permissions_list[permission["access_point"].replace(" ", "_")] = {
-                "permissions": permission["permissions"]
-            }
+            permissions_list[permission["access_point"].replace(" ", "_")] = permission["permissions"]
 
         user_permissions = {
             "authorized": authorized,

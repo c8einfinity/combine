@@ -27,13 +27,14 @@
                                 {% set permission_value = user_group_permission.permissions[permission] %}
                                 {% if permission_value != "-" %}
                                     {% set checked = "" if permission_value == "0" else "checked" %}
-                                    <input class="form-check-input m-0" type="checkbox" id="checkboxNoLabel"
+                                    <input class="form-check-input m-0" type="checkbox"
                                            name="{{ user_group_permission.access_point }}_{{ permission }}"
-                                            {{ checked }}/>
+                                            {{ checked }} data-depends="{{ user_group_permission.depends }}"/>
                                 {% else %}
                                     <input class="text-center border-0" size="1" maxlength="1"
                                            name="{{ user_group_permission.access_point }}_{{ permission }}"
-                                           value="{{ permission_value }}"/>
+                                           value="{{ permission_value }}"
+                                           data-depends="{{ user_group_permission.depends }}"/>
                                 {% endif %}
                             </td>
                         {% endfor %}
@@ -54,4 +55,194 @@
             }
         }
     });
+
+    /**
+     * Function to disable checkboxes that depends on another permission being visible.
+     */
+    function disableDependantFields() {
+        const dependantFields = $("input[data-depends!=''][type='checkbox']");
+        const dependsArray = [];
+
+        dependantFields.each(function() {
+            if (!dependsArray.includes(this.dataset.depends)) {
+                dependsArray.push(this.dataset.depends);
+            }
+        });
+
+        dependsArray.forEach(function (item) {
+            const dependsField = $(`input[name*='${item}_visible'][type='checkbox']`);
+            const dependantField = $(`input[data-depends='${item}'][type='checkbox']`);
+
+            dependantField.each(function () {
+                if (!dependsField[0].checked) {
+                    this.title = `Depends on ${item}`;
+                    this.checked = false;
+                    this.disabled = true;
+                } else {
+                    this.title = "";
+                    this.disabled = false;
+                }
+            });
+        });
+    }
+
+    /**
+     * Function to disable checkboxes that depends on the permission being visible.
+     */
+    function disableVisibleDependantFields() {
+        const userGroupPermissionsRows = $(".user-group-permissions-record");
+
+        userGroupPermissionsRows.each(function () {
+            for (let i = 2; i < this.children.length; i++ ) {
+                if (!this.children[1].children[0].checked) {
+                    this.children[i].children[0].title = `Depends on ${this.children[0].innerHTML} being visible`;
+                    this.children[i].children[0].disabled = true;
+                    this.children[i].children[0].checked = false;
+                } else {
+                    this.children[i].children[0].title = "";
+                    this.children[i].children[0].disabled = false;
+                }
+            }
+        });
+    }
+
+    /**
+     * Disabling and enabling fields after load.
+     */
+    $(document).ready(function () {
+        disableVisibleDependantFields();
+        disableDependantFields();
+    });
+
+    /**
+     * Disabling and enabling fields on checkbox change.
+     */
+    $("input[type='checkbox']").on("change", function () {
+        disableVisibleDependantFields();
+        disableDependantFields();
+    });
+
+    /**
+     * Function to select all checkboxes.
+     */
+    function selectAll() {
+        let ele = document.getElementsByTagName('input');
+
+        for (let i = 0; i < ele.length; i++) {
+            if (ele[i].type === 'checkbox') {
+                ele[i].checked = true;
+            }
+        }
+    }
+
+    /**
+     * Function to deselect all checkboxes.
+     */
+    function selectNone() {
+        let ele = document.getElementsByTagName('input');
+
+        for (let i = 0; i < ele.length; i++) {
+            if (ele[i].type === 'checkbox') {
+                ele[i].checked = false;
+            }
+        }
+    }
+
+    /**
+     * Function to prepare the user group permissions data for submission.
+     * @returns {*[]}
+     */
+    function prepareUserGroupPermissionsSubmission() {
+        const userGroupPermissions = [];
+        const userGroupPermissionsRows = $(".user-group-permissions-record");
+
+        userGroupPermissionsRows.each(function () {
+            const permissions = {};
+            const permissionsList = $(`input[name^="${this.children[0].innerHTML}"]`);
+
+            permissionsList.each(function () {
+                if (this.checked) {
+                    this.value = 1;
+                } else if (this.value !== "-") {
+                    this.value = 0;
+                }
+
+                permissions[this.name.split("_").pop()] = this.value;
+            });
+
+            userGroupPermissions.push({
+                "access_point": this.children[0].textContent,
+                "permissions": permissions,
+                "depends": this.children[1].children[0].dataset.depends
+            });
+        });
+
+        return userGroupPermissions;
+    }
+
+    if (typeof message === 'undefined') {
+        let message;
+    }
+
+    message = $("#message");
+
+    /**
+     * Function to reset the form, reload the table, and reset the message.
+     */
+    function clearUserGroupForm() {
+        document.forms[0].name.value = "";
+
+        selectNone();
+        userGroupsGrid.ajax.reload();
+        message.html(``);
+    }
+
+    /**
+     * Function to add a user group.
+     */
+    function addUserGroup(id) {
+        if (document.forms[0].name.value === "") {
+            message.html(`<div class="alert alert-danger">Name is required</div>`);
+            document.forms[0].name.focus();
+
+            return;
+        }
+
+        message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                <span class="sr-only text-maastricht-blue">Adding ...</span>
+            </div></div>`);
+
+        const formData = new FormData();
+
+        if (id) {
+            formData.append("id", id);
+        }
+
+        formData.append("name", $("#name").val());
+        formData.append("permissions", JSON.stringify(prepareUserGroupPermissionsSubmission()));
+
+        const errorMessage = `Something went wrong adding the user group.`;
+
+        fetch("/api/user_groups?formToken={{ formToken() }}", {
+            method: "POST",
+            body: formData
+        }).then(response => {
+            clearUserGroupForm();
+
+            if (response.status === 200) {
+                return response.json();
+            } else {
+                showMessage(errorMessage, "danger");
+            }
+        }).then(data => {
+            const messageType = (data.success) ? "info" : "danger";
+
+            showMessage(data.message, messageType);
+        }).catch(error => {
+            clearUserGroupForm();
+
+            console.error(error);
+            showMessage(errorMessage, "danger");
+        });
+    }
 </script>

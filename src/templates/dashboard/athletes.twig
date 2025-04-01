@@ -3,11 +3,11 @@
 <div class="px-3 py-4">
     <div class="container-fluid">
         {% if user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="text-anton text-maastricht-blue py-2">ADD ATHLETE</h3>
-                    <hr class="hor-line-gradient"/>
-                    {% if user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
+            {% if user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-anton text-maastricht-blue py-2">ADD ATHLETE</h3>
+                        <hr class="hor-line-gradient"/>
                         <form id="athlete" method="post" onsubmit="return false;">
                             <div class="row">
                                 <div class="col form-group">
@@ -35,9 +35,9 @@
                             </div>
                         </form>
                         <div id="formMessage"></div>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="card my-2">
                 <div class="card-body">
                     <h3 class="text-anton text-maastricht-blue py-2">ATHLETES</h3>
@@ -75,17 +75,7 @@
 
                         <table id="athletes-grid" class="table" style="width: 100%">
                             <thead>
-                            <tr>
-                                <th>Player Id</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Date of Birth</th>
-                                <th>Sport</th>
-                                <th>Home Town</th>
-                                <th>Major</th>
-                                <th>Transcription Status</th>
-                                <th>Status</th>
-                            </tr>
+                            <!-- table details filled in completely by data tables -->
                             </thead>
                         </table>
                         <div id="message"></div>
@@ -208,20 +198,20 @@
                     orderable: false
                 },
                 {% if user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
-                    {
-                        "title": "Status",
-                        "render": function (data, type, row) {
-                            return `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
-                        }
-                    },
+                {
+                    "title": "Status",
+                    "render": function (data, type, row) {
+                        return `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
+                    }
+                },
                 {% endif %}
                 {% if user_permissions.permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
-                    {
-                        "orderable": false,
-                        "render": function (data, type, row) {
-                            return ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
-                        }
+                {
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        return ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
                     }
+                }
                 {% endif %}
             ],
             language: {

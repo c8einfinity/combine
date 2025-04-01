@@ -5,19 +5,17 @@ from ..app.UserGroups import UserGroups
 
 class SessionHandler:
     @staticmethod
-    def set_user_session(request, user):
+    def set_user_session(request, user, user_permissions):
         """
         Function to set the user session after authentication.
+        :param user_permissions:
         :param request:
         :param user:
         :return:
         """
         request.session.set("user", user)
         request.session.set("logged_in", True)
-
-        user_group = UserGroups.get_user_group_data_by_id(user["user_group_id"])
-
-        request.session.set("user_permissions", UserGroups.get_condensed_user_group_permission_list(user_group))
+        request.session.set("user_permissions", user_permissions)
 
         request.session.save()
 

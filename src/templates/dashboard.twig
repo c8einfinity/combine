@@ -65,10 +65,6 @@
 {% block content_public %}
     <div id="content"></div>
     <script>
-        {% if not user_permissions.authorized %}
-            window.location.href = "/login?p_e=1";
-        {% endif %}
-
         {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
             loadPage('/dashboard/home', 'content');
             teamQNavSetActive($('#homeLink')[0]);

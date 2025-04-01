@@ -1,93 +1,104 @@
-    {% if video %}
-{% set user = request.session.get("user") %}
-<h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
+{% if video %}
+    {% set user = request.session.get("user") %}
+    {% set user_permissions = request.session.get("user_permissions") %}
+    <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
 
-{% if transcripts %}
+    {% if transcripts %}
 
-    {%  set nsa = namespace(speaker_array = []) %}
+        {% set nsa = namespace(speaker_array = []) %}
 
-    {% for transcript in transcripts  %}
-        {% for transcription in transcript.data.transcription %}
-            {% do nsa.speaker_array.append(transcription["speaker"]) %}
-        {% endfor %}
-    {% endfor %}
-    {% set selectedSpeaker = "SPEAKER00" %}
-    {% set userVerified = "" %}
-    {% if transcripts|length == 1 %}
-        {% set selectedSpeaker = transcripts[0].selected_speaker %}
-        {% set userVerified = transcripts[0].verified_user_id %}
-    {% endif %}
-<form id="speaker_form" class="form-inline d-flex mb-2" style="grid-gap: 1rem;">
-    <div class="form-group flex-column">
-        <label for="select_speaker" class="d-block">Select Speaker as Player:</label>
-        <select id="select_speaker" class="form-control w-100" onchange="showHideTranscript(this.value, 1)" {% if userVerified %}disabled{% endif %}>
-            <option value="ALL">Show All</option>
-            {% for speaker_array in nsa.speaker_array | unique %}
-                {% if speaker_array %}
-                <option value="{{ speaker_array }}" {% if speaker_array == selectedSpeaker %}selected{% endif %}>{{ speaker_array }}</option>
-                {% endif %}
+        {% for transcript in transcripts %}
+            {% for transcription in transcript.data.transcription %}
+                {% do nsa.speaker_array.append(transcription["speaker"]) %}
             {% endfor %}
-        </select>
-    </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" name="verified_user_id" id="user_verification" {% if userVerified %}checked{% endif %} onclick="submitUserVerification(this)" value="{{ user.id }}">
-        <label for="user_verification" class="d-flex flex-column align-items-start">
-            <span class="d-block">Verified by User</span>
-            <i class="d-block w-100"><small>Clicking this confirms you have verified this speaker.</small></i>
-        </label>
-    </div>
-</form>
-<div class="bg-light p-2 rounded border" style="overflow: auto; height:35vh">
-    {% for transcript in transcripts  %}
-        {%  for speaker in transcript.data.transcription %}
+        {% endfor %}
+        {% set selectedSpeaker = "SPEAKER00" %}
+        {% set userVerified = "" %}
+        {% if transcripts|length == 1 %}
+            {% set selectedSpeaker = transcripts[0].selected_speaker %}
+            {% set userVerified = transcripts[0].verified_user_id %}
+        {% endif %}
+        {% if user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
+            <form id="speaker_form" class="form-inline d-flex mb-2" style="grid-gap: 1rem;">
+                <div class="form-group flex-column">
+                    <label for="select_speaker" class="d-block">Select Speaker as Player:</label>
+                    <select id="select_speaker" class="form-control w-100" onchange="showHideTranscript(this.value, 1)"
+                            {% if userVerified %}disabled{% endif %}>
+                        <option value="ALL">Show All</option>
+                        {% for speaker_array in nsa.speaker_array | unique %}
+                            {% if speaker_array %}
+                                <option value="{{ speaker_array }}"
+                                        {% if speaker_array == selectedSpeaker %}selected{% endif %}>{{ speaker_array }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" name="verified_user_id" id="user_verification"
+                           {% if userVerified %}checked{% endif %} onclick="submitUserVerification(this)"
+                           value="{{ user.id }}">
+                    <label for="user_verification" class="d-flex flex-column align-items-start">
+                        <span class="d-block">Verified by User</span>
+                        <i class="d-block w-100"><small>Clicking this confirms you have verified this
+                                speaker.</small></i>
+                    </label>
+                </div>
+            </form>
+        {% endif %}
+        <div class="bg-light p-2 rounded border" style="overflow: auto; height:35vh">
+            {% for transcript in transcripts %}
+                {% for speaker in transcript.data.transcription %}
 
-                {% if speaker["text"] %}
-                    <div class="{{ speaker["speaker"] }} speaker"><b>{{ speaker["speaker"] }}</b>: {{ speaker["text"] }}</div>
-                {% endif %}
+                    {% if speaker["text"] %}
+                        <div class="{{ speaker["speaker"] }} speaker">
+                            <b>{{ speaker["speaker"] }}</b>: {{ speaker["text"] }}</div>
+                    {% endif %}
 
-        {%  endfor %}
-    {%  endfor %}
-</div>
-<br>
-<h5 class="text-anton text-maastricht-blue pb-2">Classification</h5>
-<div id="videoClassification" style="overflow: auto; height:50vh">
-</div>
-<script>
-    function showHideTranscript(speakerName, refresh) {
-        if (speakerName === "ALL") {
-            $('.speaker').show();
-        } else {
-            $('.speaker').hide();
-            $('.' + speakerName).show();
-        }
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <br>
+        <h5 class="text-anton text-maastricht-blue pb-2">Classification</h5>
+        <div id="videoClassification" style="overflow: auto; height:50vh">
+        </div>
+        <script>
+            function showHideTranscript(speakerName, refresh) {
+                if (speakerName === "ALL") {
+                    $('.speaker').show();
+                } else {
+                    $('.speaker').hide();
+                    $('.' + speakerName).show();
+                }
 
-        doClassification(speakerName, refresh);
-    }
+                doClassification(speakerName, refresh);
+            }
 
-    showHideTranscript("{{ selectedSpeaker }}", 0);
+            showHideTranscript("{{ selectedSpeaker }}", 0);
 
-    function submitUserVerification(inputElement) {
-        submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function() {
-            loadTranscript({{ transcripts[0].player_media_id }});
-        });
-    }
+            function submitUserVerification(inputElement) {
+                submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function () {
+                    loadTranscript({{ transcripts[0].player_media_id }});
+                });
+            }
 
-    function doClassification(speakerName, refresh) {
-        if (refresh === undefined) refresh = 0;
+            function doClassification(speakerName, refresh) {
+                if (refresh === undefined) refresh = 0;
 
-        $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                 <span class="sr-only text-maastricht-blue">Loading...</span>
             </div></div>`)
 
-        loadPage(`/api/athlete/{{ player.id }}/transcripts/{{transcripts[0].player_media_id}}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
-    }
-</script>
+                loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
+            }
+        </script>
+    {% else %}
+        <p class="py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
+    {% endif %}
 {% else %}
-<p class="py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
-{% endif %}
-{% else %}
-<h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - None</h5>
-<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/{{ player.id }}/videos?search=1', 'tabVideos')"> Find Videos </button>
+    <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - None</h5>
+    <button class="btn btn-soft-green" onclick="loadPage('/api/athlete/{{ player.id }}/videos?search=1', 'tabVideos')">
+        Find Videos
+    </button>
 {% endif %}
 
 <div style="display:none"> {{ RANDOM()~"ID" }} </div>

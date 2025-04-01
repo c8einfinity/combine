@@ -1,58 +1,71 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
 <div class="px-3 py-4">
-    <div class="content container-fluid">
-        <h3 class="text-anton text-maastricht-blue pb-2">USERS</h3>
+    <div class="container-fluid">
         {% if user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
             {% if user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
-                <form id="user" class="card" method="post" onsubmit="return false;">
+                <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName"
-                                       placeholder="First Name">
+                        <h3 class="text-anton text-maastricht-blue py-2">ADD USER</h3>
+                        <hr class="hor-line-gradient"/>
+                        <form id="user" class="card" method="post" onsubmit="return false;">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" class="form-control" name="firstName" id="firstName"
+                                               placeholder="First Name">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" name="lastName" id="lastName"
+                                               placeholder="Last Name">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" name="email" id="email"
+                                               placeholder="Email">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="password">Password</label>
+                                        <input type="text" class="form-control" name="password" id="password"
+                                               placeholder="Password">
+                                    </div>
+                                    <div class="col form-group">
+                                        <label for="userGroupId">User Group</label>
+                                        <select class="form-control" name="userGroupId" id="userGroupId">
+                                            <option value="">Select User Group</option>
+                                            {% for user_group in user_groups %}
+                                                <option value="{{ user_group.id }}">{{ user_group.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-2 pt-4">
+                                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
+                                                onclick="addUser()">
+                                            Add
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last Name">
-                            </div>
-                            <div class="col form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
-                            </div>
-                            <div class="col form-group">
-                                <label for="password">Password</label>
-                                <input type="text" class="form-control" name="password" id="password" placeholder="Password">
-                            </div>
-                            <div class="col form-group">
-                                <label for="userGroupId">User Group</label>
-                                <select class="form-control" name="userGroupId" id="userGroupId">
-                                    <option value="">Select User Group</option>
-                                    {% for user_group in user_groups %}
-                                        <option value="{{ user_group.id }}">{{ user_group.name }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-2 pt-4">
-                                <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addUser()">
-                                    Add
-                                </button>
-                            </div>
-                        </div>
+                            {{ "user" | formToken }}
+                        </form>
                     </div>
-                    {{ "user" | formToken }}
-                </form>
+                </div>
             {% endif %}
-            <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-                <table id="users-grid" class="table text-maastricht-blue m-0" style="width: 100%">
-                    <thead>
-                    <!-- table details filled in completely by data tables -->
-                    </thead>
-                </table>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="text-anton text-maastricht-blue py-2">USERS</h3>
+                    <hr class="hor-line-gradient"/>
+                    <div class="content col-12" style="height: fit-content">
+                        <table id="users-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                            <thead>
+                            <!-- table details filled in completely by data tables -->
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div id="message"></div>
-            <div id="form"></div>
         {% endif %}
     </div>
 </div>
@@ -177,11 +190,11 @@
                         let actions = "";
 
                         {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
+                        actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
                         {% endif %}
 
                         {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
+                        actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
                         {% endif %}
 
                         return actions

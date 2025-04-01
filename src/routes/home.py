@@ -2,6 +2,7 @@ import os
 import tina4_python
 from .. import dba
 from ..app.SessionHandler import SessionHandler
+from ..app.UserGroups import UserGroups
 from tina4_python import Debug, tina4_auth
 from tina4_python.Router import get, post
 from tina4_python.Queue import Queue, Config, Producer
@@ -52,7 +53,15 @@ async def login(request, response):
     if "email" in request.body and user.load("email = ?", [request.body["email"]]):
         # validating
         if  tina4_auth.check_password( str(user.password), request.body["password"]):
-            SessionHandler.set_user_session(request, user.to_dict())
+            user_group = UserGroups.get_user_group_data_by_id(user.user_group_id)
+            user_permissions = UserGroups.get_condensed_user_group_permission_list(user_group)
+
+            if not user_permissions["authorized"]:
+                message = "You do not have permission to access this dashboard."
+
+                return response(f"<script>$('.progress-spinner').hide(); showMessage('{message}', 'danger');</script>")
+
+            SessionHandler.set_user_session(request, user.to_dict(), user_permissions)
 
             return response("<script>window.location.href='/dashboard'</script>")
         else:
