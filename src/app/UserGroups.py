@@ -16,7 +16,7 @@ class UserGroups:
         """
         from ..orm.UserGroup import UserGroup
 
-        user_group = UserGroup().select(["id", "name", "permissions"], "id <> ?", [0])
+        user_group = UserGroup().select(["id", "name", "permissions"])
 
         return user_group.to_array()
 
@@ -34,7 +34,7 @@ class UserGroups:
             [str(user_group_id)]
         )
 
-        return user_group.to_array()
+        return user_group
 
     @staticmethod
     def get_user_group_permission_entries(visible, create, edit, delete):
@@ -43,10 +43,10 @@ class UserGroups:
         :return:
         """
         return {
-            "visible":visible,
-            "create":create,
-            "edit":edit,
-            "delete":delete
+            "visible": visible,
+            "create": create,
+            "edit": edit,
+            "delete": delete
         }
 
     @staticmethod
@@ -70,7 +70,7 @@ class UserGroups:
             },
             {
                 "access_point": "Videos",
-                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "0")
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0")
             },
             {
                 "access_point": "Links",
@@ -91,6 +91,10 @@ class UserGroups:
             {
                 "access_point": "Queue",
                 "permissions": UserGroups.get_user_group_permission_entries("0", "-", "0", "0")
+            },
+            {
+                "access_point": "Receptiviti CSV",
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-")
             }
         ]
 
@@ -107,19 +111,76 @@ class UserGroups:
         return UserGroups.get_initial_user_group_permission_list()
 
     @staticmethod
+    def get_access_point_navigation_data(access_point):
+        """
+        Function to get the relevant access point's navigation data.
+        :param access_point:
+        :return:
+        """
+        match access_point:
+            case "Home":
+                page_url = "/dashboard/home"
+                nav_element_id = "homeLink"
+            case "Athletes":
+                page_url = "/dashboard/athletes/all"
+                nav_element_id = "athleteLink"
+            case "Users":
+                page_url = "/api/users/landing"
+                nav_element_id = "usersLink"
+            case "User Groups":
+                page_url = "/api/user_groups/landing"
+                nav_element_id = "userGroupsLink"
+            case "Queue":
+                page_url = "/dashboard/queue"
+                nav_element_id = "queueLink"
+            case "Receptiviti CSV":
+                page_url = "/api/receptiviti/export"
+                nav_element_id = "receptivitiCsvLink"
+            case _:
+                page_url = ""
+                nav_element_id = ""
+
+        return {
+            "page_url": page_url,
+            "nav_element_id": nav_element_id
+        }
+
+    @staticmethod
     def get_condensed_user_group_permission_list(user_group):
         """
         Function to get the condensed user group permissions.
         :return:
         """
-        permissions = UserGroups.get_user_group_permissions(user_group)
+        permissions = UserGroups.get_user_group_permissions(user_group[0])
 
         permissions_list = {}
+        authorized = False
+        page_url = ""
+        nav_element_id = ""
+
+        visible_entries = next((item for item in permissions if item["permissions"]["visible"] == "1"), None)
+
+        if visible_entries:
+            authorized = True
+
+            navigation_data = UserGroups.get_access_point_navigation_data(visible_entries["access_point"])
+
+            page_url = navigation_data["page_url"]
+            nav_element_id = navigation_data["nav_element_id"]
 
         for permission in permissions:
-            permissions_list[permission["access_point"].replace(" ", "_")] = permission["permissions"]
+            permissions_list[permission["access_point"].replace(" ", "_")] = {
+                "permissions": permission["permissions"]
+            }
 
-        return permissions_list
+        user_permissions = {
+            "authorized": authorized,
+            "landing_page_url": page_url,
+            "landing_page_nav_element_id": nav_element_id,
+            "permissions": permissions_list
+        }
+
+        return user_permissions
 
     @staticmethod
     def get_user_group_landing(response):
@@ -145,14 +206,13 @@ class UserGroups:
 
         data_tables_filter = get_data_tables_filter(request)
 
-        where = "id <> ?"
+        where = ""
 
         if data_tables_filter["where"] != "":
             where += " and " + data_tables_filter["where"]
 
         user_groups = UserGroup().select(["id", "name", "date_created", "permissions", "is_active"],
                                          where,
-                                         [0],
                                          order_by=data_tables_filter["order_by"],
                                          limit=data_tables_filter["length"],
                                          skip=data_tables_filter["start"])
@@ -197,7 +257,9 @@ class UserGroups:
             user_group.load()
 
             data["user_group_permissions"]["name"] = user_group.name.value
-            data["user_group_permissions"]["permissions_list"] = user_group.permissions.value
+
+            if user_group.permissions.value:
+                data["user_group_permissions"]["permissions_list"] = user_group.permissions.value
 
             id_param = str(user_group.id)
             title = "EDIT USER GROUP"

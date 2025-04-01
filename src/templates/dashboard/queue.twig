@@ -1,9 +1,9 @@
 {% set user = request.session.get("user") %}
-{% set permissions = request.session.get("permissions") %}
+{% set user_permissions = request.session.get("user_permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">Transcription Queue</h3>
-        {% if permissions.Queue.visible == "1" or user.user_group_id == "1" %}
+        {% if user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
             <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
                 <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
                     <thead>
@@ -26,7 +26,7 @@
         queueGrid = $('#queue-grid').DataTable({
             "ajax": "/api/queue",
             "columns": [
-                {% if permissions.Queue.edit == "1" or user.user_group_id == "1" %}
+                {% if user_permissions.permissions.Queue.edit == "1" or user.user_group_id == "1" %}
                     {
                         "title": "Priority",
                         "render": function (data, type, row) {
@@ -50,7 +50,7 @@
                     "title": "Player",
                     "data": "player"
                 },
-                {% if permissions.Queue.delete == "1" or user.user_group_id == "1" %}
+                {% if user_permissions.permissions.Queue.delete == "1" or user.user_group_id == "1" %}
                     {
                         "title": "Actions",
                         "render": function (data, type, row) {

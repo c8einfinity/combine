@@ -1,10 +1,10 @@
 {% set user = request.session.get("user") %}
-{% set permissions = request.session.get("permissions") %}
+{% set user_permissions = request.session.get("user_permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-maastricht-blue pb-2">USERS</h3>
-        {% if permissions.Users.visible == "1" or user.user_group_id == "1" %}
-            {% if permissions.Users.create == "1" or user.user_group_id == "1" %}
+        {% if user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
+            {% if user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
                 <form id="user" class="card" method="post" onsubmit="return false;">
                     <div class="card-body">
                         <div class="row">
@@ -176,11 +176,11 @@
                     "render": function (data, type, row) {
                         let actions = "";
 
-                        {% if permissions.Users.edit == "1" or user.user_group_id == "1" %}
+                        {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
                             actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
                         {% endif %}
 
-                        {% if permissions.Users.delete == "1" or user.user_group_id == "1" %}
+                        {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
                             actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
                         {% endif %}
 

@@ -57,6 +57,7 @@
             const urlParams = new URLSearchParams(queryString);
             const userExists = urlParams.get('u_e'); // User exists
             const sessionEnded = urlParams.get('s_e'); // User session ended
+            const permissionError = urlParams.get("p_e"); // Permissions error
 
             if (userExists) {
                 const email = urlParams.get('email');
@@ -68,6 +69,10 @@
 
             if (sessionEnded) {
                 showMessage("Your session has ended. Please login again.", "danger");
+            }
+
+            if (permissionError) {
+                showMessage("You do not have permission to access this dashboard.", "danger");
             }
         });
 

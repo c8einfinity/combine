@@ -1,13 +1,13 @@
 {% set user = request.session.get("user") %}
-{% set permissions = request.session.get("permissions") %}
+{% set user_permissions = request.session.get("user_permissions") %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <div class="row">
             <div class="col-10">
                 <h3 class="text-anton text-maastricht-blue pb-2">USER GROUPS</h3>
             </div>
-            {% if (permissions.User_Groups.visible == "1" and permissions.User_Groups.create == "1" )
-                or user.user_group_id == "1" %}
+            {% if (user_permissions.permissions.User_Groups.visible == "1"
+                and user_permissions.permissions.User_Groups.create == "1") or user.user_group_id == "1" %}
                 <div class="col-2">
                     <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="getUserGroupFormModal()">
                         + Add User Group
@@ -15,7 +15,7 @@
                 </div>
             {% endif %}
         </div>
-        {% if permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+        {% if user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
             <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
                 <table id="user-groups-grid" class="table text-maastricht-blue m-0" style="width: 100%">
                     <thead>
@@ -67,12 +67,14 @@
                     "render": function (data, type, row) {
                         let actions = "";
 
-                        {% if permissions.Users.edit == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal(${row.id})"></a>`;
+                        {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
+                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal('${row.id}')"></a>`;
                         {% endif %}
 
-                        {% if permissions.Users.delete == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
+                        {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
+                            if (row.id !== 0) {
+                                actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
+                            }
                         {% endif %}
 
                         return actions;
@@ -225,7 +227,10 @@
      * @param id
      */
     function deleteUserGroup(id) {
-        if (confirm("Delete User Group? All users' permissions in this user group will be reset.")) {
+        const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will be " +
+            "reset to the default user group."
+
+        if (confirm(deleteConfirmationMessage)) {
             deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
                 userGroupsGrid.ajax.reload();
             });

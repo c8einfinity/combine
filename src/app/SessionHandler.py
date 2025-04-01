@@ -17,7 +17,7 @@ class SessionHandler:
 
         user_group = UserGroups.get_user_group_data_by_id(user["user_group_id"])
 
-        request.session.set("permissions", UserGroups.get_condensed_user_group_permission_list(user_group))
+        request.session.set("user_permissions", UserGroups.get_condensed_user_group_permission_list(user_group))
 
         request.session.save()
 
