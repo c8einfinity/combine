@@ -1,8 +1,6 @@
 # Copyright 2025 Code Infinity
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
-from ..app.UserGroups import UserGroups
-
 class SessionHandler:
     @staticmethod
     def set_user_session(request, user, user_permissions):
@@ -28,6 +26,6 @@ class SessionHandler:
         """
         request.session.set("logged_in", False)
         request.session.set("user", None)
-        request.session.set("permissions", None)
+        request.session.set("user_permissions", None)
 
         request.session.save()

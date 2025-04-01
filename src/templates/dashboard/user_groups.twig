@@ -76,14 +76,14 @@
                     "render": function (data, type, row) {
                         let actions = "";
 
-                        {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
-                        actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal('${row.id}')"></a>`;
+                        {% if user_permissions.permissions.User_Groups.edit == "1" or user.user_group_id == "1" %}
+                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal('${row.id}')"></a>`;
                         {% endif %}
 
-                        {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
-                        if (row.id !== 0) {
-                            actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
-                        }
+                        {% if user_permissions.permissions.User_Groups.delete == "1" or user.user_group_id == "1" %}
+                            if (row.id !== 0) {
+                                actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
+                            }
                         {% endif %}
 
                         return actions;

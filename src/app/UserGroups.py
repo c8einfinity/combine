@@ -156,9 +156,9 @@ class UserGroups:
         }
 
     @staticmethod
-    def get_condensed_user_group_permission_list(user_group):
+    def get_holistic_user_group_permission_list(user_group):
         """
-        Function to get the condensed user group permissions.
+        Function to get the holistic user group permissions.
         :return:
         """
         permissions = UserGroups.get_user_group_permissions(user_group[0])

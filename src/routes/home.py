@@ -54,7 +54,7 @@ async def login(request, response):
         # validating
         if  tina4_auth.check_password( str(user.password), request.body["password"]):
             user_group = UserGroups.get_user_group_data_by_id(user.user_group_id)
-            user_permissions = UserGroups.get_condensed_user_group_permission_list(user_group)
+            user_permissions = UserGroups.get_holistic_user_group_permission_list(user_group)
 
             if not user_permissions["authorized"]:
                 message = "You do not have permission to access this dashboard."
