@@ -124,7 +124,7 @@ def remove_repeated_text(input_string):
 
 def replace_repeats(text):
     # Use regex to find repeated characters outside of words
-    pattern = re.compile(r'(\s|^)(.)\2+(\s|$)')
+    pattern = re.compile(r'\b(\w*?)([^\W\d_])\2{2,}(\w*?)\b')
 
     # Replace the repeated characters with a single instance
     result = pattern.sub(lambda m: m.group(1) + m.group(2) + m.group(3), text)
