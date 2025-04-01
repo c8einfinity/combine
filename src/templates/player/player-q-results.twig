@@ -25,19 +25,18 @@
             <label class="sr-only" for="playerText">Transcription Text</label>
             <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20" placeholder="Text to submit" onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
         </form>
-        <div class="d-flex justify-content-between mt-3">
-            <div>
-                <b
+        <div class="mt-1">
+            <b
                     style="
                         font-family: 'Inter', 'Arial', sans-serif;
                         font-weight: 600;
                         font-size: 14px;
                         color: #000000;
                     "
-                >
-                    Word Count:
-                </b>
-                <span
+            >
+                Word Count:
+            </b>
+            <span
                     id="wordCount"
                     style="
                         font-family: 'Inter', 'Arial', sans-serif;
@@ -45,18 +44,9 @@
                         font-size: 14px;
                         color: #000000;
                     "
-                >
+            >
                     0
                 </span>
-            </div>
-            <a
-                href="/api/athlete/{{ player.id }}/report"
-                target="_blank"
-                class="p-1 btn text-inchworm-green text-inter view-btn"
-                style="width: 140px;"
-            >
-                View Full Report
-            </a>
         </div>
     </div>
     <div class="col">
