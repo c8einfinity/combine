@@ -1,8 +1,11 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
+{% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
+{% set links_create_permission = user_permissions.permissions.Links.create == "1" or user.user_group_id == "1" %}
+{% set links_delete_permission = user_permissions.permissions.Links.delete == "1" or user.user_group_id == "1" %}
 <h5 class="text-anton text-maastricht-blue">Links</h5>
-{% if user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
-    {% if user_permissions.permissions.Links.create == "1" or user.user_group_id == "1" %}
+{% if links_visible_permission %}
+    {% if links_create_permission %}
         <form id="linkDetails" onsubmit="return false">
             <input type="hidden" name="player_id" value="{{ player_id }}">
             <div class="row">
@@ -52,7 +55,7 @@
                             "title": "Link Type",
                             data: 'media_type'
                         },
-                        {% if user_permissions.permissions.Links.delete == "1" or user.user_group_id == "1" %}
+                        {% if links_delete_permission %}
                             {
                                 "title": "Status",
                                 "render": function (data, type, row) {
@@ -69,20 +72,24 @@
                 });
             });
 
-            function addLink() {
-                submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function () {
-                    linksGrid.ajax.reload();
-                });
-
-            }
-
-            function deleteLink(link_id) {
-                if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function () {
+            {% if links_create_permission %}
+                function addLink() {
+                    submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function () {
                         linksGrid.ajax.reload();
-                    })
+                    });
+
                 }
-            }
+            {% endif %}
+
+            {% if links_delete_permission %}
+                function deleteLink(link_id) {
+                    if (confirm("Delete Link ?")) {
+                        deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function () {
+                            linksGrid.ajax.reload();
+                        })
+                    }
+                }
+            {% endif %}
         </script>
     </div>
 {% endif %}
