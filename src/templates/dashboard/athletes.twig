@@ -37,6 +37,27 @@
                         <div id="formMessage"></div>
                     </div>
                 </div>
+                <div class="card my-2">
+                    <div class="card-body">
+                        <h3 class="text-anton text-maastricht-blue py-2">CSV IMPORT</h3>
+                        <hr class="hor-line-gradient"/>
+                        <form id="csvImport" method="post" onsubmit="return false;">
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="importCsv">Select CSV File</label>
+                                    <input type="file" class="form-control-file" name="importCsv" id="importCsv" accept="text/csv">
+                                </div>
+                                <div class="col-12 col-md-2 pt-4">
+                                    <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
+                                        onclick="doImportCsv()">
+                                        Import
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="formImportMessage"></div>
+                    </div>
+                </div>
             {% endif %}
             <div class="card my-2">
                 <div class="card-body">
@@ -87,7 +108,7 @@
 </div>
 <script>
     var athletesGrid = null;
-
+    {% if user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
     function addAthlete() {
         if (document.forms[0].firstName.value == '') {
             $('#formMessage').html(`<div class="alert alert-danger">First Name is required</div>`);
@@ -112,6 +133,11 @@
             $('#formMessage').html(``);
         });
     }
+
+    function doImportCsv() {
+        submitForm("csvImport", "/api/athletes/import-csv", "formImportMessage");
+    }
+    {% endif %}
 
     function getStatStatusClass(status) {
         if (status === 100) {
@@ -219,7 +245,7 @@
             serverSide: true,
         });
     });
-
+    {% if user_permissions.permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
     function deleteAthlete(id) {
         if (confirm("Delete Athlete ?")) {
             deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
@@ -227,5 +253,6 @@
             })
         }
     }
+    {% endif %}
 
 </script>

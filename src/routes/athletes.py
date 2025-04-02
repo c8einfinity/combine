@@ -62,11 +62,8 @@ async def get_athletes(request, response):
     # loop through the players and get the transcribe stats
     for player in data["data"]:
         player["transcript_stats"] = player_transcript_stats(player["id"])
-        # player["transcript_stats"] = {"total_media": 0, "total_transcribed": 0, "total_verified": 0}
         player["completed_bio"] = player_bio_complete(player["id"])
-        # player["completed_bio"] = False
         player["report_sent"] = player_report_sent(player["id"])
-        # player["report_sent"] = False
         # Return only the date, Y-m-d format
         player["date_of_birth"] = player["date_of_birth"].split("T")[0]
 
@@ -830,3 +827,25 @@ async def post_transcript_verified(request, response):
     player_transcript.save()
 
     return response("Done!")
+
+@post("/api/athletes/import-csv")
+async def post_import_csv(request, response):
+    """
+    Get the file upload from request and import the csv data
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..app.Player import import_csv_player_data
+
+    if "importCsv" not in request.body:
+        return response("No file found", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
+    # decode file contents
+    file_content = base64.b64decode(request.body["importCsv"]["content"]).decode('utf-8')
+    import_count = import_csv_player_data(str(file_content))
+
+    if import_count > 0:
+        return response("Imported "+str(import_count)+" players")
+
+    return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)

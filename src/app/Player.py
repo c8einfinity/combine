@@ -2,6 +2,7 @@ import base64
 import io
 import requests
 import os
+import csv
 
 from PIL import Image
 from PIL.Image import Resampling
@@ -20,6 +21,11 @@ def get_player_results(candidate_id):
     return results.json()
 
 def split_trim_minify(text):
+    """
+    For the HTML results coming in from the API.
+    :param text:
+    :return:
+    """
     # Split the text by new lines
     lines = text.split('\n')
     # Trim each line and join them into one line
@@ -27,7 +33,15 @@ def split_trim_minify(text):
     return minified_text
 
 def submit_player_results(first_name, last_name, image="", text="", candidate_id=""):
-
+    """
+    Submit the player results to the API to get the Receptiviti results
+    :param first_name:
+    :param last_name:
+    :param image:
+    :param text:
+    :param candidate_id:
+    :return:
+    """
     data = {"first_name": first_name, "last_name": last_name, "image": image,
             "candidate_id": candidate_id, "text": text}
 
@@ -116,3 +130,32 @@ def resize_profile_image(image_data):
             raise Exception("Cannot resize image to be under 64KB")
 
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+def import_csv_player_data(file_data):
+    """
+    Import player data from a CSV file
+    :param file_data:
+    :return:
+    """
+    from ..orm.Player import Player
+
+    read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
+    count = 0
+    for row in read_data:
+        # Check if the player already exists
+        player = Player().select("*", filter="first_name = ? and last_name = ?", params=[row['first_name'], row['last_name']], limit=1)
+        if player.count == 0:
+            # Create a new player
+            player = Player()
+            player.first_name = row['first_name']
+            player.last_name = row['last_name']
+            player.sport = row['sport']
+            player.position = row['position']
+            player.team = row['team']
+            player.is_video_links_created = 0
+            player.is_bio_links_created = 0
+            player.save()
+            count += 1
+
+    return count
+
