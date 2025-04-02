@@ -1,9 +1,13 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
+{% set users_visible_permission = user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
+{% set users_create_permission = user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
+{% set users_edit_permission = user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
+{% set users_delete_permission = user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
 <div class="px-3 py-4">
     <div class="container-fluid">
-        {% if user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
-            {% if user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
+        {% if users_visible_permission %}
+            {% if users_create_permission %}
                 <div class="card">
                     <div class="card-body">
                         <h3 class="text-anton text-maastricht-blue py-2">ADD USER</h3>
@@ -71,161 +75,169 @@
         {% endif %}
     </div>
 </div>
-<script>
-    if (typeof usersGrid === 'undefined') {
-        let usersGrid;
-    }
-
-    usersGrid = null;
-
-    if (typeof message === 'undefined') {
-        let message;
-    }
-
-    message = $("#message");
-
-    /**
-     * Function to add a user.
-     */
-    function addUser() {
-        if (document.forms[0].firstName.value === "") {
-            message.html(`<div class="alert alert-danger">First Name is required</div>`);
-            document.forms[0].firstName.focus();
-
-            return;
+{% if users_visible_permission %}
+    <script>
+        if (typeof usersGrid === 'undefined') {
+            let usersGrid;
         }
 
-        if (document.forms[0].lastName.value === "") {
-            message.html(`<div class="alert alert-danger">Last Name is required</div>`);
-            document.forms[0].lastName.focus();
+        usersGrid = null;
 
-            return;
+        if (typeof message === 'undefined') {
+            let message;
         }
 
-        if (document.forms[0].email.value === "") {
-            message.html(`<div class="alert alert-danger">Email is required</div>`);
-            document.forms[0].email.focus();
+        message = $("#message");
 
-            return;
-        }
+        {% if users_create_permission %}
+            /**
+             * Function to add a user.
+             */
+            function addUser() {
+                if (document.forms[0].firstName.value === "") {
+                    message.html(`<div class="alert alert-danger">First Name is required</div>`);
+                    document.forms[0].firstName.focus();
 
-        if (document.forms[0].password.value === "") {
-            message.html(`<div class="alert alert-danger">Password is required</div>`);
-            document.forms[0].password.focus();
-
-            return;
-        }
-
-        if (document.forms[0].userGroupId.value === "") {
-            message.html(`<div class="alert alert-danger">User Group is required</div>`);
-            document.forms[0].userGroupId.focus();
-
-            return;
-        }
-
-        message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
-                <span class="sr-only text-maastricht-blue">Adding ...</span>
-            </div></div>`)
-
-        submitForm("user", "/api/users", "", function () {
-            document.forms[0].firstName.value = "";
-            document.forms[0].lastName.value = "";
-            document.forms[0].email.value = "";
-            document.forms[0].password.value = "";
-            document.forms[0].userGroupId.value = "";
-
-            usersGrid.ajax.reload();
-
-            message.html(``);
-        });
-    }
-
-    $(document).ready(function () {
-        usersGrid = $("#users-grid").DataTable({
-            dom: "",
-            ajax: "/api/users",
-            columns: [
-                {
-                    "title": "ID",
-                    "data": "id",
-                    "visible": false
-                },
-                {
-                    "title": "First Name",
-                    "data": "first_name"
-                },
-                {
-                    "title": "Last Name",
-                    "data": "last_name"
-                },
-                {
-                    "title": "Email",
-                    "data": "email"
-                },
-                {
-                    "title": "Date Created",
-                    "data": "date_created"
-                },
-                {
-                    "title": "User Group",
-                    "data": "user_group_id",
-                    "orderable": false,
-                    "render": function (data, type, row) {
-                        const userGroups = {{ user_groups|tojson|safe }};
-                        if (userGroups !== undefined) {
-                            return userGroups.find(userGroup => userGroup.id === data).name;
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "title": "Status",
-                    "data": "is_active",
-                    "orderable": false,
-                    "render": function (data, type, row) {
-                        return data === 1 ? "Active" : "Inactive";
-                    }
-                },
-                {
-                    "orderable": false,
-                    "render": function (data, type, row) {
-                        let actions = "";
-
-                        {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
-                        {% endif %}
-
-                        {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
-                        {% endif %}
-
-                        return actions
-                    }
+                    return;
                 }
-            ],
-            language: {
-                emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
-            },
-            processing: true,
-            serverSide: true
+
+                if (document.forms[0].lastName.value === "") {
+                    message.html(`<div class="alert alert-danger">Last Name is required</div>`);
+                    document.forms[0].lastName.focus();
+
+                    return;
+                }
+
+                if (document.forms[0].email.value === "") {
+                    message.html(`<div class="alert alert-danger">Email is required</div>`);
+                    document.forms[0].email.focus();
+
+                    return;
+                }
+
+                if (document.forms[0].password.value === "") {
+                    message.html(`<div class="alert alert-danger">Password is required</div>`);
+                    document.forms[0].password.focus();
+
+                    return;
+                }
+
+                if (document.forms[0].userGroupId.value === "") {
+                    message.html(`<div class="alert alert-danger">User Group is required</div>`);
+                    document.forms[0].userGroupId.focus();
+
+                    return;
+                }
+
+                message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                        <span class="sr-only text-maastricht-blue">Adding ...</span>
+                    </div></div>`)
+
+                submitForm("user", "/api/users", "", function () {
+                    document.forms[0].firstName.value = "";
+                    document.forms[0].lastName.value = "";
+                    document.forms[0].email.value = "";
+                    document.forms[0].password.value = "";
+                    document.forms[0].userGroupId.value = "";
+
+                    usersGrid.ajax.reload();
+
+                    message.html(``);
+                });
+            }
+        {% endif %}
+
+        $(document).ready(function () {
+            usersGrid = $("#users-grid").DataTable({
+                dom: "",
+                ajax: "/api/users",
+                columns: [
+                    {
+                        "title": "ID",
+                        "data": "id",
+                        "visible": false
+                    },
+                    {
+                        "title": "First Name",
+                        "data": "first_name"
+                    },
+                    {
+                        "title": "Last Name",
+                        "data": "last_name"
+                    },
+                    {
+                        "title": "Email",
+                        "data": "email"
+                    },
+                    {
+                        "title": "Date Created",
+                        "data": "date_created"
+                    },
+                    {
+                        "title": "User Group",
+                        "data": "user_group_id",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            const userGroups = {{ user_groups|tojson|safe }};
+                            if (userGroups !== undefined) {
+                                return userGroups.find(userGroup => userGroup.id === data).name;
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "title": "Status",
+                        "data": "is_active",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return data === 1 ? "Active" : "Inactive";
+                        }
+                    },
+                    {
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            let actions = "";
+
+                            {% if users_edit_permission %}
+                                actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
+                            {% endif %}
+
+                            {% if users_delete_permission %}
+                                actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
+                            {% endif %}
+
+                            return actions
+                        }
+                    }
+                ],
+                language: {
+                    emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
+                },
+                processing: true,
+                serverSide: true
+            });
         });
-    });
 
-    /**
-     * Function to edit a user.
-     * @param id
-     */
-    function editUser(id) {
-        showForm("edit", `/api/users/${id}?formToken={{ formToken() }}`)
-    }
+        {% if users_edit_permission %}
+            /**
+             * Function to edit a user.
+             * @param id
+             */
+            function editUser(id) {
+                showForm("edit", `/api/users/${id}?formToken={{ formToken() }}`)
+            }
+        {% endif %}
 
-    /**
-     * Function to delete a user.
-     * @param id
-     */
-    function deleteUser(id) {
-        if (confirm("Delete User?")) {
-            deleteUrl(`/api/users/${id}`, null, "message");
-        }
-    }
-</script>
+        {% if users_delete_permission %}
+            /**
+             * Function to delete a user.
+             * @param id
+             */
+            function deleteUser(id) {
+                if (confirm("Delete User?")) {
+                    deleteUrl(`/api/users/${id}`, null, "message");
+                }
+            }
+        {% endif %}
+    </script>
+{% endif %}

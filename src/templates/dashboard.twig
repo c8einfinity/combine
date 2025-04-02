@@ -1,5 +1,12 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
+{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+{% set athletes_visible_permission = user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
+{% set users_visible_permission = user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
+{% set user_groups_visible_permission = user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+{% set queue_visible_permission = user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
+{% set receptiviti_csv_visible_permission = user_permissions.permissions.Receptiviti_CSV.visible == "1" or user.user_group_id == "1" %}
+
 {% extends "base.twig" %}
 
 {% block navigation %}
@@ -14,26 +21,26 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+                {% if home_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="homeLink" href="#" role="button"
                            onclick="loadPage('/dashboard/home', 'content'); teamQNavSetActive(this);">Home<span
                                     class="sr-only">(current)</span></a>
                     </li>
                 {% endif %}
-                {% if user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
+                {% if athletes_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="athleteLink" href="#" role="button"
                            onclick="loadPage('/dashboard/athletes/all', 'content'); teamQNavSetActive(this);">Athletes</a>
                     </li>
                 {% endif %}
-                {% if user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
+                {% if users_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="usersLink" href="#" role="button"
                            onclick="loadPage('/api/users/landing', 'content'); teamQNavSetActive(this);">Users</a>
                     </li>
                 {% endif %}
-                {% if user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+                {% if user_groups_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="userGroupsLink" href="#" role="button"
                            onclick="loadPage('/api/user_groups/landing', 'content'); teamQNavSetActive(this);">
@@ -41,13 +48,13 @@
                         </a>
                     </li>
                 {% endif %}
-                {% if user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
+                {% if queue_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="queueLink" href="#" role="button"
                            onclick="loadPage('/dashboard/queue', 'content'); teamQNavSetActive(this);">Queue</a>
                     </li>
                 {% endif %}
-                {% if user_permissions.permissions.Receptiviti_CSV.visible == "1" or user.user_group_id == "1" %}
+                {% if receptiviti_csv_visible_permission %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="receptivitiCsvLink" href="/api/receptiviti/export" target="_blank">
                             Receptivi CSV
@@ -65,7 +72,7 @@
 {% block content_public %}
     <div id="content"></div>
     <script>
-        {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+        {% if home_visible_permission %}
             loadPage('/dashboard/home', 'content');
             teamQNavSetActive($('#homeLink')[0]);
         {% else %}

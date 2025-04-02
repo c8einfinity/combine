@@ -1,8 +1,11 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
-{% if user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+{% set playerq_visible_permission = user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+{% set playerq_create_permission = user_permissions.permissions.PlayerQ.create == "1" or user.user_group_id == "1" %}
+
+{% if playerq_visible_permission %}
     <div class="row">
-        {% if user_permissions.permissions.PlayerQ.create == "1" or user.user_group_id == "1" %}
+        {% if playerq_create_permission %}
             <div class="col-4">
                 <h5 class="text-anton text-maastricht-blue pb-2 d-flex justify-content-between">
                     <span class="d-block">Description</span>
@@ -25,7 +28,7 @@
         </div>
     </div>
     <div class="row ">
-        {% if user_permissions.permissions.PlayerQ.create == "1" or user.user_group_id == "1" %}
+        {% if playerq_create_permission %}
             <div class="col-4">
                 <form id="text-submit">
                     <label class="sr-only" for="playerText">Transcription Text</label>
@@ -151,39 +154,41 @@
             </div>
         </div>
     </div>
-{% endif %}
-<script>
-    function showResultTab(tabName) {
-        $(".result-tab").hide();
-        $("#" + tabName).show();
-    }
-
-    showResultTab("player-report");
-
-    function countWords(input) {
-        // Get the input text value
-        let text = document.getElementById(input).value;
-
-        // Initialize the word counter
-        let numWords = 0;
-
-        for (let i = 0; i < text.length; i++) {
-            let currentCharacter = text[i];
-
-            // Check if the character is a space
-            if (currentCharacter == " ") {
-                numWords += 1;
-            }
+    <script>
+        function showResultTab(tabName) {
+            $(".result-tab").hide();
+            $("#" + tabName).show();
         }
-        numWords += 1;
-        return numWords;
-    }
 
-    $('#wordCount').html(countWords('playerText'));
+        showResultTab("player-report");
 
-    function submitPlayerText() {
-        submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "", function () {
-            loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
-        });
-    }
-</script>
+        function countWords(input) {
+            // Get the input text value
+            let text = document.getElementById(input).value;
+
+            // Initialize the word counter
+            let numWords = 0;
+
+            for (let i = 0; i < text.length; i++) {
+                let currentCharacter = text[i];
+
+                // Check if the character is a space
+                if (currentCharacter == " ") {
+                    numWords += 1;
+                }
+            }
+            numWords += 1;
+            return numWords;
+        }
+
+        $('#wordCount').html(countWords('playerText'));
+
+        {% if playerq_create_permission %}
+            function submitPlayerText() {
+                submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "", function () {
+                    loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
+                });
+            }
+        {% endif %}
+    </script>
+{% endif %}
