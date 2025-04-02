@@ -1,0 +1,53 @@
+<form class="m-4" id="usersModalForm">
+    <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input class="form-control" name="first_name" id="first_name" type="text" value="{{ user.first_name }}"
+               placeholder="First Name"/>
+    </div>
+    <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input class="form-control" name="last_name" id="last_name" type="text" value="{{ user.last_name }}"
+               placeholder="Last Name"/>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control" name="email" id="email" type="email" value="{{ user.email }}" readonly
+               placeholder="Email"/>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input class="form-control" name="password" id="password" type="text" value="" placeholder="Password"/>
+    </div>
+
+    <div class="form-group">
+        <label for="user_group_id">User Group</label>
+        <select class="form-control" name="user_group_id" id="user_group_id">
+            <option value="">Select User Group</option>
+            {% for user_group in user_groups %}
+                <option value="{{ user_group.id }}">{{ user_group.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <input type="hidden" name="id" value="{{ user.id }}"/>
+
+    {{ "usersModalForm" | formToken }}
+</form>
+
+<script>
+    $("#usersModalForm").validate({
+        rules: {
+            first_name: {
+                required: true
+            },
+            last_name: {
+                required: true
+            },
+            user_group_id: {
+                required: true
+            }
+        }
+    });
+
+    $('#user_group_id option[value="{{ user.user_group_id }}"]').attr("selected", "selected");
+</script>

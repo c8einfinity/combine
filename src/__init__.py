@@ -1,6 +1,5 @@
 # Start your project here
 import os
-
 from tina4_python.Database import Database
 from tina4_python.Migration import migrate
 from tina4_python.ORM import orm
@@ -19,6 +18,6 @@ check_setup(dba)
 # import everything
 
 from .app import Setup, Utility, Scraper
-from .routes import athletes, dashboard, home, users, websocket, queue
+from .routes import athletes, dashboard, home, users, user_groups, websocket, queue
 
 

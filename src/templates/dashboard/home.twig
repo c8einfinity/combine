@@ -1,70 +1,76 @@
+{% set user = request.session.get("user") %}
+{% set user_permissions = request.session.get("user_permissions") %}
 <main class="container-fluid mx-auto">
     <div class="row my-4">
         <div class="col">
             <h2 class="text-body">Overview</h2>
-            <hr class="hor-line-gradient" />
+            <hr class="hor-line-gradient"/>
         </div>
     </div>
-    <div class="row">
-        <div class="col-2 col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.processed  }} / {{ total_transcribed_stats.total_transcribed }}</h5>
-                            <p class="card-text">Speaker Confirmed</p>
+    {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+        <div class="row">
+            <div class="col-2 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.processed }}
+                                    / {{ total_transcribed_stats.total_transcribed }}</h5>
+                                <p class="card-text">Speaker Confirmed</p>
+                            </div>
+                            <div class="col-3">
+                                <img src="/images/dashboard/icon-transcribed.svg" alt="Transcribe Icon"
+                                     class="img-fluid">
+                            </div>
                         </div>
-                        <div class="col-3">
-                            <img src="/images/dashboard/icon-transcribed.svg" alt="Transcribe Icon" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title fw-bolder text-darker-green">{{ player_stats.total_players }}</h5>
+                                <p class="card-text">Players Loaded</p>
+                            </div>
+                            <div class="col-3">
+                                <img src="/images/dashboard/icon-loaded.svg" alt="Transcribe Icon" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_media }}</h5>
+                                <p class="card-text">Videos Found</p>
+                            </div>
+                            <div class="col-3">
+                                <img src="/images/dashboard/icon-videos.svg" alt="Transcribe Icon" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.unprocessed }}</h5>
+                                <p class="card-text">Pending Transcripts</p>
+                            </div>
+                            <div class="col-3">
+                                <img src="/images/dashboard/icon-pending.svg" alt="Transcribe Icon" class="img-fluid">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-2 col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ player_stats.total_players }}</h5>
-                            <p class="card-text">Players Loaded</p>
-                        </div>
-                        <div class="col-3">
-                            <img src="/images/dashboard/icon-loaded.svg" alt="Transcribe Icon" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-2 col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_media }}</h5>
-                            <p class="card-text">Videos Found</p>
-                        </div>
-                        <div class="col-3">
-                            <img src="/images/dashboard/icon-videos.svg" alt="Transcribe Icon" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-2 col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.unprocessed }}</h5>
-                            <p class="card-text">Pending Transcripts</p>
-                        </div>
-                        <div class="col-3">
-                            <img src="/images/dashboard/icon-pending.svg" alt="Transcribe Icon" class="img-fluid">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endif %}
 </main>

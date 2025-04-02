@@ -3,15 +3,17 @@
 
 class SessionHandler:
     @staticmethod
-    def set_user_session(request, user):
+    def set_user_session(request, user, user_permissions):
         """
         Function to set the user session after authentication.
+        :param user_permissions:
         :param request:
         :param user:
         :return:
         """
         request.session.set("user", user)
         request.session.set("logged_in", True)
+        request.session.set("user_permissions", user_permissions)
 
         request.session.save()
 
@@ -22,7 +24,8 @@ class SessionHandler:
         :param request:
         :return:
         """
-        request.session.set("user", None)
         request.session.set("logged_in", False)
+        request.session.set("user", None)
+        request.session.set("user_permissions", None)
 
         request.session.save()

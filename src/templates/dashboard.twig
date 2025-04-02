@@ -1,14 +1,6 @@
 {% set user = request.session.get("user") %}
+{% set user_permissions = request.session.get("user_permissions") %}
 {% extends "base.twig" %}
-
-{% block head_content %}
-    <script src="/js/emoji.js"></script>
-    <script src="/js/reconnecting-websocket.js"></script>
-    <link href="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.css"
-          rel="stylesheet">
-    <script src="https://cdn.datatables.net/v/bs4/jq-3.7.0/dt-2.2.1/b-3.2.1/sp-2.3.3/datatables.min.js"></script>
-{% endblock %}
-
 
 {% block navigation %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,35 +12,48 @@
         <a class="navbar-brand" href="/dashboard">
             <img src="/images/logos/qfinder-logo-dark.svg" class="img-fluid" alt="QFinder"/>
         </a>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                {% if user.user_group_id == "1" %}
+                {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="homeLink" href="#" role="button"
                            onclick="loadPage('/dashboard/home', 'content'); teamQNavSetActive(this);">Home<span
                                     class="sr-only">(current)</span></a>
                     </li>
                 {% endif %}
-                <li class="nav-item mx-1">
-                    <a class="nav-link" id="athleteLink" href="#" role="button"
-                       onclick="loadPage('/dashboard/athletes/all', 'content'); teamQNavSetActive(this);">Athletes</a>
-                </li>
-                {% if user.user_group_id == "1" %}
+                {% if user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" id="athleteLink" href="#" role="button"
+                           onclick="loadPage('/dashboard/athletes/all', 'content'); teamQNavSetActive(this);">Athletes</a>
+                    </li>
+                {% endif %}
+                {% if user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="usersLink" href="#" role="button"
                            onclick="loadPage('/api/users/landing', 'content'); teamQNavSetActive(this);">Users</a>
                     </li>
                 {% endif %}
-                {% if user.user_group_id == "1" %}
+                {% if user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" id="userGroupsLink" href="#" role="button"
+                           onclick="loadPage('/api/user_groups/landing', 'content'); teamQNavSetActive(this);">
+                            User Groups
+                        </a>
+                    </li>
+                {% endif %}
+                {% if user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
                     <li class="nav-item mx-1">
                         <a class="nav-link" id="queueLink" href="#" role="button"
                            onclick="loadPage('/dashboard/queue', 'content'); teamQNavSetActive(this);">Queue</a>
                     </li>
                 {% endif %}
-                <li class="nav-item mx-1">
-                    <a class="nav-link" href="/api/receptiviti/export" target="_blank">Receptivi CSV</a>
-                </li>
+                {% if user_permissions.permissions.Receptiviti_CSV.visible == "1" or user.user_group_id == "1" %}
+                    <li class="nav-item mx-1">
+                        <a class="nav-link" id="receptivitiCsvLink" href="/api/receptiviti/export" target="_blank">
+                            Receptivi CSV
+                        </a>
+                    </li>
+                {% endif %}
                 <li class="nav-item mx-1">
                     <a class="nav-link" href="/logout">Logout</a>
                 </li>
@@ -57,16 +62,15 @@
     </nav>
 {% endblock %}
 
-
 {% block content_public %}
     <div id="content"></div>
     <script>
-        {% if user.user_group_id == "1" %}
+        {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
             loadPage('/dashboard/home', 'content');
             teamQNavSetActive($('#homeLink')[0]);
         {% else %}
-            loadPage('/dashboard/athletes/all', 'content')
-            teamQNavSetActive($("#athleteLink")[0]);
+            loadPage("{{ user_permissions.landing_page_url }}", 'content');
+            teamQNavSetActive($("#{{ user_permissions.landing_page_nav_element_id }}")[0]);
         {% endif %}
 
         {# const socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket/feed"); #}

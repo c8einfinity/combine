@@ -1,16 +1,21 @@
-{%  set ns = namespace(load_video_id = 0) %}
+{% set user = request.session.get("user") %}
+{% set user_permissions = request.session.get("user_permissions") %}
+{% set ns = namespace(load_video_id = 0) %}
 <div class="row">
-    <div class="col-12" id="videoFeedback"></div>
-    <div class="col-4">
-        <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
-            {%  if videos %}
+    {% if user_permissions.permissions.Videos.visible == "1" or user.user_group_id == "1" %}
+        <div class="col-12" id="videoFeedback"></div>
+        <div class="col-4">
+            <h5 class="text-anton text-maastricht-blue pb-2">Videos</h5>
+            {% if videos %}
                 {% for video in videos %}
                     {% set borderColor = "border-dark" %}
                     {% if video.transcript_verified %}
                         {% set borderColor = "border-success" %}
                     {% endif %}
                     <div class="row p-2 mb-2 border rounded bg-light {{ borderColor }}">
-                        <div class="col-12"><h6 class="text-anton text-maastricht-blue pb-2"><a role="button" onclick="loadTranscript({{ video.id }})">{{ video.title }} - {{ video.published_at }}</a></h6></div>
+                        <div class="col-12"><h6 class="text-anton text-maastricht-blue pb-2"><a role="button"
+                                                                                                onclick="loadTranscript({{ video.id }})">{{ video.title }}
+                                    - {{ video.published_at }}</a></h6></div>
                         <div class="col-4">
                             <div class="embed-responsive embed-responsive-16by9">
                                 <iframe width="420" height="315"
@@ -18,35 +23,49 @@
                                 </iframe>
                             </div>
                             {% if ns.load_video_id == 0 and video %}
-                                {%  set ns.load_video_id = video.id %}
+                                {% set ns.load_video_id = video.id %}
                             {% endif %}
                         </div>
                         <div class="col-8">
-                            <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on YouTube</small></a>
-                            <div class="form-check">
-                                <input id="include_{{ video.id }}" type="checkbox" class="form-check-input"
-                                       onclick="toggleIncludeVideo({{ video.id }})" {%  if video.is_valid %}checked{% endif %} >
-                                <label for="include_{{ video.id }}" class="form-check-label">Include this video transcript in the results?</label>
-                            </div>
-                            <div class="row py-2" style="font-size: 0.8rem;">
-                                <div class="col-6">
-                            {%  if not video.transcript %}
-                                    <a role="button" onclick="addToQueue({{ video.id }})"><i class="fa fa-plus-square text-primary"></i> Transcribe</a>
+                            <a href="{{ video.url }}" target="_blank" class="w-full text-center"><small>View on
+                                    YouTube</small></a>
+                            {% if user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
+                                <div class="form-check">
+                                    <input id="include_{{ video.id }}" type="checkbox" class="form-check-input"
+                                           onclick="toggleIncludeVideo({{ video.id }})"
+                                           {% if video.is_valid %}checked{% endif %} >
+                                    <label for="include_{{ video.id }}" class="form-check-label">Include this video
+                                        transcript in the results?</label>
+                                </div>
                             {% endif %}
-                                </div>
-                                <div class="col-6">
-                                    <a role="button" onclick="removeVideo({{ video.id }})"><i class="fa fa-minus-square" style="color: orangered"></i> Remove Video</a>
-                                </div>
+                            <div class="row py-2" style="font-size: 0.8rem;">
+                                {% if user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
+                                    <div class="col-6">
+                                        {% if not video.transcript %}
+                                            <a role="button" onclick="addToQueue({{ video.id }})"><i
+                                                        class="fa fa-plus-square text-primary"></i> Transcribe</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if user_permissions.permissions.Videos.delete == "1" or user.user_group_id == "1" %}
+                                    <div class="col-6">
+                                        <a role="button" onclick="removeVideo({{ video.id }})"><i
+                                                    class="fa fa-minus-square"
+                                                    style="color: orangered"></i>
+                                            Remove Video</a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 {% endfor %}
-            {%  else %}
+            {% else %}
                 <div class="alert alert-info">No videos available</div>
-            {%  endif %}
-    </div>
-    <div class="col-8" id="videoTranscript">
-    </div>
+            {% endif %}
+        </div>
+        <div class="col-8" id="videoTranscript">
+        </div>
+    {% endif %}
 </div>
 <script>
     function loadTranscript(videoId) {
@@ -58,19 +77,19 @@
     }
 
     function addToQueue(videoId) {
-        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function(data){
+        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function (data) {
             loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
         })
     }
 
     function toggleIncludeVideo(videoId) {
-        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function(data){
+        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function (data) {
             loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
         })
     }
 
     function removeVideo(videoId) {
-        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function(data){
+        postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function (data) {
             loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')
         });
     }

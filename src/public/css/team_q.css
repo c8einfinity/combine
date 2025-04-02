@@ -148,6 +148,10 @@ input[type="checkbox"] {
     background: #ffffff;
 }
 
+input[type="checkbox"]:disabled {
+    background: #e4e4e4;
+}
+
 input[type="checkbox"]:checked {
     background: #9fcd56;
 }
