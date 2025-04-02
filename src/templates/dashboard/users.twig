@@ -192,11 +192,11 @@
                         let actions = "";
 
                         {% if user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
-                        actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
+                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="editUser(${row.id})"></a>`
                         {% endif %}
 
                         {% if user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
-                        actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
+                            actions += ` <a class="fas fa-trash" href="#" onclick="deleteUser(${row.id})"></a>`
                         {% endif %}
 
                         return actions
