@@ -56,10 +56,13 @@ async def login(request, response):
             user_group = UserGroups.get_user_group_data_by_id(user.user_group_id)
             user_permissions = UserGroups.get_holistic_user_group_permission_list(user_group)
 
-            if not user_permissions["authorized"] or user.user_group_id != 1:
-                message = "You do not have permission to access this dashboard."
+            if not user_permissions["authorized"]:
+                if user.user_group_id != 1:
+                    message = "You do not have permission to access this dashboard."
 
-                return response(f"<script>$('.progress-spinner').hide(); showMessage('{message}', 'danger');</script>")
+                    return response(
+                        f"<script>$('.progress-spinner').hide(); showMessage('{message}', 'danger');</script>"
+                    )
 
             SessionHandler.set_user_session(request, user.to_dict(), user_permissions)
 
