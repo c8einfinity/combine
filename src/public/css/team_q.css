@@ -6,11 +6,12 @@
 
 /* Colors */
 :root {
-    --inchworm-green: #CFFF80;
-    --soft-green: #BCFF51;
-    --soft-green-hover: #ABF536;
+    --soft-green: #CFFF80;
+    --soft-green-hover: #B5F151;
+    --darker-green: #9AC750;
+    --dark: #000000;
     --navy: #012839;
-    --blue: #4373B4;
+    --blue: #315E98;
     --charcoal: #212529;
     --grey: #495057;
     --light-grey: #CED4DA;
@@ -99,12 +100,12 @@ body {
     color: #111111;
 }
 
-.text-inchworm-green {
-    color: var(--inchworm-green);
+.text-soft-green {
+    color: var(--soft-green);
 }
 
-.text-maastricht-blue {
-    color: #012839;
+.text-black {
+    color: var(--dark);
 }
 
 .linear-bar-color-gradient {
@@ -265,7 +266,7 @@ input[type="checkbox"]:checked:after {
 
 /* LOGIN AND SIGNUP SCREENS */
 .form-side-graphic-container {
-    background-image: url(../images/login_signup_side_mb.png);
+    background-image: url(../images/login_signup_side_mb.jpg);
     background-color: #111111;
     background-repeat: no-repeat;
     background-size: cover;
@@ -274,7 +275,7 @@ input[type="checkbox"]:checked:after {
 
 @media (min-width: 768px) {
     .form-side-graphic-container {
-        background-image: url(../images/login_signup_side_dp.png);
+        background-image: url(../images/login_signup_side_dp.jpg);
         min-height: unset;
     }
 }
@@ -374,7 +375,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .login-signup-button:hover {
-    background: #ABF536;
+    background: var(--soft-green-hover);
     color: var(--navy);
     box-shadow: 0 0 0 0.25rem rgba(218, 252, 144, 0.25);
 }

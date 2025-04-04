@@ -10,7 +10,7 @@
             {% if users_create_permission %}
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="text-anton text-maastricht-blue py-2">ADD USER</h3>
+                        <h3 class="text-anton text-black py-2">ADD USER</h3>
                         <hr class="hor-line-gradient"/>
                         <form id="user" class="card" method="post" onsubmit="return false;">
                             <div class="card-body">
@@ -45,7 +45,7 @@
                                         </select>
                                     </div>
                                     <div class="col-12 col-md-2 pt-4">
-                                        <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
+                                        <button type="submit" class="btn btn-soft-green mt-2 w-100"
                                                 onclick="addUser()">
                                             Add
                                         </button>
@@ -59,10 +59,10 @@
             {% endif %}
             <div class="card my-2">
                 <div class="card-body">
-                    <h3 class="text-anton text-maastricht-blue py-2">USERS</h3>
+                    <h3 class="text-anton text-black py-2">USERS</h3>
                     <hr class="hor-line-gradient"/>
                     <div class="content col-12" style="height: fit-content">
-                        <table id="users-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                        <table id="users-grid" class="table text-black m-0" style="width: 100%">
                             <thead>
                             <!-- table details filled in completely by data tables -->
                             </thead>
@@ -129,8 +129,8 @@
                     return;
                 }
 
-                message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-maastricht-blue pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
-                        <span class="sr-only text-maastricht-blue">Adding ...</span>
+                message.html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-black pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                        <span class="sr-only text-black">Adding ...</span>
                     </div></div>`)
 
                 submitForm("user", "/api/users", "", function () {

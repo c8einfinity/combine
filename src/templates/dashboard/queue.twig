@@ -5,10 +5,10 @@
 {% set queue_delete_permission = user_permissions.permissions.Queue.delete == "1" or user.user_group_id == "1" %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
-        <h3 class="text-anton text-maastricht-blue pb-2">Transcription Queue</h3>
+        <h3 class="text-anton text-black pb-2">Transcription Queue</h3>
         {% if queue_visible_permission %}
             <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-                <table id="queue-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+                <table id="queue-grid" class="table text-black m-0" style="width: 100%">
                     <thead>
                     <!-- table details filled in completely by data tables -->
                     </thead>

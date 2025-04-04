@@ -21,7 +21,7 @@
                     <div class="col-12 col-md-11">
                         <div class="row">
                             <div class="col-4">
-                                <h3 class='text-anton text-maastricht-blue'>{{ player.first_name }} {{ player.last_name }}</h3>
+                                <h3 class='text-anton text-black'>{{ player.first_name }} {{ player.last_name }}</h3>
                             </div>
                             <div class="col-1 offset-4">
                                 <a class="btn btn-outline-dark btn-block" role="button"
@@ -55,7 +55,7 @@
                 <div class="row">
                     <div id="tabProfile" class="col-12 tab">
                         <div class="card-body">
-                            <h5 class="card-title text-anton text-maastricht-blue pb-2">Profile</h5>
+                            <h5 class="card-title text-anton text-black pb-2">Profile</h5>
                             <form id="profileDetails" onsubmit="return false;">
                                 <div class="row">
                                     <div class="col">
@@ -149,7 +149,7 @@
                             </form>
                             <div id="profileMessage"></div>
                             {% if profile_edit_permission %}
-                                <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
+                                <button style="width:100px" class="btn btn-soft-green float-right"
                                         onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')">
                                     Save
                                 </button>

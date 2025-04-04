@@ -3,7 +3,7 @@
 {% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
 {% set links_create_permission = user_permissions.permissions.Links.create == "1" or user.user_group_id == "1" %}
 {% set links_delete_permission = user_permissions.permissions.Links.delete == "1" or user.user_group_id == "1" %}
-<h5 class="text-anton text-maastricht-blue">Links</h5>
+<h5 class="text-anton text-black">Links</h5>
 {% if links_visible_permission %}
     {% if links_create_permission %}
         <form id="linkDetails" onsubmit="return false">
@@ -23,7 +23,7 @@
                     </select>
                 </div>
                 <div class="col-2 pt-4">
-                    <button class="btn btn-soft-green rounded-0 mt-2 w-100" onclick="addLink()">
+                    <button class="btn btn-soft-green mt-2 w-100" onclick="addLink()">
                         Add
                     </button>
                 </div>
@@ -33,7 +33,7 @@
     <div id="linkMessage"></div>
     <hr class="hor-line-gradient"/>
     <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-        <table id="links-grid" class="table text-maastricht-blue m-0" style="width: 100%">
+        <table id="links-grid" class="table text-black m-0" style="width: 100%">
             <thead>
             <!-- table details filled in completely by data tables -->
             </thead>
