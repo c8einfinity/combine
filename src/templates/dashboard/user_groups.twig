@@ -1,18 +1,22 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
+{% set user_groups_visible_permission = user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+{% set user_groups_create_permission = user_permissions.permissions.User_Groups.create == "1" or user.user_group_id == "1" %}
+{% set user_groups_edit_permission = user_permissions.permissions.User_Groups.edit == "1" or user.user_group_id == "1" %}
+{% set user_groups_delete_permission = user_permissions.permissions.User_Groups.delete == "1" or user.user_group_id == "1" %}
 <div class="px-3 py-4">
     <div class="container-fluid">
-        {% if user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+        {% if user_groups_visible_permission %}
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-10">
                             <h3 class="text-anton text-maastricht-blue pt-2">USER GROUPS</h3>
                         </div>
-                        {% if user_permissions.permissions.User_Groups.create == "1" or user.user_group_id == "1" %}
+                        {% if user_groups_create_permission %}
                             <div class="col-2">
                                 <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
-                                        onclick="getUserGroupFormModal()">
+                                        onclick="getUserGroupAddFormModal()">
                                     + Add User Group
                                 </button>
                             </div>
@@ -33,93 +37,106 @@
         {% endif %}
     </div>
 </div>
-<script>
-    if (typeof userGroupsGrid === 'undefined') {
-        let userGroupsGrid;
-    }
-
-    userGroupsGrid = null;
-
-    $(document).ready(function () {
-        userGroupsGrid = $("#user-groups-grid").DataTable({
-            dom: "",
-            ajax: "/api/user_groups",
-            columns: [
-                {
-                    "title": "ID",
-                    "data": "id",
-                    "visible": false
-                },
-                {
-                    "title": "Name",
-                    "data": "name"
-                },
-                {
-                    "title": "Date Created",
-                    "data": "date_created"
-                },
-                {
-                    "title": "Permissions",
-                    "data": "permissions",
-                    "width": "40%"
-                },
-                {
-                    "title": "Status",
-                    "data": "is_active",
-                    "orderable": false,
-                    "render": function (data, type, row) {
-                        return data === 1 ? "Active" : "Inactive";
-                    }
-                },
-                {
-                    "orderable": false,
-                    "render": function (data, type, row) {
-                        let actions = "";
-
-                        {% if user_permissions.permissions.User_Groups.edit == "1" or user.user_group_id == "1" %}
-                            actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupFormModal('${row.id}')"></a>`;
-                        {% endif %}
-
-                        {% if user_permissions.permissions.User_Groups.delete == "1" or user.user_group_id == "1" %}
-                            if (row.id !== 0) {
-                                actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
-                            }
-                        {% endif %}
-
-                        return actions;
-                    }
-                }
-            ],
-            language: {
-                emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
-            },
-            processing: true,
-            serverSide: true
-        });
-    });
-
-    /**
-     * Function to get the user group form modal to add or edit records.
-     * @param id
-     */
-    function getUserGroupFormModal(id) {
-        const idParam = (id) ? `id=${id}&` : "";
-
-        showForm("edit", `/api/user_groups/form?${idParam}formToken={{ formToken() }}`);
-    }
-
-    /**
-     * Function to delete a user group.
-     * @param id
-     */
-    function deleteUserGroup(id) {
-        const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will be " +
-            "reset to the default user group."
-
-        if (confirm(deleteConfirmationMessage)) {
-            deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
-                userGroupsGrid.ajax.reload();
-            });
+{% if user_groups_visible_permission %}
+    <script>
+        if (typeof userGroupsGrid === 'undefined') {
+            let userGroupsGrid;
         }
-    }
-</script>
+
+        userGroupsGrid = null;
+
+        $(document).ready(function () {
+            userGroupsGrid = $("#user-groups-grid").DataTable({
+                dom: "",
+                ajax: "/api/user_groups",
+                columns: [
+                    {
+                        "title": "ID",
+                        "data": "id",
+                        "visible": false
+                    },
+                    {
+                        "title": "Name",
+                        "data": "name"
+                    },
+                    {
+                        "title": "Date Created",
+                        "data": "date_created"
+                    },
+                    {
+                        "title": "Permissions",
+                        "data": "permissions",
+                        "width": "40%"
+                    },
+                    {
+                        "title": "Status",
+                        "data": "is_active",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return data === 1 ? "Active" : "Inactive";
+                        }
+                    },
+                    {
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            let actions = "";
+
+                            {% if user_groups_edit_permission %}
+                                actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupEditFormModal('${row.id}')"></a>`;
+                            {% endif %}
+
+                            {% if user_groups_delete_permission %}
+                                if (row.id !== 0) {
+                                    actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
+                                }
+                            {% endif %}
+
+                            return actions;
+                        }
+                    }
+                ],
+                language: {
+                    emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
+                },
+                processing: true,
+                serverSide: true
+            });
+        });
+
+        {% if user_groups_create_permission %}
+            /**
+             * Function to get the user group form modal to add records.
+             */
+            function getUserGroupAddFormModal() {
+                showForm("edit", `/api/user_groups/form?formToken={{ formToken() }}`);
+            }
+        {% endif %}
+
+        {% if user_groups_edit_permission %}
+            /**
+             * Function to get the user group form modal to edit records.
+             * @param id
+             */
+            function getUserGroupEditFormModal(id) {
+                showForm("edit", `/api/user_groups/form?id=${id}&formToken={{ formToken() }}`);
+            }
+        {% endif %}
+
+        {% if user_groups_delete_permission %}
+            /**
+             * Function to delete a user group.
+             * @param id
+             */
+            function deleteUserGroup(id) {
+                const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will " +
+                    "be reset to the default user group."
+
+                if (confirm(deleteConfirmationMessage)) {
+                    deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
+                        userGroupsGrid.ajax.reload();
+                    });
+                }
+            }
+        {% endif %}
+    </script>
+{% endif %}

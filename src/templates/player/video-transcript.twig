@@ -1,6 +1,7 @@
 {% if video %}
     {% set user = request.session.get("user") %}
     {% set user_permissions = request.session.get("user_permissions") %}
+    {% set videos_edit_permission = user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
     <h5 class="text-anton text-maastricht-blue pb-2">Video Transcript - {{ video.title }}</h5>
 
     {% if transcripts %}
@@ -18,7 +19,7 @@
             {% set selectedSpeaker = transcripts[0].selected_speaker %}
             {% set userVerified = transcripts[0].verified_user_id %}
         {% endif %}
-        {% if user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
+        {% if videos_edit_permission %}
             <form id="speaker_form" class="form-inline d-flex mb-2" style="grid-gap: 1rem;">
                 <div class="form-group flex-column">
                     <label for="select_speaker" class="d-block">Select Speaker as Player:</label>
@@ -28,7 +29,9 @@
                         {% for speaker_array in nsa.speaker_array | unique %}
                             {% if speaker_array %}
                                 <option value="{{ speaker_array }}"
-                                        {% if speaker_array == selectedSpeaker %}selected{% endif %}>{{ speaker_array }}</option>
+                                        {% if speaker_array == selectedSpeaker %}selected{% endif %}>
+                                    {{ speaker_array }}
+                                </option>
                             {% endif %}
                         {% endfor %}
                     </select>
@@ -61,36 +64,38 @@
         <h5 class="text-anton text-maastricht-blue pb-2">Classification</h5>
         <div id="videoClassification" style="overflow: auto; height:50vh">
         </div>
-        <script>
-            function showHideTranscript(speakerName, refresh) {
-                if (speakerName === "ALL") {
-                    $('.speaker').show();
-                } else {
-                    $('.speaker').hide();
-                    $('.' + speakerName).show();
+        {% if videos_edit_permission %}
+            <script>
+                function showHideTranscript(speakerName, refresh) {
+                    if (speakerName === "ALL") {
+                        $('.speaker').show();
+                    } else {
+                        $('.speaker').hide();
+                        $('.' + speakerName).show();
+                    }
+
+                    doClassification(speakerName, refresh);
                 }
 
-                doClassification(speakerName, refresh);
-            }
+                showHideTranscript("{{ selectedSpeaker }}", 0);
 
-            showHideTranscript("{{ selectedSpeaker }}", 0);
+                function submitUserVerification(inputElement) {
+                    submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function () {
+                        loadTranscript({{ transcripts[0].player_media_id }});
+                    });
+                }
 
-            function submitUserVerification(inputElement) {
-                submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function () {
-                    loadTranscript({{ transcripts[0].player_media_id }});
-                });
-            }
+                function doClassification(speakerName, refresh) {
+                    if (refresh === undefined) refresh = 0;
 
-            function doClassification(speakerName, refresh) {
-                if (refresh === undefined) refresh = 0;
-
-                $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                    $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-maastricht-blue pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                 <span class="sr-only text-maastricht-blue">Loading...</span>
             </div></div>`)
 
-                loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
-            }
-        </script>
+                    loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
+                }
+            </script>
+        {% endif %}
     {% else %}
         <p class="py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
     {% endif %}
