@@ -13,6 +13,11 @@ async def get_dashboard(request, response):
     :param response:
     :return:
     """
+    from ..app.QueueUtility import QueueUtility
+    queue = QueueUtility('test')
+    queue.add({"test": "test"})
+
+
     if not request.session.get('logged_in'):
         return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
