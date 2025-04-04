@@ -173,13 +173,13 @@ async def get_receptiviti_export(request, response):
     }
 
     player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
-    text = "\"player_id\",\"candidate_id\",\"text\"\r\n"
+    text = "\"player_id\",\"candidate_id\",\"text\"\n"
     transcripts = player_transcripts.to_list(decode_transcript)
     player_id = ""
     for transcript in transcripts:
         if player_id != transcript["player_id"]:
             if player_id != "":
-                text += "\"\r\n"
+                text += "\"\n"
             if transcript["candidate_id"] == "":
                 transcript["candidate_id"] = "NA"
             text += str(transcript["player_id"])+",\""+str(transcript["candidate_id"])+"\",\""
@@ -190,7 +190,7 @@ async def get_receptiviti_export(request, response):
                 if speaker["speaker"] == transcript["selected_speaker"]:
                     text += speaker["text"].replace("\n", "").replace("\"", "")
     # last line needs to be closed
-    text += "\"\r\n"
+    text += "\"\n"
 
     return response(text, 200, "text/csv", headers_in=headers)
 
