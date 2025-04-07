@@ -21,8 +21,9 @@
 
 // Assessment module
 @import "aatos.scss";
+@import "team_q.scss";
 
-$gradient: linear-gradient(90deg, #E6ECA4 -0.86%, #9FCD56 9.29%, #489195 50.91%, #00609E 75.28%, #102D4F 92.53%, #102D4F 100.65%);
+$gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
 
 .text-darker-green {
     color: $darker-green;

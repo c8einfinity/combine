@@ -3,7 +3,7 @@
         <div class="form-side-graphic-row row">
             <div class="col-12 px-0">
                 <h1 class="text-white" style="font-size: 5rem; font-family: Anton, Arial, Helvetica, sans-serif;">
-                    UNLOCK YOUR <span class="text-anton text-inchworm-green">INNER GREATNESS</span>
+                    UNLOCK YOUR <span class="text-anton text-soft-green">INNER GREATNESS</span>
                 </h1>
             </div>
             <div class="col-12 px-0 mt-md-5">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="col-md-6 p-0 d-flex flex-column justify-content-center align-items-center bg-white text-maastricht-blue">
+    <div class="col-md-6 p-0 d-flex flex-column justify-content-center align-items-center bg-white text-black">
         <div class="p-3">
             {% set signup_header_class = "signup-header-full" if not pricing_data or payment_required == "0" else "signup-header" %}
 
@@ -63,7 +63,7 @@
                 <div class="form-group">
                     <div class="d-flex justify-content-between">
                         <label for="password">Password</label>
-                        <button class="btn border-0 bg-transparent text-maastricht-blue" type="button"
+                        <button class="btn border-0 bg-transparent text-black" type="button"
                                 id="passwordVisibility">
                             <i class="fa-solid fa-eye-slash text-granite-gray"></i>
                             <span id="passwordVisibilityPrompt"> Hide</span>
@@ -71,7 +71,7 @@
                     </div>
                     <input class="form-control" type="text" name="password" id="password" placeholder="Password"
                            value="" autocomplete="off"/>
-                    <small class="form-text text-maastricht-blue">
+                    <small class="form-text text-black">
                         Use 8 or more characters with a mix of letters, numbers & symbols
                     </small>
                 </div>
@@ -95,7 +95,7 @@
                 <input id="confirmation_hash" type="hidden" name="confirmation_hash" value=""/>
                 <input id="payment_required" type="hidden" name="payment_required" value=""/>
 
-                <button class="login-signup-button btn rounded-0 btn-lg" title="Create an Account">
+                <button class="login-signup-button btn btn-lg" title="Create an Account">
                     Create an Account
                 </button>
                 <p class="pt-1">Already have an account?
