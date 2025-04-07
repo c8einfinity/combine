@@ -2,7 +2,7 @@
 {% set user_permissions = request.session.get("user_permissions") %}
 {% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
 <main class="container-fluid">
-    <div class="my-4">
+    <div class="mb-4">
         <h3 class="text-body text-uppercase">Overview</h3>
         <hr class="hor-line-gradient"/>
     </div>

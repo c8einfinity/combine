@@ -28,14 +28,14 @@ $darker-green: #B2DB6E !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
 
-$primary:       $blue !default;
-$secondary:     $gray-600 !default;
-$success:       $green !default;
-$info:          $cyan !default;
-$warning:       $yellow !default;
-$danger:        $red !default;
-$light:         $gray-100 !default;
-$dark:          #454545 !default;
+$primary: $blue !default;
+$secondary: $gray-600 !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red !default;
+$light: $gray-300 !default;
+$dark: #454545 !default;
 
 $border-radius: 4px !default;
 
@@ -95,3 +95,19 @@ $password-image: 'https://source.unsplash.com/oWTW-jNGl9I/600x800' !default;
 
 // Cards
 $card-border-radius: 12px !default;
+
+// Forms
+$label-margin-bottom: .3rem !default;
+
+// Pagination
+$pagination-active-bg: $black !default;
+$pagination-color: $black !default;
+
+// Datatables
+.table.dataTable.table {
+  width: 100%;
+  border-top: 1px solid rgb(227, 230, 240);
+  margin-top: 20px;
+  border-bottom: 1px solid rgb(227, 230, 240);
+  margin-bottom: 20px;
+}

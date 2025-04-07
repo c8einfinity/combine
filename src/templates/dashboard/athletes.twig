@@ -4,120 +4,122 @@
 {% set athletes_create_permission = user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
 {% set athletes_delete_permission = user_permissions.permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
 {% set profile_visible_permission = user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
-<div class="px-3 py-4">
-    <div class="container-fluid">
-        {% if athletes_visible_permission %}
-            {% if athletes_create_permission %}
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="text-anton text-black py-2">ADD ATHLETE</h3>
-                        <hr class="hor-line-gradient"/>
-                        <form id="athlete" method="post" onsubmit="return false;">
-                            <div class="row">
-                                <div class="col form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="form-control" name="firstName" id="firstName"
-                                           placeholder="First Name">
-                                </div>
-                                <div class="col form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" class="form-control" name="lastName" id="lastName"
-                                           placeholder="Last Name">
-                                </div>
-                                <div class="col form-group">
-                                    <label for="sport">Sport</label>
-                                    <select class="form-control" name="sport" id="sport">
-                                        <option>Football</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-2 pt-4">
-                                    <button type="submit" class="btn btn-soft-green mt-2 w-100"
-                                            onclick="addAthlete()">
-                                        Add
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        <div id="formMessage"></div>
-                    </div>
-                </div>
-            {% endif %}
-            <div class="card my-2">
-                <div class="card-body">
-                    <h3 class="text-anton text-black py-2">ATHLETES</h3>
+<div class="container-fluid">
+    {% if athletes_visible_permission %}
+        {% if athletes_create_permission %}
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h3 class="text-anton text-black pb-2 text-uppercase">Add Athlete</h3>
                     <hr class="hor-line-gradient"/>
-                    <div class="content col-12" style="height: fit-content">
-                        <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
-                        <ul class="nav nav-tabs mb-1">
-                            <li class="nav-item">
-                                <a role="button" class="nav-link {% if status == "all" %}active{% endif %}"
-                                   data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
-                            </li>
-                            <li class="nav-item">
-                                <a role="button" class="nav-link {% if status == "verified-videos" %}active{% endif %}"
-                                   data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
-                                    Verified</a>
-                            </li>
-                            <li class="nav-item">
+                    <form id="athlete" method="post" onsubmit="return false;">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg form-group">
+                                <label for="firstName" class="font-weight-bold">First Name</label>
+                                <input type="text" class="form-control" name="firstName" id="firstName"
+                                       placeholder="First Name">
+                            </div>
+                            <div class="col-12 col-md-6 col-lg form-group">
+                                <label for="lastName" class="font-weight-bold">Last Name</label>
+                                <input type="text" class="form-control" name="lastName" id="lastName"
+                                       placeholder="Last Name">
+                            </div>
+                            <div class="col-12 col-md-6 col-lg form-group">
+                                <label for="sport" class="font-weight-bold">Sport</label>
+                                <select class="form-control" name="sport" id="sport">
+                                    <option>Football</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg form-group">
+                                <label class="d-none d-md-block">&nbsp;</label>
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="addAthlete()">
+                                    Add +
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="formMessage"></div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="card">
+            <div class="card-body p-4">
+                <h3 class="text-anton text-black pb-2 text-uppercase">Athletes</h3>
+                <hr class="hor-line-gradient"/>
+                <div class="content" style="height: fit-content">
+                    <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
+                    <ul class="nav nav-tabs mb-4">
+                        <li class="nav-item">
+                            <a role="button"
+                               class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
+                               data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="button"
+                               class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
+                               data-toggle="tab"
+                               onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
+                                Verified</a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="button"
+                               class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
+                               data-toggle="tab"
+                               onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
+                                Verified</a>
+                        </li>
+                        {% if user.user_group_id == "1" %}
+                            <li>
                                 <a role="button"
-                                   class="nav-link {% if status == "verified-speakers" %}active{% endif %}"
+                                   class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
                                    data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
-                                    Verified</a>
+                                   onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
+                                    Complete</a>
                             </li>
-                            {% if user.user_group_id == "1" %}
-                                <li>
-                                    <a role="button"
-                                       class="nav-link {% if status == "completed-reports" %}active{% endif %}"
-                                       data-toggle="tab"
-                                       onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
-                                        Complete</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-
-                        <table id="athletes-grid" class="table" style="width: 100%">
+                        {% endif %}
+                    </ul>
+                    <div class="table-responsive">
+                        <table id="athletes-grid" class="table" style="width: 100%; border-top: 1px solid #e3e6f0; margin-top: 20px;">
                             <thead>
                             <!-- table details filled in completely by data tables -->
                             </thead>
                         </table>
-                        <div id="message"></div>
                     </div>
+                    <div id="message"></div>
                 </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
 </div>
 {% if athletes_visible_permission %}
     <script>
         var athletesGrid = null;
 
         {% if athletes_create_permission %}
-            function addAthlete() {
-                if (document.forms[0].firstName.value == '') {
-                    $('#formMessage').html(`<div class="alert alert-danger">First Name is required</div>`);
-                    document.forms[0].firstName.focus();
-                    return;
-                }
+        function addAthlete() {
+            if (document.forms[0].firstName.value == '') {
+                $('#formMessage').html(`<div class="alert alert-danger">First Name is required</div>`);
+                document.forms[0].firstName.focus();
+                return;
+            }
 
-                if (document.forms[0].lastName.value == '') {
-                    $('#formMessage').html(`<div class="alert alert-danger">Last Name is required</div>`);
-                    document.forms[0].lastName.focus();
-                    return;
-                }
+            if (document.forms[0].lastName.value == '') {
+                $('#formMessage').html(`<div class="alert alert-danger">Last Name is required</div>`);
+                document.forms[0].lastName.focus();
+                return;
+            }
 
-                $('#formMessage').html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-black pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+            $('#formMessage').html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-black pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                     <span class="sr-only text-black">Adding ...</span>
                 </div></div>`)
 
-                submitForm("athlete", "/api/athletes", "", function (data) {
-                    document.forms[0].firstName.value = '';
-                    document.forms[0].lastName.value = '';
-                    athletesGrid.ajax.reload();
-                    $('#formMessage').html(``);
-                });
-            }
+            submitForm("athlete", "/api/athletes", "", function (data) {
+                document.forms[0].firstName.value = '';
+                document.forms[0].lastName.value = '';
+                athletesGrid.ajax.reload();
+                $('#formMessage').html(``);
+            });
+        }
         {% endif %}
 
         function getStatStatusClass(status) {
@@ -151,11 +153,21 @@
                         data: 'first_name',
                         render: function (data, type, row) {
                             if (!row.completed_bio || row.report_sent) {
-                                return `<div class="d-inline-flex" style="grid-gap: 0.2rem;" data-toggle="tooltip" data-placement="bottom">
-                                        ${row.report_sent ? '<img src="/images/player/report-sent.svg" alt="Report Sent" title="Report sent" />' : ""}
-                                        ${!row.completed_bio ? '<img src="/images/warning.svg" alt="Incomplete Biography Warning" title="Incomplete Biography" />' : ""}
-                                        ${row.first_name}
-                                    </div>`;
+                                return `
+                                        <div class="d-inline-flex" style="grid-gap: 0.3rem;">
+                                            ${row.report_sent ? `
+                                                <div class="qf-tooltip-wrapper">
+                                                    <img src="/images/player/report-sent.svg" alt="Report Sent" />
+                                                    <span class="qf-tooltip">Report sent</span>
+                                                </div>` : ""}
+                                            ${!row.completed_bio ? `
+                                                <div class="qf-tooltip-wrapper">
+                                                    <img src="/images/warning.svg" alt="Incomplete Biography Warning" />
+                                                    <span class="qf-tooltip">Incomplete Biography</span>
+                                                </div>` : ""}
+                                            ${row.first_name}
+                                        </div>
+                                    `;
                             }
                             return row.first_name;
                         }
@@ -185,38 +197,38 @@
                         searchable: false,
                         render: function (data, type, row) {
                             let html = '<div class="d-flex" style="grid-gap: 0.5rem;">';
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
-    <span class="bg-dark rounded-left p-1">Media</span>
-    <span class="${getStatStatusClass(row.transcript_stats.total_media > 0 ? 100 : 0)} rounded-right p-1">${row.transcript_stats.total_media}</span>
+                            html += `<div class="text-white d-flex" style="font-size: 0.7rem; font-weight: bold;">
+    <span class="bg-dark rounded-left py-1 px-2 text-nowrap">Media</span>
+    <span class="${getStatStatusClass(row.transcript_stats.total_media > 0 ? 100 : 0)} rounded-right py-1 px-2" style="margin-left: -4px;">${row.transcript_stats.total_media}</span>
 </div>`;
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
-    <span class="bg-dark rounded-left p-1">Videos Verified</span>
-    <span class="${getStatStatusClass(Math.round((row.transcript_stats.valid_media / row.transcript_stats.total_media) * 100))} rounded-right p-1">${row.transcript_stats.valid_media}</span>
+                            html += `<div class="text-white d-flex" style="font-size: 0.7rem; font-weight: bold;">
+    <span class="bg-dark rounded-left py-1 px-2 text-nowrap">Videos Verified</span>
+    <span class="${getStatStatusClass(Math.round((row.transcript_stats.valid_media / row.transcript_stats.total_media) * 100))} rounded-right py-1 px-2" style="margin-left: -4px;">${row.transcript_stats.valid_media}</span>
 </div>`;
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
-    <span class="bg-dark rounded-left p-1">Speaker Verified</span>
-    <span class="${getStatStatusClass(Math.round((row.transcript_stats.processed / row.transcript_stats.valid_media) * 100))} rounded-right p-1">${row.transcript_stats.processed}</span>
+                            html += `<div class="text-white d-flex" style="font-size: 0.7rem; font-weight: bold;">
+    <span class="bg-dark rounded-left py-1 px-2 text-nowrap">Speaker Verified</span>
+    <span class="${getStatStatusClass(Math.round((row.transcript_stats.processed / row.transcript_stats.valid_media) * 100))} rounded-right py-1 px-2" style="margin-left: -4px;">${row.transcript_stats.processed}</span>
 </div>`;
                             html += "</div>";
                             return html;
                         },
                         orderable: false
                     },
-                    {% if profile_visible_permission %}
-                        {
-                            "title": "Status",
-                            "render": function (data, type, row) {
-                                return `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
-                            }
-                        },
-                    {% endif %}
-                    {% if athletes_delete_permission %}
-                        {
-                            "orderable": false,
-                            "render": function (data, type, row) {
-                                return ` <a class="fas fa-trash" href="#" onclick="deleteAthlete(${row.id})"></a>`
-                            }
+                    {% if profile_visible_permission or athletes_delete_permission %}
+                    {
+                        "orderable": false,
+                        "title": "Actions",
+                        "render": function (data, type, row) {
+                            let buttons = '';
+                            {% if profile_visible_permission %}
+                            buttons += `<button class="btn btn-soft-green mr-1" onclick="loadPage('/api/athlete/${row.id}', 'content')">Profile</button>`;
+                            {% endif %}
+                            {% if athletes_delete_permission %}
+                            buttons += `<a class="btn btn-outline-light text-dark" href="#" onclick="deleteAthlete(${row.id})"><i class="fas fa-trash"></i></a>`;
+                            {% endif %}
+                            return buttons;
                         }
+                    }
                     {% endif %}
                 ],
                 language: {
@@ -228,13 +240,13 @@
         });
 
         {% if athletes_delete_permission %}
-            function deleteAthlete(id) {
-                if (confirm("Delete Athlete ?")) {
-                    deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
-                        athletesGrid.ajax.reload();
-                    })
-                }
+        function deleteAthlete(id) {
+            if (confirm("Delete Athlete ?")) {
+                deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
+                    athletesGrid.ajax.reload();
+                })
             }
+        }
         {% endif %}
     </script>
 {% endif %}
