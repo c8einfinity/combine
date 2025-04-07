@@ -24,7 +24,7 @@ $red: #DC2B2B !default;
 $orange: #fd7e14 !default;
 $yellow: #FFB71B !default;
 $green: #9AC750 !default;
-$darker-green: #9AC750 !default;
+$darker-green: #B2DB6E !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
 
@@ -94,4 +94,4 @@ $register-image: 'https://source.unsplash.com/Mv9hjnEUHR4/600x800' !default;
 $password-image: 'https://source.unsplash.com/oWTW-jNGl9I/600x800' !default;
 
 // Cards
-$card-border-radius: $border-radius !default;
+$card-border-radius: 12px !default;
