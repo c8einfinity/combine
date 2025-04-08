@@ -8,7 +8,7 @@
 {% if videos_visible_permission %}
     <div class="row">
         <div class="col-12" id="videoFeedback"></div>
-        <div class="col-4">
+        <div class="col-12 col-xl-4">
             <h3 class="pb-2 text-uppercase">Videos</h3>
             {% if videos %}
                 {% for video in videos %}
@@ -50,24 +50,28 @@
                                     {% endif %}
                                     <div class="row py-2">
                                         {% if videos_edit_permission %}
-                                            <div class="col-6">
-                                                {% if not video.transcript %}
+                                            {% if not video.transcript %}
+                                                <div class="col-6">
+
                                                     <a role="button" onclick="addToQueue({{ video.id }})">
-                                                        <i class="fa fa-plus-square text-primary" style="font-size: 18px;"></i> Transcribe
+                                                        <i class="fa fa-plus-square text-primary mr-1"
+                                                           style="font-size: 18px;"></i> Transcribe
                                                     </a>
-                                                {% endif %}
-                                            </div>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                                         {% if videos_delete_permission %}
                                             <div class="col-6">
                                                 <a role="button" onclick="removeVideo({{ video.id }})">
-                                                    <i class="fa fa-minus-square" style="color: orangered; font-size: 18px;"></i> Remove
+                                                    <i class="fa fa-minus-square mr-1"
+                                                       style="color: orangered; font-size: 18px;"></i> Remove
                                                     Video
                                                 </a>
                                             </div>
                                         {% endif %}
                                     </div>
-                                    <a href="{{ video.url }}" target="_blank" class="w-full text-center text-black "><u>View on
+                                    <a href="{{ video.url }}" target="_blank" class="w-full text-center text-black "><u>View
+                                            on
                                             YouTube <i class="fa-solid fa-up-right-from-square"></i></u></a>
                                 </div>
                             </div>
@@ -78,7 +82,7 @@
                 <div class="alert alert-info">No videos available</div>
             {% endif %}
         </div>
-        <div class="col-8" id="videoTranscript">
+        <div class="col-12 col-xl-8" id="videoTranscript">
         </div>
     </div>
     <script>

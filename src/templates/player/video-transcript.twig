@@ -2,7 +2,8 @@
     {% set user = request.session.get("user") %}
     {% set user_permissions = request.session.get("user_permissions") %}
     {% set videos_edit_permission = user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
-    <h5 class="text-anton text-black pb-2">Video Transcript - {{ video.title }}</h5>
+    <h3 class="text-anton text-black pb-2 text-uppercase text-nowrap text-truncate">Video Transcript
+        - {{ video.title }}</h3>
 
     {% if transcripts %}
 
@@ -20,10 +21,10 @@
             {% set userVerified = transcripts[0].verified_user_id %}
         {% endif %}
         {% if videos_edit_permission %}
-            <form id="speaker_form" class="form-inline d-flex mb-2" style="grid-gap: 1rem;">
-                <div class="form-group flex-column">
-                    <label for="select_speaker" class="d-block">Select Speaker as Player:</label>
-                    <select id="select_speaker" class="form-control w-100" onchange="showHideTranscript(this.value, 1)"
+            <form id="speaker_form" class="d-flex align-items-center mb-2" style="grid-gap: 1rem;">
+                <div class="form-group form-inline mb-0">
+                    <label for="select_speaker" class="font-weight-bold mr-2">Select Speaker as Player:</label>
+                    <select id="select_speaker" class="form-control" onchange="showHideTranscript(this.value, 1)"
                             {% if userVerified %}disabled{% endif %}>
                         <option value="ALL">Show All</option>
                         {% for speaker_array in nsa.speaker_array | unique %}
@@ -36,19 +37,25 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" name="verified_user_id" id="user_verification"
-                           {% if userVerified %}checked{% endif %} onclick="submitUserVerification(this)"
-                           value="{{ user.id }}">
-                    <label for="user_verification" class="d-flex flex-column align-items-start">
-                        <span class="d-block">Verified by User</span>
-                        <i class="d-block w-100"><small>Clicking this confirms you have verified this
-                                speaker.</small></i>
-                    </label>
+                <div class="form-group form-check mb-0">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                               class="custom-control-input"
+                               name="verified_user_id"
+                               id="user_verification"
+                               value="{{ user.id }}"
+                               {% if userVerified %}checked{% endif %}
+                               onclick="submitUserVerification(this)">
+                        <label class="custom-control-label d-flex flex-column align-items-start"
+                               for="user_verification">
+                            <span class="d-block">Verified by User</span>
+                            <small class="d-block w-100">Clicking this confirms you have verified this speaker.</small>
+                        </label>
+                    </div>
                 </div>
             </form>
         {% endif %}
-        <div class="bg-lighter p-4 rounded border" style="overflow: auto; height:35vh">
+        <div class="bg-lighter p-4 rounded border mb-4" style="overflow: auto; height:35vh">
             {% for transcript in transcripts %}
                 {% for speaker in transcript.data.transcription %}
 
@@ -60,9 +67,10 @@
                 {% endfor %}
             {% endfor %}
         </div>
-        <br>
-        <h5 class="text-anton text-black pb-2">Classification</h5>
-        <div id="videoClassification" style="overflow: auto; height:50vh">
+        <h3 class="pb-2 text-uppercase">Classification</h3>
+        <div class="bg-lighter p-4 rounded border">
+            <div id="videoClassification" style="overflow: hidden; height: 50vh; overflow-y: auto;">
+            </div>
         </div>
         {% if videos_edit_permission %}
             <script>
@@ -97,7 +105,8 @@
             </script>
         {% endif %}
     {% else %}
-        <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
+        <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the
+            video.</p>
     {% endif %}
 {% else %}
     <h5 class="text-anton text-black pb-2">Video Transcript - None</h5>
