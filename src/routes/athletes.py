@@ -5,6 +5,8 @@ import hashlib
 import os
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
+
+from tina4_python import Debug
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
@@ -847,5 +849,6 @@ async def post_import_csv(request, response):
 
     if import_count > 0:
         return response("Imported "+str(import_count)+" players")
+    Debug.error("No players imported")
 
     return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)

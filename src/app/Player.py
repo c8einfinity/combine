@@ -144,6 +144,7 @@ def import_csv_player_data(file_data):
 
     read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
     count = 0
+    queue = QueueUtility()
     for row in read_data:
         # Check if the player already exists
         player = Player().select("*", filter="first_name = ? and last_name = ?", params=[row['first_name'], row['last_name']], limit=1)
@@ -160,7 +161,6 @@ def import_csv_player_data(file_data):
             player.save()
             count += 1
             player = player.to_dict()
-            queue = QueueUtility()
             queue.add_item("process_player", {"player_id": player["id"]})
 
     return count
