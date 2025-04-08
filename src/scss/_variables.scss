@@ -7,7 +7,7 @@
 $white: #fff !default;
 $gray-100: #F9F9F9 !default;
 $gray-200: #f8f9fa !default;
-$gray-300: #dddfeb !default;
+$gray-300: #D9D9D9 !default;
 $gray-400: #d1d3e2 !default;
 $gray-500: #b7b9cc !default;
 $gray-600: #858796 !default;
@@ -111,3 +111,6 @@ $pagination-color: $black !default;
   border-bottom: 1px solid rgb(227, 230, 240);
   margin-bottom: 20px;
 }
+
+// Progress bar
+$progress-bg: $gray-300 !default;
