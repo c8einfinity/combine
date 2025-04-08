@@ -224,7 +224,7 @@
                             buttons += `<button class="btn btn-soft-green mr-1" onclick="loadPage('/api/athlete/${row.id}', 'content')">Profile</button>`;
                             {% endif %}
                             {% if athletes_delete_permission %}
-                            buttons += `<a class="btn btn-outline-light text-dark" href="#" onclick="deleteAthlete(${row.id})"><i class="fas fa-trash"></i></a>`;
+                            buttons += `<a class="btn btn-outline-light text-black" href="#" onclick="deleteAthlete(${row.id})"><i class="fas fa-trash"></i></a>`;
                             {% endif %}
                             return buttons;
                         }

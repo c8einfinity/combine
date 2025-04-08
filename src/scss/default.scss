@@ -26,7 +26,7 @@
 $gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
 
 .text-darker-green {
-    color: $darker-green;
+  color: $darker-green;
 }
 
 .navbar-brand img {
@@ -48,7 +48,7 @@ $gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
   }
 }
 
-/* Buttons in headings default font based on body */
+// Buttons in headings default font based on body
 h1, h2, h3, h4, h5, h6 {
   button {
     font-family: $font-family-sans-serif;
@@ -63,7 +63,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.5rem;
 }
 
-/* Custom progress bar background that uses the CI gradient as background */
+// Custom progress bar background that uses the CI gradient as background
 .progress-bar-qfinder {
   background: $gradient;
   border-radius: inherit;
@@ -76,13 +76,119 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .profile-img {
-  border: none;
   width: 78px;
   height: 78px;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   object-position: center;
   box-shadow: 0 10px 13px 0 #00000024;
-  &:hover {
-    box-shadow: 0 4px 4px 0 #0000001A;
+  border: 1px solid $light;
+}
+
+.profile-img-upload-section {
+  background: $gray-200;
+  border-radius: $border-radius;
+  border: 1px solid $gray-400;
+
+  .profile-img-uploaded {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: $border-radius;
+    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.05);
+    background: $white;
   }
+}
+
+.btn-outline-dark:not(:disabled):not(.disabled).active,
+.btn-outline-dark:not(:disabled):not(.disabled):hover {
+  color: $soft-green;
+  background-color: $black;
+  border-color: $black;
+}
+
+.profile-tabs {
+  border-image: linear-gradient(to right, var(--soft-green, #CFFF80) 0%, #006DB0 79%) 1;
+  border-width: 0;
+  border-style: solid;
+  border-bottom-width: 2px;
+
+  .btn {
+    min-width: 90px;
+  }
+}
+
+.form-control[type=file]:not(:disabled):not([readonly]) {
+  cursor: pointer;
+}
+
+.form-control[type=file] {
+  overflow: hidden;
+}
+
+
+.btn-text-lg {
+  font-size: 20px;
+  padding: 0.2rem 1rem;
+}
+
+// Custom Tooltip for athletes grid
+.qf-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  top: 2px;
+
+  img:hover {
+    cursor: pointer;
+  }
+}
+
+.qf-tooltip {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: -12px;
+  background-color: #333;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: $border-radius;
+  font-size: 13px;
+  white-space: nowrap;
+  display: none;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
+}
+
+.qf-tooltip-wrapper:hover .qf-tooltip {
+  display: block;
+}
+
+.qf-tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+.custom-file-upload {
+  width: 100%;
+  background: #fff;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius;
+  font-size: 14px;
+}
+
+.custom-file-upload::file-selector-button {
+  margin-right: 10px;
+  padding: 0.5em;
+  background: #E2E2E2;
+  border: none;
+  border-radius: $border-radius 0 0 $border-radius;
+  color: $black;
+  font-size: 14px;
+  font-weight: bold;
 }
