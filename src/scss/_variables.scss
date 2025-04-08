@@ -35,6 +35,7 @@ $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-300 !default;
+$lighter: $gray-100 !default;
 $dark: #454545 !default;
 
 $border-radius: 4px !default;
@@ -112,5 +113,15 @@ $pagination-color: $black !default;
   margin-bottom: 20px;
 }
 
+div.dt-processing>div:last-child>div {
+  background: $black !important;
+}
+
 // Progress bar
 $progress-bg: $gray-300 !default;
+
+// Border radius
+$border-radius-lg: .4rem !default;
+
+// Checkboxes
+$custom-control-indicator-checked-bg: $green !default;

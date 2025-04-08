@@ -130,43 +130,6 @@ body {
     color: #db282e;
 }
 
-.form-check-inline {
-    display: grid;
-    grid-template-columns: 15px 1fr;
-    grid-gap: 10px;
-}
-
-input[type="checkbox"] {
-    -webkit-appearance: initial;
-    appearance: initial;
-    width: 16px;
-    height: 16px;
-    position: relative;
-    margin-right: 5px;
-    border: 1px solid #d1d3e2;
-    border-radius: 3px;
-    background: #ffffff;
-}
-
-input[type="checkbox"]:disabled {
-    background: #e4e4e4;
-}
-
-input[type="checkbox"]:checked {
-    background: #9fcd56;
-}
-
-input[type="checkbox"]:checked:after {
-    content: "\2714";
-    font-size: 0.85rem;
-    color: #ffffff;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-}
-
 /* BUTTON STYLES */
 .btn-soft-green {
     font-weight: 400;

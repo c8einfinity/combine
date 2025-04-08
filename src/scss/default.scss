@@ -29,6 +29,10 @@ $gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
   color: $darker-green;
 }
 
+.bg-lighter {
+  background: $lighter;
+}
+
 .navbar-brand img {
   height: 2rem;
   margin: 0 2rem;

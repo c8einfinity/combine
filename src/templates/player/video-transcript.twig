@@ -48,7 +48,7 @@
                 </div>
             </form>
         {% endif %}
-        <div class="bg-light p-2 rounded border" style="overflow: auto; height:35vh">
+        <div class="bg-lighter p-4 rounded border" style="overflow: auto; height:35vh">
             {% for transcript in transcripts %}
                 {% for speaker in transcript.data.transcription %}
 
@@ -97,7 +97,7 @@
             </script>
         {% endif %}
     {% else %}
-        <p class="py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
+        <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the video.</p>
     {% endif %}
 {% else %}
     <h5 class="text-anton text-black pb-2">Video Transcript - None</h5>
