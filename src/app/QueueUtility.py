@@ -1,7 +1,6 @@
 import json
 import os
 import threading
-import asyncer
 from tina4_python import Debug
 from tina4_python.Queue import Queue, Config, Consumer, Producer
 
