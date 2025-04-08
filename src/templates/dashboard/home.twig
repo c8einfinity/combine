@@ -1,5 +1,6 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
+{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
 <main class="container-fluid mx-auto">
     <div class="row my-4">
         <div class="col">
@@ -7,7 +8,7 @@
             <hr class="hor-line-gradient"/>
         </div>
     </div>
-    {% if user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+    {% if home_visible_permission %}
         <div class="row">
             <div class="col-2 col-md-3">
                 <div class="card">

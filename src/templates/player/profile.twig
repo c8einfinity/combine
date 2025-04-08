@@ -1,8 +1,13 @@
 {% set user = request.session.get("user") %}
-{% set user_permissions = request.session.get("user_permissions") %}
 {% set logged_in = request.session.get("logged_in") %}
+{% set user_permissions = request.session.get("user_permissions") %}
+{% set profile_visible_permission = user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+{% set profile_edit_permission = user_permissions.permissions.Profile.edit == "1" or user.user_group_id == "1" %}
+{% set videos_visible_permission = user_permissions.permissions.Videos.visible == "1" or user.user_group_id == "1" %}
+{% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
+{% set playerq_visible_permission = user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
 <div class="px-3 py-4">
-    {% if user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+    {% if profile_visible_permission %}
         <div class="container-fluid card">
             <div class="card-body">
                 <div class="row">
@@ -22,21 +27,21 @@
                                 <a class="btn btn-outline-dark btn-block" role="button"
                                    onclick="showTab(this)">Profile</a>
                             </div>
-                            {% if user_permissions.permissions.Videos.visible == "1" or user.user_group_id == "1" %}
+                            {% if videos_visible_permission %}
                                 <div class="col-1">
                                     <a class="btn btn-outline-dark btn-block" role="button"
                                        onclick="showTab(this);
                                                loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');">Videos</a>
                                 </div>
                             {% endif %}
-                            {% if user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
+                            {% if links_visible_permission %}
                                 <div class="col-1">
                                     <a class="btn btn-outline-dark btn-block" role="button"
                                        onclick="showTab(this);
                                                loadPage('/api/athlete/{{ player.id }}/links', 'tabLinks');">Links</a>
                                 </div>
                             {% endif %}
-                            {% if user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+                            {% if playerq_visible_permission %}
                                 <div class="col-1">
                                     <a class="btn btn-outline-dark btn-block" role="button"
                                        onclick="showTab(this);
@@ -135,7 +140,7 @@
                                                      alt="Athlete Picture">
                                             {% endif %}
                                         </div>
-                                        {% if user_permissions.permissions.Profile.edit == "1" or user.user_group_id == "1" %}
+                                        {% if profile_edit_permission %}
                                             <input id="file-upload" name="picture-upload" type="file" accept="image/*"
                                                    onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')">
                                         {% endif %}
@@ -143,7 +148,7 @@
                                 </div>
                             </form>
                             <div id="profileMessage"></div>
-                            {% if user_permissions.permissions.Profile.edit == "1" or user.user_group_id == "1" %}
+                            {% if profile_edit_permission %}
                                 <button style="width:100px" class="btn btn-soft-green rounded-0 float-right"
                                         onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')">
                                     Save
@@ -162,17 +167,19 @@
         </div>
     {% endif %}
 </div>
-<script>
-    function showTab(tabElement) {
-        // remove active class from all tabs
-        $(".btn-outline-dark").removeClass("active");
-        // add active class to the clicked tab
-        $(tabElement).addClass("active");
-        $(".tab").hide();
-        $("#tab" + tabElement.innerHTML).show();
-    }
+{% if profile_visible_permission %}
+    <script>
+        function showTab(tabElement) {
+            // remove active class from all tabs
+            $(".btn-outline-dark").removeClass("active");
+            // add active class to the clicked tab
+            $(tabElement).addClass("active");
+            $(".tab").hide();
+            $("#tab" + tabElement.innerHTML).show();
+        }
 
-    showTab($('.btn-outline-dark')[0]);
-</script>
+        showTab($('.btn-outline-dark')[0]);
+    </script>
+{% endif %}
 
 <!-- {{ RANDOM()~"ID" }} -->
