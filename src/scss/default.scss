@@ -33,6 +33,10 @@ $gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
   background: $lighter;
 }
 
+.bg-success-light {
+  background: $success-light;
+}
+
 .navbar-brand img {
   height: 2rem;
   margin: 0 2rem;
@@ -204,4 +208,11 @@ h1, h2, h3, h4, h5, h6 {
   color: $black;
   font-size: 14px;
   font-weight: bold;
+}
+
+// Video list styling
+.video-list-container {
+  overflow: hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - 311px);
 }
