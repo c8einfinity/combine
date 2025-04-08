@@ -10,3 +10,13 @@ services:
       - "33068:3306"
     volumes:
       - "./database:/var/lib/mysql"
+  rabbit-mq:
+    restart: always
+    image: rabbitmq:3
+    mem_limit: "1024M"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: qfinder
+      RABBITMQ_DEFAULT_PASS: QFinderRMQ1234!

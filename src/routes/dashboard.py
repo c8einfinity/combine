@@ -1,4 +1,5 @@
 from tina4_python.Constant import HTTP_OK, TEXT_HTML
+from tina4_python.Queue import Producer
 from tina4_python.Template import Template
 from tina4_python.Router import get, post
 import random
@@ -13,6 +14,10 @@ async def get_dashboard(request, response):
     :param response:
     :return:
     """
+    # Temp example to test the queue
+    # from ..app.QueueUtility import QueueUtility
+    # queue_instance = QueueUtility()
+    # Producer(queue_instance.get_queue()).produce("A test message")
     if not request.session.get('logged_in'):
         return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
