@@ -7,6 +7,9 @@ import csv
 from PIL import Image
 from PIL.Image import Resampling
 
+from src.app.QueueUtility import QueueUtility
+
+
 def get_player_results(candidate_id):
     """
     Fetch results from the API
@@ -156,6 +159,9 @@ def import_csv_player_data(file_data):
             player.is_bio_links_created = 0
             player.save()
             count += 1
+            player = player.to_dict()
+            queue = QueueUtility()
+            queue.add_item("process_player", {"player_id": player["id"]})
 
     return count
 
