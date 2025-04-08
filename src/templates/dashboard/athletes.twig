@@ -8,37 +8,71 @@
     <div class="container-fluid">
         {% if athletes_visible_permission %}
             {% if athletes_create_permission %}
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="text-anton text-maastricht-blue py-2">ADD ATHLETE</h3>
-                        <hr class="hor-line-gradient"/>
-                        <form id="athlete" method="post" onsubmit="return false;">
-                            <div class="row">
-                                <div class="col form-group">
-                                    <label for="firstName">First Name</label>
-                                    <input type="text" class="form-control" name="firstName" id="firstName"
-                                           placeholder="First Name">
-                                </div>
-                                <div class="col form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" class="form-control" name="lastName" id="lastName"
-                                           placeholder="Last Name">
-                                </div>
-                                <div class="col form-group">
-                                    <label for="sport">Sport</label>
-                                    <select class="form-control" name="sport" id="sport">
-                                        <option>Football</option>
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-2 pt-4">
-                                    <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
-                                            onclick="addAthlete()">
-                                        Add
-                                    </button>
-                                </div>
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="text-anton text-maastricht-blue py-2">ADD ATHLETE</h3>
+                                <hr class="hor-line-gradient"/>
+                                <form id="athlete" method="post" onsubmit="return false;">
+                                    <div class="row">
+                                        <div class="col form-group">
+                                            <label for="firstName">First Name</label>
+                                            <input type="text" class="form-control" name="firstName" id="firstName"
+                                                   placeholder="First Name">
+                                        </div>
+                                        <div class="col form-group">
+                                            <label for="lastName">Last Name</label>
+                                            <input type="text" class="form-control" name="lastName" id="lastName"
+                                                   placeholder="Last Name">
+                                        </div>
+                                        <div class="col form-group">
+                                            <label for="sport">Sport</label>
+                                            <select class="form-control" name="sport" id="sport">
+                                                <option>Football</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-md-2 pt-4">
+                                            <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
+                                                    onclick="addAthlete()">
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="formMessage"></div>
                             </div>
-                        </form>
-                        <div id="formMessage"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="text-anton text-maastricht-blue py-2">IMPORT FROM CSV</h3>
+                                    </div>
+                                    <div class="col">
+                                        <a href="/athletes/athlete-template.csv" class="btn btn-outline-dark">Download Template</a>
+                                    </div>
+                                </div>
+                                <hr class="hor-line-gradient"/>
+                                <form id="csvImport" method="post" onsubmit="return false;">
+                                    <div class="row">
+                                        <div class="col form-group">
+                                            <label for="importCsv">Select CSV File</label>
+                                            <input type="file" class="form-control-file" name="importCsv" id="importCsv" accept="text/csv">
+                                        </div>
+                                        <div class="col-12 col-md-2 pt-4">
+                                            <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
+                                                    onclick="doImportCsv()">
+                                                Upload
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="formImportMessage"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -118,12 +152,9 @@
                     $('#formMessage').html(``);
                 });
             }
-        {% endif %}
-
-
-        function doImportCsv() {
-            submitForm("csvImport", "/api/athletes/import-csv", "formImportMessage");
-        }
+            function doImportCsv() {
+                submitForm("csvImport", "/api/athletes/import-csv", "formImportMessage");
+            }
         {% endif %}
 
         function getStatStatusClass(status) {

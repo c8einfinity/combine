@@ -834,6 +834,17 @@ async def post_transcript_verified(request, response):
 
     return response("Done!")
 
+@get("/athletes/athlete-template.csv")
+async def get_athletes_csv_template(request, response):
+    """
+    Returns the csv template for importing athletes
+    :param request:
+    :param response:
+    :return:
+    """
+    csv_template = "first_name,last_name,sport,position,team\n"
+    return response(csv_template, 200, "text/csv", headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
+
 @post("/api/athletes/import-csv")
 async def post_import_csv(request, response):
     """
