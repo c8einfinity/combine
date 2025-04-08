@@ -51,19 +51,19 @@
                     <ul class="nav nav-tabs mb-4">
                         <li class="nav-item">
                             <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
+                               class="nav-link font-weight-bold text-black {% if status == "all" %}active{% endif %}"
                                data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
                         </li>
                         <li class="nav-item">
                             <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
+                               class="nav-link font-weight-bold text-black {% if status == "verified-videos" %}active{% endif %}"
                                data-toggle="tab"
                                onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
                                 Verified</a>
                         </li>
                         <li class="nav-item">
                             <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
+                               class="nav-link font-weight-bold text-black {% if status == "verified-speakers" %}active{% endif %}"
                                data-toggle="tab"
                                onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
                                 Verified</a>
@@ -71,7 +71,7 @@
                         {% if user.user_group_id == "1" %}
                             <li>
                                 <a role="button"
-                                   class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
+                                   class="nav-link font-weight-bold text-black {% if status == "completed-reports" %}active{% endif %}"
                                    data-toggle="tab"
                                    onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
                                     Complete</a>

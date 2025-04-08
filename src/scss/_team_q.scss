@@ -74,17 +74,21 @@ body {
 }
 
 .download-btn:hover {
-    color: var(--inchworm-green) !important;
+    color: var(--soft-green) !important;
 }
 
 .view-btn {
     color: #000000 !important;
-    background-color: var(--inchworm-green);
+    background-color: var(--soft-green);
     border-radius: 5px;
     font-weight: 600;
     font-size: 14px;
     height: 30px;
     white-space: nowrap;
+}
+
+.view-btn:hover {
+    background-color: var(--soft-green-hover);
 }
 
 .text-charcoal {
@@ -104,7 +108,7 @@ body {
 }
 
 .text-black {
-    color: var(--dark);
+    color: var(--dark) !important;
 }
 
 .linear-bar-color-gradient {
@@ -314,7 +318,7 @@ body {
 }
 
 .link {
-    COLOR: #012839;
+    color: #012839;
     font-weight: 500;
     text-decoration: underline;
 }

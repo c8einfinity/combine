@@ -109,13 +109,18 @@ $pagination-color: $black !default;
 .table.dataTable.table {
   width: 100%;
   border-top: 1px solid rgb(227, 230, 240);
-  margin-top: 20px;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
   border-bottom: 1px solid rgb(227, 230, 240);
-  margin-bottom: 20px;
 }
 
 div.dt-processing>div:last-child>div {
   background: $black !important;
+}
+
+div.dt-container div.dt-info {
+  white-space: nowrap;
+  opacity: .3;
 }
 
 // Progress bar
