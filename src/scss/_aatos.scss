@@ -93,7 +93,7 @@ $navy: #002839;
   }
 
   hr {
-    background: linear-gradient(90deg, #7DC037 0%, #03709F 50%, #012839 100%);
+    background: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
     height: 2px;
     border: none;
     opacity: 1;
@@ -114,7 +114,7 @@ $navy: #002839;
       font-size: 0.8rem;
 
       &:not(:first-child) {
-        border-left: 2px solid var(--color-green);
+        border-left: 2px solid var(--soft-green);
         padding-left: 0.4rem;
       }
     }
@@ -168,24 +168,25 @@ $navy: #002839;
     height: 1rem;
     background-color: #F6F6F6;
     border-radius: 1rem;
+    background: linear-gradient(90deg, #CFFF80 47.5%, #3E6DB3 68.5%, #012839 100%) !important;
 
     .pointer {
       position: absolute;
-      top: -0.25rem;
+      top: 50%;
       left: 0;
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 30px;
+      height: 30px;
       border-radius: 100%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(-50%);
 
       &.left {
-        background-color: var(--color-green);
+        background-color: var(--soft-green);
         border: thin solid var(--color-dark-blue);
       }
 
       &.right {
         background-color: var(--color-dark-blue);
-        border: thin solid var(--color-green);
+        border: thin solid var(--soft-green);
       }
     }
   }
