@@ -268,7 +268,7 @@
                         "render": function (data, type, row) {
                             let buttons = '';
                             {% if profile_visible_permission %}
-                            buttons += `<a class="btn btn-soft-green mr-1" href="/api/athlete/${row.id}">Profile</a>`;
+                            buttons += `<a class="btn btn-soft-green mr-1" href="/athlete/${row.id}">Profile</a>`;
                             {% endif %}
                             {% if athletes_delete_permission %}
                             buttons += `<a class="btn btn-outline-light text-black" href="#" onclick="deleteAthlete(${row.id})"><i class="fas fa-trash"></i></a>`;
