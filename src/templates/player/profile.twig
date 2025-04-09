@@ -1,3 +1,4 @@
+{% extends "base.twig" %}
 {% set user = request.session.get("user") %}
 {% set logged_in = request.session.get("logged_in") %}
 {% set user_permissions = request.session.get("user_permissions") %}
@@ -6,6 +7,10 @@
 {% set videos_visible_permission = user_permissions.permissions.Videos.visible == "1" or user.user_group_id == "1" %}
 {% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
 {% set playerq_visible_permission = user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+{% block content_public %}
 <div class="px-3 py-4">
     {% if profile_visible_permission %}
         <div class="container-fluid card">
@@ -179,7 +184,11 @@
         }
 
         showTab($('.btn-outline-dark')[0]);
+        $(document).ready(function () {
+            teamQNavSetActive($('#athleteLink')[0]);
+        });
     </script>
 {% endif %}
 
 <!-- {{ RANDOM()~"ID" }} -->
+{% endblock %}

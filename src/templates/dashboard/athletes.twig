@@ -4,6 +4,13 @@
 {% set athletes_create_permission = user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
 {% set athletes_delete_permission = user_permissions.permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
 {% set profile_visible_permission = user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
 <div class="px-3 py-4">
     <div class="container-fluid">
         {% if athletes_visible_permission %}
@@ -85,27 +92,24 @@
                         <ul class="nav nav-tabs mb-1">
                             <li class="nav-item">
                                 <a role="button" class="nav-link {% if status == "all" %}active{% endif %}"
-                                   data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                                   href="/dashboard/athletes/all">All</a>
                             </li>
                             <li class="nav-item">
                                 <a role="button" class="nav-link {% if status == "verified-videos" %}active{% endif %}"
-                                   data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
+                                   href="/dashboard/athletes/verified-videos">Videos
                                     Verified</a>
                             </li>
                             <li class="nav-item">
                                 <a role="button"
                                    class="nav-link {% if status == "verified-speakers" %}active{% endif %}"
-                                   data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
+                                   href="/dashboard/athletes/verified-speakers">Speaker
                                     Verified</a>
                             </li>
                             {% if user.user_group_id == "1" %}
                                 <li>
                                     <a role="button"
                                        class="nav-link {% if status == "completed-reports" %}active{% endif %}"
-                                       data-toggle="tab"
-                                       onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
+                                       href="/dashboard/athletes/completed-reports">Report
                                         Complete</a>
                                 </li>
                             {% endif %}
@@ -243,7 +247,7 @@
                         {
                             "title": "Status",
                             "render": function (data, type, row) {
-                                return `<button class="btn btn-soft-green" onclick="loadPage('/api/athlete/${row.id}', 'content')"> Profile </button>`
+                                return `<a class="btn btn-soft-green" href="/athlete/${row.id}"> Profile </a>`
                             }
                         },
                     {% endif %}
@@ -262,6 +266,7 @@
                 processing: true,
                 serverSide: true,
             });
+            teamQNavSetActive($('#athleteLink')[0]);
         });
 
         {% if athletes_delete_permission %}
@@ -273,5 +278,8 @@
                 }
             }
         {% endif %}
+
+
     </script>
 {% endif %}
+{% endblock %}
