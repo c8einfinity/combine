@@ -4,39 +4,46 @@
 {% set user_groups_create_permission = user_permissions.permissions.User_Groups.create == "1" or user.user_group_id == "1" %}
 {% set user_groups_edit_permission = user_permissions.permissions.User_Groups.edit == "1" or user.user_group_id == "1" %}
 {% set user_groups_delete_permission = user_permissions.permissions.User_Groups.delete == "1" or user.user_group_id == "1" %}
-<div class="container-fluid">
-    {% if user_groups_visible_permission %}
-        <div class="card">
-            <div class="card-body p-4">
-                <div class="row">
-                    <div class="col-10">
-                        <h3 class="text-anton pb-2 text-uppercase mb-0">User Groups</h3>
-                    </div>
-                    {% if user_groups_create_permission %}
-                        <div class="col-2">
-                            <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
-                                    onclick="getUserGroupAddFormModal()">
-                                + Add User Group
-                            </button>
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
+    <div class="container-fluid">
+        {% if user_groups_visible_permission %}
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-10">
+                            <h3 class="text-anton pb-2 text-uppercase mb-0">User Groups</h3>
                         </div>
-                    {% endif %}
-                </div>
-                <hr class="hor-line-gradient"/>
-                <div class="content" style="height: fit-content">
-                    <div class="table-responsive">
-                        <table id="user-groups-grid" class="table text-black m-0" style="width: 100%">
-                            <thead>
-                            <!-- table details filled in completely by data tables -->
-                            </thead>
-                        </table>
+                        {% if user_groups_create_permission %}
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="getUserGroupAddFormModal()">
+                                    + Add User Group
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <hr class="hor-line-gradient"/>
+                    <div class="content" style="height: fit-content">
+                        <div class="table-responsive">
+                            <table id="user-groups-grid" class="table text-black m-0" style="width: 100%">
+                                <thead>
+                                <!-- table details filled in completely by data tables -->
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="message"></div>
-        <div id="form"></div>
-    {% endif %}
-</div>
+            <div id="message"></div>
+            <div id="form"></div>
+        {% endif %}
+    </div>
 {% if user_groups_visible_permission %}
     <script>
         if (typeof userGroupsGrid === 'undefined') {
@@ -102,6 +109,7 @@
                 processing: true,
                 serverSide: true
             });
+            teamQNavSetActive($('#userGroupsLink')[0]);
         });
 
         {% if user_groups_create_permission %}
@@ -141,3 +149,4 @@
         {% endif %}
     </script>
 {% endif %}
+{% endblock %}

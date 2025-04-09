@@ -53,6 +53,63 @@
     </div>
 
 {% endblock %}
+<script>
+    // Modified teamQNavSetActive function
+    function teamQNavSetActive(element, initialLoad = false) {
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Add active class to clicked item's parent
+        element.parentElement.classList.add('active');
+
+        // Store both the active tab ID and page URL in localStorage
+        if (!initialLoad) {
+            localStorage.setItem('activeNavItem', element.id);
+            const urlMatch = element.getAttribute('onclick').match(/loadPage\('([^']+)'/);
+            if (urlMatch && urlMatch[1]) {
+                localStorage.setItem('lastActivePage', urlMatch[1]);
+            }
+        }
+    }
+
+    // On page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const activeNavId = localStorage.getItem('activeNavItem');
+        const lastActivePage = localStorage.getItem('lastActivePage');
+
+        // If we have a stored page
+        if (lastActivePage) {
+            // Find the corresponding nav item
+            const navLinks = document.querySelectorAll('.nav-link');
+            let foundLink = null;
+
+            navLinks.forEach(link => {
+                const onclickContent = link.getAttribute('onclick');
+                if (onclickContent && onclickContent.includes(lastActivePage)) {
+                    foundLink = link;
+                }
+            });
+
+            if (foundLink) {
+                // Set the tab as active
+                teamQNavSetActive(foundLink, true);
+                // Load the stored page
+                loadPage(lastActivePage, 'content');
+                return;
+            }
+        }
+
+        // If no stored page found, do nothing (leave as current page)
+        if (activeNavId) {
+            const activeElement = document.getElementById(activeNavId);
+            if (activeElement) {
+                teamQNavSetActive(activeElement, true);
+            }
+        }
+    });
+</script>
 <div class="version">1.1.16</div>
 </body>
 </html>

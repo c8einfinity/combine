@@ -3,6 +3,13 @@
 {% set queue_visible_permission = user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
 {% set queue_edit_permission = user_permissions.permissions.Queue.edit == "1" or user.user_group_id == "1" %}
 {% set queue_delete_permission = user_permissions.permissions.Queue.delete == "1" or user.user_group_id == "1" %}
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
 <div class="px-3 py-4">
     <div class="content container-fluid">
         <h3 class="text-anton text-black pb-2">Transcription Queue</h3>
@@ -72,6 +79,7 @@
                 "processing": true,
                 "serverSide": true,
             });
+            teamQNavSetActive($('#queueLink')[0]);
         });
 
         {% if queue_delete_permission %}
@@ -114,3 +122,4 @@
         {% endif %}
     </script>
 {% endif %}
+{% endblock %}
