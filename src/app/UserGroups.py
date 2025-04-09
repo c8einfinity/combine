@@ -233,9 +233,30 @@ class UserGroups:
 
             for permission in UserGroups.get_user_group_permissions(user_group):
                 access_point = permission["access_point"]
-                permission_entry = ", ".join("{}={}".format(*i) for i in permission["permissions"].items())
+                permission_entries = []
 
-                permission_string += f"&bull; <b>{access_point}:</b> {permission_entry}</br>"
+                for key, value in permission["permissions"].items():
+                    # Determine color based on value (now properly handling string values)
+                    if str(value) == "0":
+                        color = "red"
+                    elif str(value) == "1":
+                        color = "green"
+                    else:
+                        color = "orange"
+
+                    permission_entries.append(
+                        f'<div style="display: inline-block; margin-right: 10px;">'
+                        f'<div style="display: inline-block; font-weight: bold;">{key}:</div> '
+                        f'<div style="display: inline-block; color: {color};">{value}</div>'
+                        f'</div>'
+                    )
+
+                permission_string += (
+                    f'<div style="margin-bottom: 8px;">'
+                    f'<div style="font-weight: bold; display: inline-block; min-width: 150px;">{access_point}:</div> '
+                    f'{"".join(permission_entries)}'
+                    f'</div>'
+                )
 
             user_group["permissions"] = permission_string
 

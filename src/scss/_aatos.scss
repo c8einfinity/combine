@@ -1,5 +1,5 @@
 $blue: #3579EB;
-$green: #7DC037;
+$green: #9AC750;
 $soft-green: #DAFC90;
 $navy: #002839;
 
@@ -122,6 +122,14 @@ $navy: #002839;
 
   .result-grading-heading {
     font-family: "Inter", sans-serif;
+
+    div:first-child {
+      color: $green !important;
+    }
+
+    div:last-child {
+      color: #315E98 !important;
+    }
   }
 
   .result-traits-container {

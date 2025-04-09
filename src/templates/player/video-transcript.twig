@@ -2,7 +2,7 @@
     {% set user = request.session.get("user") %}
     {% set user_permissions = request.session.get("user_permissions") %}
     {% set videos_edit_permission = user_permissions.permissions.Videos.edit == "1" or user.user_group_id == "1" %}
-    <h3 class="text-anton text-black pb-2 text-uppercase text-nowrap text-truncate">Video Transcript
+    <h3 class="text-anton pb-2 text-uppercase text-nowrap text-truncate">Video Transcript
         - {{ video.title }}</h3>
 
     {% if transcripts %}
