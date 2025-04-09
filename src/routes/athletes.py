@@ -5,6 +5,8 @@ import hashlib
 import os
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
+
+from tina4_python import Debug
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
@@ -62,11 +64,8 @@ async def get_athletes(request, response):
     # loop through the players and get the transcribe stats
     for player in data["data"]:
         player["transcript_stats"] = player_transcript_stats(player["id"])
-        # player["transcript_stats"] = {"total_media": 0, "total_transcribed": 0, "total_verified": 0}
         player["completed_bio"] = player_bio_complete(player["id"])
-        # player["completed_bio"] = False
         player["report_sent"] = player_report_sent(player["id"])
-        # player["report_sent"] = False
         # Return only the date, Y-m-d format
         player["date_of_birth"] = player["date_of_birth"].split("T")[0]
 
@@ -834,3 +833,37 @@ async def post_transcript_verified(request, response):
     player_transcript.save()
 
     return response("Done!")
+
+@get("/athletes/athlete-template.csv")
+async def get_athletes_csv_template(request, response):
+    """
+    Returns the csv template for importing athletes
+    :param request:
+    :param response:
+    :return:
+    """
+    csv_template = "first_name,last_name,sport,position,team\n"
+    return response(csv_template, 200, "text/csv", headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
+
+@post("/api/athletes/import-csv")
+async def post_import_csv(request, response):
+    """
+    Get the file upload from request and import the csv data
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..app.Player import import_csv_player_data
+
+    if "importCsv" not in request.body:
+        return response("No file found", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
+    # decode file contents
+    file_content = base64.b64decode(request.body["importCsv"]["content"]).decode('utf-8')
+    import_count = import_csv_player_data(str(file_content))
+
+    if import_count > 0:
+        return response("Imported "+str(import_count)+" players")
+    Debug.error("No players imported")
+
+    return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)
