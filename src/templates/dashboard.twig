@@ -12,11 +12,9 @@
     <div id="content" class="mt-4 my-4"></div>
     <script>
         {% if home_visible_permission %}
-        loadPage('/dashboard/home', 'content');
-        teamQNavSetActive($('#homeLink')[0]);
+        window.location.href = '/dashboard/home';
         {% else %}
-        loadPage("{{ user_permissions.landing_page_url }}", 'content');
-        teamQNavSetActive($("#{{ user_permissions.landing_page_nav_element_id }}")[0]);
+        window.location.href = "{{ user_permissions.landing_page_url }}";
         {% endif %}
 
         {# const socket = new ReconnectingWebSocket("ws://{{ request.headers.host }}/websocket/feed"); #}
