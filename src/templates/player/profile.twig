@@ -6,6 +6,7 @@
 {% set videos_visible_permission = user_permissions.permissions.Videos.visible == "1" or user.user_group_id == "1" %}
 {% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
 {% set playerq_visible_permission = user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
+{% extends "base.twig" %}
 {% block navigation %}
     {%  include "snippets/navigation.twig" %}
 {% endblock %}
