@@ -195,7 +195,7 @@ async def get_receptiviti_export(request, response):
 
 
 
-@get("/api/athlete/{id}")
+@get("/athlete/{id}")
 async def get_athlete(request, response):
     """
     :param request:

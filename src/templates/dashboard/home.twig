@@ -1,6 +1,13 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
 {% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
 <main class="container-fluid">
     <div class="mb-4">
         <h3 class="text-body text-uppercase">Overview</h3>
@@ -72,4 +79,10 @@
             </div>
         </div>
     {% endif %}
+    <script>
+    $(document).ready(function () {
+        teamQNavSetActive($('#homeLink')[0]);
+    });
+    </script>
 </main>
+{% endblock %}

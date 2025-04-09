@@ -4,6 +4,13 @@
 {% set users_create_permission = user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
 {% set users_edit_permission = user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
 {% set users_delete_permission = user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
 <div class="px-3 py-4">
     <div class="container-fluid">
         {% if users_visible_permission %}
@@ -216,6 +223,7 @@
                 processing: true,
                 serverSide: true
             });
+            teamQNavSetActive($('#usersLink')[0]);
         });
 
         {% if users_edit_permission %}
@@ -241,3 +249,4 @@
         {% endif %}
     </script>
 {% endif %}
+{% endblock %}

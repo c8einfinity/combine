@@ -1,47 +1,82 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light pb-3">
-    <a class="navbar-brand" href="#">
-        <img src="/images/logos/TeamQ_navy.svg" height="auto" width="250px" alt="PlayerQ Logo" class="img-fluid"/>
+{% set user = request.session.get("user") %}
+{% set user_permissions = request.session.get("user_permissions") %}
+{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+{% set athletes_visible_permission = user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
+{% set users_visible_permission = user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
+{% set user_groups_visible_permission = user_permissions.permissions.User_Groups.visible == "1" or user.user_group_id == "1" %}
+{% set queue_visible_permission = user_permissions.permissions.Queue.visible == "1" or user.user_group_id == "1" %}
+{% set receptiviti_csv_visible_permission = user_permissions.permissions.Receptiviti_CSV.visible == "1" or user.user_group_id == "1" %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+    <a class="navbar-brand" href="/dashboard">
+        <img src="/images/logos/qfinder-logo-dark.svg" class="img-fluid ml-3 mr-0 mr-md-4" alt="QFinder Logo"/>
     </a>
-    <button class="navbar-toggler border-0" type="button" data-toggle="collapse"
-            data-target="#navbar-content" aria-controls="navbar-content"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <img class="avatar mr-2" src="/images/avatar.svg" alt="Avatar"/>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/system/dashboard">Dashboard</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/users/landing">Users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/roles/landing">Roles</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/templates/landing">Templates</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/transactions/landing">Transactions</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/pricing/landing">Pricing</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/system/organization/landing">Organization</a>
+        <ul class="navbar-nav mr-auto mt-3 mt-lg-0">
+            {% if home_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="homeLink" role="button" title="Home"
+                       href="/dashboard/home">Home<span
+                                class="sr-only">(current)</span></a>
+                </li>
+            {% endif %}
+            {% if athletes_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="athleteLink" role="button" title="Athletes"
+                       href="/dashboard/athletes/all">Athletes</a>
+                </li>
+            {% endif %}
+            {% if users_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="usersLink" role="button" title="Users"
+                       href="/api/users/landing">Users</a>
+                </li>
+            {% endif %}
+            {% if user_groups_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="userGroupsLink" role="button" title="User Groups"
+                       href="/api/user_groups/landing">
+                        User Groups
+                    </a>
+                </li>
+            {% endif %}
+            {% if queue_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="queueLink" role="button" title="Queue"
+                       href="/dashboard/queue">Queue</a>
+                </li>
+            {% endif %}
+            {% if receptiviti_csv_visible_permission %}
+                <li class="nav-item mx-1">
+                    <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" id="receptivitiCsvLink" href="/api/receptiviti/export"
+                       target="_blank" title="Receptivi CSV">
+                        Receptivi CSV
+                    </a>
+                </li>
+            {% endif %}
+            <li class="nav-item mx-1 d-block d-lg-none">
+                <a class="nav-link px-4 py-2 px-lg-3 py-lg-1" href="/logout" title="Logout">Logout</a>
             </li>
         </ul>
-
         <div class="dropdown">
-            <button type="button"
-                    class="btn dropdown-toggle bg-transparent border-0 text-black font-weight-bold"
-                    data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false"><img class="avatar mr-2" src="/images/avatar.svg" alt="Avatar"/>John Doe
-            </button>
+            <div class="d-lg-block d-none">
+                <button type="button"
+                        class="btn dropdown-toggle bg-transparent border-0 text-black font-weight-bold"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
 
-            <div class="dropdown-menu">
-                <a class="dropdown-item text-black" href="/logout">Logout</a>
+                    <img class="avatar-default mr-2" src="/images/avatar.svg" alt="Avatar"/>
+                    {{ user.first_name }} {{ user.last_name }}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+
+                    <a class="dropdown-item text-black" href="/logout">
+                        <i class="fa-solid fa-right-from-bracket pr-2"></i>Logout
+                    </a>
+                </div>
             </div>
         </div>
     </div>
