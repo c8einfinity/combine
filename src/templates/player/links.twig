@@ -3,18 +3,18 @@
 {% set links_visible_permission = user_permissions.permissions.Links.visible == "1" or user.user_group_id == "1" %}
 {% set links_create_permission = user_permissions.permissions.Links.create == "1" or user.user_group_id == "1" %}
 {% set links_delete_permission = user_permissions.permissions.Links.delete == "1" or user.user_group_id == "1" %}
-<h5 class="text-anton text-black">Links</h5>
+<h3 class="text-uppercase mt-4">Links</h3>
 {% if links_visible_permission %}
     {% if links_create_permission %}
         <form id="linkDetails" onsubmit="return false">
             <input type="hidden" name="player_id" value="{{ player_id }}">
             <div class="row">
-                <div class="col-8 form-group">
-                    <label for="linkUrl">Link Url</label>
+                <div class="col-12 col-lg-8 form-group">
+                    <label class="font-weight-bold" for="linkUrl">Link Url</label>
                     <input class="form-control" id="linkUrl" name="url" placeholder="https://...">
                 </div>
-                <div class="col form-group">
-                    <label for="mediaType">Link Type</label>
+                <div class="col-12 col-lg form-group">
+                    <label class="font-weight-bold" for="mediaType">Link Type</label>
                     <select class="form-control" id="mediaType" name="mediaType">
                         <option value="video-youtube">YouTube</option>
                         <option value="link-bio">Bio Link</option>
@@ -22,9 +22,10 @@
                         <option value="link-generic">Generic Link</option>
                     </select>
                 </div>
-                <div class="col-2 pt-4">
-                    <button class="btn btn-soft-green mt-2 w-100" onclick="addLink()">
-                        Add
+                <div class="col-12 col-lg-2">
+                    <label class="d-none d-lg-block">&nbsp;</label>
+                    <button class="btn btn-soft-green w-100 btn-text-lg" onclick="addLink()">
+                        Add +
                     </button>
                 </div>
             </div>
@@ -32,12 +33,14 @@
     {% endif %}
     <div id="linkMessage"></div>
     <hr class="hor-line-gradient"/>
-    <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-        <table id="links-grid" class="table text-black m-0" style="width: 100%">
-            <thead>
-            <!-- table details filled in completely by data tables -->
-            </thead>
-        </table>
+    <div class="content mt-4" style="height: fit-content">
+        <div class="table-responsive">
+            <table id="links-grid" class="table text-black m-0" style="width: 100%">
+                <thead>
+                <!-- table details filled in completely by data tables -->
+                </thead>
+            </table>
+        </div>
         <script>
             var linksGrid = null
             $(document).ready(function () {
@@ -48,20 +51,21 @@
                         {
                             "title": "Link Url",
                             "render": function (data, type, row) {
-                                return `<a href="${row.url}" target="_blank">${row.url}</a>`
+                                return `<a href="${row.url}" target="_blank" class='text-black'><u>${row.url}</u></a>`
                             }
                         },
                         {
                             "title": "Link Type",
-                            data: 'media_type'
+                            data: 'media_type',
                         },
                         {% if links_delete_permission %}
-                            {
-                                "title": "Status",
-                                "render": function (data, type, row) {
-                                    return `<button class="btn btn-soft-green" onclick="deleteLink(${row.id})"> Delete </button>`
-                                }
+                        {
+                            "title": "Actions",
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                return `<button class="btn btn-outline-light text-black" onclick="deleteLink(${row.id})"><i class="fas fa-trash"></i></button>`
                             }
+                        }
                         {% endif %}
                     ],
                     language: {
@@ -73,22 +77,22 @@
             });
 
             {% if links_create_permission %}
-                function addLink() {
-                    submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function () {
-                        linksGrid.ajax.reload();
-                    });
+            function addLink() {
+                submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function () {
+                    linksGrid.ajax.reload();
+                });
 
-                }
+            }
             {% endif %}
 
             {% if links_delete_permission %}
-                function deleteLink(link_id) {
-                    if (confirm("Delete Link ?")) {
-                        deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function () {
-                            linksGrid.ajax.reload();
-                        })
-                    }
+            function deleteLink(link_id) {
+                if (confirm("Delete Link ?")) {
+                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function () {
+                        linksGrid.ajax.reload();
+                    })
                 }
+            }
             {% endif %}
         </script>
     </div>

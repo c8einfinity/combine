@@ -6,8 +6,8 @@
 
 $white: #fff !default;
 $gray-100: #F9F9F9 !default;
-$gray-200: #eaecf4 !default;
-$gray-300: #dddfeb !default;
+$gray-200: #f8f9fa !default;
+$gray-300: #D9D9D9 !default;
 $gray-400: #d1d3e2 !default;
 $gray-500: #b7b9cc !default;
 $gray-600: #858796 !default;
@@ -31,11 +31,13 @@ $cyan: #36b9cc !default;
 $primary: $blue !default;
 $secondary: $gray-600 !default;
 $success: $green !default;
+$success-light: #F5FAEE !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-300 !default;
-$dark: #454545 !default;
+$lighter: $gray-100 !default;
+$dark: $black !default;
 
 $border-radius: 4px !default;
 
@@ -107,7 +109,25 @@ $pagination-color: $black !default;
 .table.dataTable.table {
   width: 100%;
   border-top: 1px solid rgb(227, 230, 240);
-  margin-top: 20px;
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
   border-bottom: 1px solid rgb(227, 230, 240);
-  margin-bottom: 20px;
 }
+
+div.dt-processing>div:last-child>div {
+  background: $black !important;
+}
+
+div.dt-container div.dt-info {
+  white-space: nowrap;
+  opacity: .3;
+}
+
+// Progress bar
+$progress-bg: $gray-300 !default;
+
+// Border radius
+$border-radius-lg: .4rem !default;
+
+// Checkboxes
+$custom-control-indicator-checked-bg: $green !default;
