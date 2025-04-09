@@ -7,66 +7,73 @@
 <div class="container-fluid">
     {% if athletes_visible_permission %}
         {% if athletes_create_permission %}
-            <div class="card mb-4">
-                <div class="card-body p-4">
-                    <h3 class="text-anton text-black pb-2 text-uppercase">Add Athlete</h3>
-                    <hr class="hor-line-gradient"/>
-                    <form id="athlete" method="post" onsubmit="return false;">
-                        <div class="row">
-                            <div class="col-12 col-md-6 col-lg form-group">
-                                <label for="firstName" class="font-weight-bold">First Name</label>
-                                <input type="text" class="form-control" name="firstName" id="firstName"
-                                       placeholder="First Name">
-                            </div>
-                            <div class="col-12 col-md-6 col-lg form-group">
-                                <label for="lastName" class="font-weight-bold">Last Name</label>
-                                <input type="text" class="form-control" name="lastName" id="lastName"
-                                       placeholder="Last Name">
-                            </div>
-                            <div class="col-12 col-md-6 col-lg form-group">
-                                <label for="sport" class="font-weight-bold">Sport</label>
-                                <select class="form-control" name="sport" id="sport">
-                                    <option>Football</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg form-group">
-                                <label class="d-none d-md-block">&nbsp;</label>
-                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
-                                        onclick="addAthlete()">
-                                    Add +
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                    <div id="formMessage"></div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h3 class="text-anton text-maastricht-blue py-2">IMPORT FROM CSV</h3>
-                        </div>
-                        <div class="col">
-                            <a href="/athletes/athlete-template.csv" class="btn btn-outline-dark">Download Template</a>
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body p-4">
+                            <h3 class="text-anton text-black pb-2 text-uppercase">Add Athlete</h3>
+                            <hr class="hor-line-gradient"/>
+                            <form id="athlete" method="post" onsubmit="return false;">
+                                <div class="row">
+                                    <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
+                                        <label for="firstName" class="font-weight-bold">First Name</label>
+                                        <input type="text" class="form-control" name="firstName" id="firstName"
+                                               placeholder="First Name">
+                                    </div>
+                                    <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
+                                        <label for="lastName" class="font-weight-bold">Last Name</label>
+                                        <input type="text" class="form-control" name="lastName" id="lastName"
+                                               placeholder="Last Name">
+                                    </div>
+                                    <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
+                                        <label for="sport" class="font-weight-bold">Sport</label>
+                                        <select class="form-control" name="sport" id="sport">
+                                            <option>Football</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
+                                        <label class="d-none d-md-block">&nbsp;</label>
+                                        <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                                onclick="addAthlete()">
+                                            Add +
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="formMessage"></div>
                         </div>
                     </div>
-                    <hr class="hor-line-gradient"/>
-                    <form id="csvImport" method="post" onsubmit="return false;">
-                        <div class="row">
-                            <div class="col form-group">
-                                <label for="importCsv">Select CSV File</label>
-                                <input type="file" class="form-control-file" name="importCsv" id="importCsv" accept="text/csv">
+                </div>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <h3 class="text-uppercase mb-0">Import from CSV</h3>
+                                <a href="/athletes/athlete-template.csv" class="btn btn-outline-dark btn-sm"><i
+                                            class="fa-solid fa-upload mr-2"></i>Download
+                                    Template</a>
                             </div>
-                            <div class="col-12 col-md-2 pt-4">
-                                <button type="submit" class="btn btn-soft-green rounded-0 mt-2 w-100"
-                                        onclick="doImportCsv()">
-                                    Upload
-                                </button>
-                            </div>
+
+                            <hr class="hor-line-gradient mt-4"/>
+                            <form id="csvImport" method="post" onsubmit="return false;">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="mr-3 w-100">
+                                        <label class="font-weight-bold" for="importCsv">Select CSV File</label>
+                                        <input type="file" class="custom-file-upload" name="importCsv" id="importCsv"
+                                               accept="text/csv">
+                                    </div>
+                                    <div>
+                                        <label class="d-none d-lg-block">&nbsp;</label>
+                                        <button type="submit" class="btn btn-soft-green btn-text-lg"
+                                                onclick="doImportCsv()">
+                                            Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div id="formImportMessage"></div>
                         </div>
-                    </form>
-                    <div id="formImportMessage"></div>
+                    </div>
                 </div>
             </div>
         {% endif %}
@@ -107,7 +114,8 @@
                         {% endif %}
                     </ul>
                     <div class="table-responsive">
-                        <table id="athletes-grid" class="table" style="width: 100%; border-top: 1px solid #e3e6f0; margin-top: 20px;">
+                        <table id="athletes-grid" class="table"
+                               style="width: 100%; border-top: 1px solid #e3e6f0; margin-top: 20px;">
                             <thead>
                             <!-- table details filled in completely by data tables -->
                             </thead>
@@ -124,33 +132,34 @@
         var athletesGrid = null;
 
         {% if athletes_create_permission %}
-            function addAthlete() {
-                if (document.forms[0].firstName.value == '') {
-                    $('#formMessage').html(`<div class="alert alert-danger">First Name is required</div>`);
-                    document.forms[0].firstName.focus();
-                    return;
-                }
+        function addAthlete() {
+            if (document.forms[0].firstName.value == '') {
+                $('#formMessage').html(`<div class="alert alert-danger">First Name is required</div>`);
+                document.forms[0].firstName.focus();
+                return;
+            }
 
-                if (document.forms[0].lastName.value == '') {
-                    $('#formMessage').html(`<div class="alert alert-danger">Last Name is required</div>`);
-                    document.forms[0].lastName.focus();
-                    return;
-                }
+            if (document.forms[0].lastName.value == '') {
+                $('#formMessage').html(`<div class="alert alert-danger">Last Name is required</div>`);
+                document.forms[0].lastName.focus();
+                return;
+            }
 
-                $('#formMessage').html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-black pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+            $('#formMessage').html(`<div class="text-center" style="position: absolute; width: 100vw; height: 100vh; z-index: 200;"><h5 class="text-anton text-black pb-2">Adding ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                     <span class="sr-only text-black">Adding ...</span>
                 </div></div>`)
 
-                submitForm("athlete", "/api/athletes", "", function (data) {
-                    document.forms[0].firstName.value = '';
-                    document.forms[0].lastName.value = '';
-                    athletesGrid.ajax.reload();
-                    $('#formMessage').html(``);
-                });
-            }
-            function doImportCsv() {
-                submitForm("csvImport", "/api/athletes/import-csv", "formImportMessage");
-            }
+            submitForm("athlete", "/api/athletes", "", function (data) {
+                document.forms[0].firstName.value = '';
+                document.forms[0].lastName.value = '';
+                athletesGrid.ajax.reload();
+                $('#formMessage').html(``);
+            });
+        }
+
+        function doImportCsv() {
+            submitForm("csvImport", "/api/athletes/import-csv", "formImportMessage");
+        }
         {% endif %}
 
         function getStatStatusClass(status) {
@@ -271,13 +280,13 @@
         });
 
         {% if athletes_delete_permission %}
-            function deleteAthlete(id) {
-                if (confirm("Delete Athlete ?")) {
-                    deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
-                        athletesGrid.ajax.reload();
-                    })
-                }
+        function deleteAthlete(id) {
+            if (confirm("Delete Athlete ?")) {
+                deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
+                    athletesGrid.ajax.reload();
+                })
             }
+        }
         {% endif %}
     </script>
 {% endif %}
