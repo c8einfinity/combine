@@ -18,6 +18,8 @@
     --ff-anton: Anton, Arial, Helvetica, sans-serif;
 }
 
+$gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
+
 /* GENERAL STYLES */
 * {
     box-sizing: border-box;
@@ -412,11 +414,6 @@ body {
 }
 
 /* ORGANIZATION SCREEN */
-.content {
-    background: #ffffff;
-    border-radius: 20px;
-    height: fit-content;
-}
 
 .table-add .add-btn,
 .system-manage-btn-add .btn,
