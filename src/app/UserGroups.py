@@ -7,6 +7,7 @@ from ..app.Utility import get_data_tables_filter
 from tina4_python.Constant import HTTP_OK, HTTP_SERVER_ERROR, TEXT_PLAIN, APPLICATION_JSON
 from tina4_python.Template import Template
 
+
 class UserGroups:
     @staticmethod
     def get_user_group_data():
@@ -236,27 +237,28 @@ class UserGroups:
                 permission_entries = []
 
                 for key, value in permission["permissions"].items():
-                    # Determine color based on value (now properly handling string values)
-                    if str(value) == "0":
-                        color = "red"
-                    elif str(value) == "1":
-                        color = "green"
-                    else:
-                        color = "orange"
+                    # Skip entirely if value is '-'
+                    if str(value) == "-":
+                        continue
+
+                    # Determine color based on value
+                    color = "bg-success" if str(value) == "1" else "bg-danger"
 
                     permission_entries.append(
-                        f'<div style="display: inline-block; margin-right: 10px;">'
-                        f'<div style="display: inline-block; font-weight: bold;">{key}:</div> '
-                        f'<div style="display: inline-block; color: {color};">{value}</div>'
+                        f'<div class="mr-3 d-inline-block font-weight-bold text-nowrap" style="font-size: 0.7rem;">'
+                        f'<div class="bg-dark d-inline-block text-white text-capitalize py-1 px-2 rounded-left">{key}</div> '
+                        f'<div class="{color} d-inline-block text-white text-capitalize py-1 px-2 rounded-right" style="margin-left: -3px;">{value}</div>'
                         f'</div>'
                     )
 
-                permission_string += (
-                    f'<div style="margin-bottom: 8px;">'
-                    f'<div style="font-weight: bold; display: inline-block; min-width: 150px;">{access_point}:</div> '
-                    f'{"".join(permission_entries)}'
-                    f'</div>'
-                )
+                # Only add if there are visible permissions
+                if permission_entries:
+                    permission_string += (
+                        f'<div class="text-nowrap my-1">'
+                        f'<div style="font-weight: bold; display: inline-block; min-width: 150px;">{access_point}:</div> '
+                        f'{"".join(permission_entries)}'
+                        f'</div>'
+                    )
 
             user_group["permissions"] = permission_string
 
