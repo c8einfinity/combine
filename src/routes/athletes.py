@@ -15,7 +15,6 @@ from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image
 from .. import dba
-from itertools import groupby
 
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
@@ -867,3 +866,8 @@ async def post_import_csv(request, response):
     Debug.error("No players imported")
 
     return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
+@post("/api/athletes/send-results")
+def post_send_results(request, response):
+    # player_ids = [1,2,3]
+    return response("Done!")

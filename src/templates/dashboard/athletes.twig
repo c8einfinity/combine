@@ -127,6 +127,7 @@
                             <!-- table details filled in completely by data tables -->
                             </thead>
                         </table>
+                        <button class="py-1 px-2 btn mr-2 text-soft-green text-inter download-btn">Submit Reports</button>
                     </div>
                     <div id="message"></div>
                 </div>
@@ -186,9 +187,17 @@
 
         $(document).ready(function () {
             athletesGrid = $("#athletes-grid").DataTable({
+                select: {
+                    style: 'multi',
+                },
                 dom: '',
                 ajax: "/api/athletes/{{ status }}",
                 columns: [
+                    {
+                        'targets': 0,
+                        orderable: false,
+                        render:DataTable.render.select()
+                    },
                     {
                         title: "Player Id",
                         data: "id",
