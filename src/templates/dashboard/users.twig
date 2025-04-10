@@ -67,13 +67,11 @@
                 <h3 class="text-anton pb-2 text-uppercase">Users</h3>
                 <hr class="hor-line-gradient"/>
                 <div class="content" style="height: fit-content">
-                    <div class="table-responsive">
-                        <table id="users-grid" class="table text-black m-0" style="width: 100%">
+                        <table id="users-grid" class="table text-black m-0 responsive nowrap" style="">
                             <thead>
                             <!-- table details filled in completely by data tables -->
                             </thead>
                         </table>
-                    </div>
                 </div>
             </div>
         </div>
@@ -157,6 +155,11 @@
             usersGrid = $("#users-grid").DataTable({
                 dom: "",
                 ajax: "/api/users",
+                columnDefs: [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }],
+                responsive: true,
                 columns: [
                     {
                         "title": "ID",

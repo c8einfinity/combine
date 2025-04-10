@@ -40,6 +40,16 @@
   margin: 0 2rem;
 }
 
+.truncate-table-link {
+  @media (max-width: 375px) {
+    max-width: 224px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}
+
 .priority-selector {
   position: absolute;
   background-color: $gray-500;
