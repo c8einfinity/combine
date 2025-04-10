@@ -18,7 +18,7 @@
                 <div class="col-12 col-md-6 col-lg-8">
                     <div class="card mb-4">
                         <div class="card-body p-4">
-                            <h3 class="text-anton text-black pb-2 text-uppercase">Add Athlete</h3>
+                            <h3 class="text-anton pb-2 text-uppercase">Add Athlete</h3>
                             <hr class="hor-line-gradient"/>
                             <form id="athlete" method="post" onsubmit="return false;">
                                 <div class="row">
@@ -86,36 +86,29 @@
         {% endif %}
         <div class="card">
             <div class="card-body p-4">
-                <h3 class="text-anton text-black pb-2 text-uppercase">Athletes</h3>
+                <h3 class="text-anton pb-2 text-uppercase">Athletes</h3>
                 <hr class="hor-line-gradient"/>
                 <div class="content" style="height: fit-content">
                     <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
                     <ul class="nav nav-tabs mb-4">
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
-                               data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                            <a class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
+                               href="/dashboard/athletes/all">All</a>
                         </li>
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
-                               data-toggle="tab"
-                               onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
+                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
+                               href="/dashboard/athletes/verified-videos">Videos
                                 Verified</a>
                         </li>
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
-                               data-toggle="tab"
-                               onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
+                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
+                               href="/dashboard/athletes/verified-speakers">Speaker
                                 Verified</a>
                         </li>
                         {% if user.user_group_id == "1" %}
                             <li>
-                                <a role="button"
-                                   class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
-                                   data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
+                                <a class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
+                                   href="/dashboard/athletes/completed-reports">Report
                                     Complete</a>
                             </li>
                         {% endif %}
@@ -271,15 +264,15 @@
                         searchable: false,
                         render: function (data, type, row) {
                             let html = '<div class="d-flex" style="grid-gap: 0.5rem;">';
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+                            html += `<div class="d-flex text-white" style="font-size: 0.7rem; font-weight: bold;">
     <span class="bg-dark rounded-left p-1">Media</span>
     <span class="${getStatStatusClass(row.transcript_stats.total_media > 0 ? 100 : 0)} rounded-right p-1">${row.transcript_stats.total_media}</span>
 </div>`;
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+                            html += `<div class="d-flex text-white" style="font-size: 0.7rem; font-weight: bold;">
     <span class="bg-dark rounded-left p-1">Videos Verified</span>
     <span class="${getStatStatusClass(Math.round((row.transcript_stats.valid_media / row.transcript_stats.total_media) * 100))} rounded-right p-1">${row.transcript_stats.valid_media}</span>
 </div>`;
-                            html += `<div class="d-flex text-white" style="font-size: 0.6rem; font-weight: bold;">
+                            html += `<div class="d-flex text-white" style="font-size: 0.7rem; font-weight: bold;">
     <span class="bg-dark rounded-left p-1">Speaker Verified</span>
     <span class="${getStatStatusClass(Math.round((row.transcript_stats.processed / row.transcript_stats.valid_media) * 100))} rounded-right p-1">${row.transcript_stats.processed}</span>
 </div>`;
