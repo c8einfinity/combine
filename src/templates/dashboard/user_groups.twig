@@ -11,18 +11,17 @@
 {% endblock %}
 
 {% block content_public %}
-<div class="px-3 py-4">
     <div class="container-fluid">
         {% if user_groups_visible_permission %}
             <div class="card">
-                <div class="card-body">
+                <div class="card-body p-4">
                     <div class="row">
-                        <div class="col-10">
-                            <h3 class="text-anton text-black pt-2">USER GROUPS</h3>
+                        <div class="col-12 col-lg-8 col-xl-10">
+                            <h3 class="text-anton pb-2 text-uppercase mb-0">User Groups</h3>
                         </div>
                         {% if user_groups_create_permission %}
-                            <div class="col-2">
-                                <button type="submit" class="btn btn-soft-green mt-2 w-100"
+                            <div class="col-12 col-lg-4 col-xl-2">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
                                         onclick="getUserGroupAddFormModal()">
                                     + Add User Group
                                 </button>
@@ -30,12 +29,14 @@
                         {% endif %}
                     </div>
                     <hr class="hor-line-gradient"/>
-                    <div class="content col-12" style="height: fit-content">
-                        <table id="user-groups-grid" class="table text-black m-0" style="width: 100%">
-                            <thead>
-                            <!-- table details filled in completely by data tables -->
-                            </thead>
-                        </table>
+                    <div class="content" style="height: fit-content">
+                        <div class="table-responsive">
+                            <table id="user-groups-grid" class="table text-black m-0" style="width: 100%">
+                                <thead>
+                                <!-- table details filled in completely by data tables -->
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,7 +44,6 @@
             <div id="form"></div>
         {% endif %}
     </div>
-</div>
 {% if user_groups_visible_permission %}
     <script>
         if (typeof userGroupsGrid === 'undefined') {
@@ -84,18 +84,19 @@
                         }
                     },
                     {
+                        "title": "Actions",
                         "orderable": false,
                         "render": function (data, type, row) {
                             let actions = "";
 
                             {% if user_groups_edit_permission %}
-                                actions += ` <a class="fas fa-pen-to-square mr-2" href="#" onclick="getUserGroupEditFormModal('${row.id}')"></a>`;
+                            actions += ` <a class="btn btn-outline-light text-black" href="#" onclick="getUserGroupEditFormModal('${row.id}')"><i class="fas fa-edit"></i></a>`;
                             {% endif %}
 
                             {% if user_groups_delete_permission %}
-                                if (row.id !== 0) {
-                                    actions += ` <a class="fas fa-trash float-right" href="#" onclick="deleteUserGroup(${row.id})"></a>`;
-                                }
+                            if (row.id !== 0) {
+                                actions += ` <a class="btn btn-outline-light text-black" href="#" onclick="deleteUserGroup(${row.id})"><i class="fas fa-trash"></i></a>`;
+                            }
                             {% endif %}
 
                             return actions;
@@ -112,39 +113,39 @@
         });
 
         {% if user_groups_create_permission %}
-            /**
-             * Function to get the user group form modal to add records.
-             */
-            function getUserGroupAddFormModal() {
-                showForm("edit", `/api/user_groups/form?formToken={{ formToken() }}`);
-            }
+        /**
+         * Function to get the user group form modal to add records.
+         */
+        function getUserGroupAddFormModal() {
+            showForm("edit", `/api/user_groups/form?formToken={{ formToken() }}`);
+        }
         {% endif %}
 
         {% if user_groups_edit_permission %}
-            /**
-             * Function to get the user group form modal to edit records.
-             * @param id
-             */
-            function getUserGroupEditFormModal(id) {
-                showForm("edit", `/api/user_groups/form?id=${id}&formToken={{ formToken() }}`);
-            }
+        /**
+         * Function to get the user group form modal to edit records.
+         * @param id
+         */
+        function getUserGroupEditFormModal(id) {
+            showForm("edit", `/api/user_groups/form?id=${id}&formToken={{ formToken() }}`);
+        }
         {% endif %}
 
         {% if user_groups_delete_permission %}
-            /**
-             * Function to delete a user group.
-             * @param id
-             */
-            function deleteUserGroup(id) {
-                const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will " +
-                    "be reset to the default user group."
+        /**
+         * Function to delete a user group.
+         * @param id
+         */
+        function deleteUserGroup(id) {
+            const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will " +
+                "be reset to the default user group."
 
-                if (confirm(deleteConfirmationMessage)) {
-                    deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
-                        userGroupsGrid.ajax.reload();
-                    });
-                }
+            if (confirm(deleteConfirmationMessage)) {
+                deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
+                    userGroupsGrid.ajax.reload();
+                });
             }
+        }
         {% endif %}
     </script>
 {% endif %}

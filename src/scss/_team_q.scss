@@ -178,7 +178,6 @@ body {
     text-transform: uppercase;
     background: white;
     color: var(--dark);
-    border-radius: 0 !important;
     border: 1px solid #012839;
 }
 
@@ -485,7 +484,7 @@ body {
 .gradient-separator {
     height: 2px;
     width: 100%;
-    background-image: linear-gradient(90deg, #E6ECA4 -0.86%, #9FCD56 9.29%, #489195 50.91%, #00609E 75.28%, #102D4F 92.53%, #102D4F 100.65%);
+    background-image: $gradient;
 }
 
 .form-group .error {

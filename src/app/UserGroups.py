@@ -7,6 +7,7 @@ from ..app.Utility import get_data_tables_filter
 from tina4_python.Constant import HTTP_OK, HTTP_SERVER_ERROR, TEXT_PLAIN, APPLICATION_JSON
 from tina4_python.Template import Template
 
+
 class UserGroups:
     @staticmethod
     def get_user_group_data():
@@ -233,9 +234,31 @@ class UserGroups:
 
             for permission in UserGroups.get_user_group_permissions(user_group):
                 access_point = permission["access_point"]
-                permission_entry = ", ".join("{}={}".format(*i) for i in permission["permissions"].items())
+                permission_entries = []
 
-                permission_string += f"&bull; <b>{access_point}:</b> {permission_entry}</br>"
+                for key, value in permission["permissions"].items():
+                    # Skip entirely if value is '-'
+                    if str(value) == "-":
+                        continue
+
+                    # Determine color based on value
+                    color = "bg-success" if str(value) == "1" else "bg-danger"
+
+                    permission_entries.append(
+                        f'<div class="mr-3 d-inline-block font-weight-bold text-nowrap" style="font-size: 0.7rem;">'
+                        f'<div class="bg-dark d-inline-block text-white text-capitalize py-1 px-2 rounded-left">{key}</div> '
+                        f'<div class="{color} d-inline-block text-white text-capitalize py-1 px-2 rounded-right" style="margin-left: -3px;">{value}</div>'
+                        f'</div>'
+                    )
+
+                # Only add if there are visible permissions
+                if permission_entries:
+                    permission_string += (
+                        f'<div class="text-nowrap my-1">'
+                        f'<div style="font-weight: bold; display: inline-block; min-width: 150px;">{access_point}:</div> '
+                        f'{"".join(permission_entries)}'
+                        f'</div>'
+                    )
 
             user_group["permissions"] = permission_string
 
