@@ -869,5 +869,7 @@ async def post_import_csv(request, response):
 
 @post("/api/athletes/send-results")
 def post_send_results(request, response):
-    # player_ids = [1,2,3]
+    player_ids_json = request.body["playerIds"]
+    player_ids = json.loads(player_ids_json)
+
     return response("Done!")
