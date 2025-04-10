@@ -92,30 +92,23 @@
                     <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
                     <ul class="nav nav-tabs mb-4">
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
-                               data-toggle="tab" onclick="loadPage('/dashboard/athletes/all', 'content')">All</a>
+                            <a class="nav-link font-weight-bold text-dark {% if status == "all" %}active{% endif %}"
+                               href="/dashboard/athletes/all">All</a>
                         </li>
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
-                               data-toggle="tab"
-                               onclick="loadPage('/dashboard/athletes/verified-videos', 'content')">Videos
+                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
+                               href="/dashboard/athletes/verified-videos">Videos
                                 Verified</a>
                         </li>
                         <li class="nav-item">
-                            <a role="button"
-                               class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
-                               data-toggle="tab"
-                               onclick="loadPage('/dashboard/athletes/verified-speakers', 'content')">Speaker
+                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
+                               href="/dashboard/athletes/verified-speakers">Speaker
                                 Verified</a>
                         </li>
                         {% if user.user_group_id == "1" %}
                             <li>
-                                <a role="button"
-                                   class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
-                                   data-toggle="tab"
-                                   onclick="loadPage('/dashboard/athletes/completed-reports', 'content')">Report
+                                <a class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
+                                   href="/dashboard/athletes/completed-reports">Report
                                     Complete</a>
                             </li>
                         {% endif %}
