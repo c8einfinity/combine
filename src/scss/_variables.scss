@@ -141,6 +141,17 @@ table.dataTable tbody td.selected a {
   margin-left: 1rem;
 }
 
+.dt-search, .dt-length {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  white-space: nowrap;
+
+  label {
+    margin-bottom: 0;
+  }
+}
+
 // Progress bar
 $progress-bg: $gray-300 !default;
 

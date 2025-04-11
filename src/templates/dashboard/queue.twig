@@ -16,19 +16,18 @@
                 <h3 class="text-anton pb-2 text-uppercase">Transcription Queue</h3>
                 <hr class="hor-line-gradient"/>
                 {% if queue_visible_permission %}
-                    <div style="height: fit-content">
-                        <div class="table-responsive">
-                            <table id="queue-grid" class="table text-black m-0" style="width: 100%">
-                                <thead>
-                                <!-- table details filled in completely by data tables -->
-                                </thead>
-                            </table>
-                            <div id="message"></div>
-                        </div>
-                    </div>
-                {% endif %}
+                <div style="height: fit-content">
+                    <table id="queue-grid" class="table responsive nowrap">
+                        <thead>
+                        <!-- table details filled in completely by data tables -->
+                        </thead>
+                    </table>
+                    <div id="message"></div>
+                </div>
             </div>
+            {% endif %}
         </div>
+    </div>
     </div>
     {% if queue_visible_permission %}
         <script>
@@ -40,6 +39,11 @@
 
                 queueGrid = $('#queue-grid').DataTable({
                     "ajax": "/api/queue",
+                    "columnDefs": [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }],
+                    "responsive": true,
                     "columns": [
                         {% if queue_edit_permission %}
                         {
