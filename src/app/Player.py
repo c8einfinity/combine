@@ -1,5 +1,9 @@
+import ast
 import base64
 import io
+import json
+import re
+
 import requests
 import os
 import csv
@@ -45,14 +49,22 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     :param candidate_id:
     :return:
     """
+    from tina4_python import Debug
+
     data = {"first_name": first_name, "last_name": last_name, "image": image,
             "candidate_id": candidate_id, "text": text}
 
-    results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
+    Debug.info(f"submit_player_results: {data}")
+
+    try:
+        results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
                             json=data,
                             headers={"Content-Type": "application/json",
                                      "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
-    return results.json()
+        return results.json()
+    except Exception as e:
+        Debug.error(f"submit_player_results: {e}")
+        return {"error": str(e)}
 
 def player_bio_complete(player_id):
     """
@@ -83,6 +95,76 @@ def player_report_sent(player_id):
         return True
 
     return False
+
+def remove_repeated_text(input_string):
+    words = input_string.split()
+    seen = set()
+    result = []
+
+    for word in words:
+        if word not in seen:
+            seen.add(word)
+            result.append(word)
+
+    return ' '.join(result)
+
+def replace_repeats(text):
+    # Use regex to find repeated characters outside of words
+    pattern = re.compile(r'\b(\w*?)([^\W\d_])\2{2,}(\w*?)\b')
+
+    # Replace the repeated characters with a single instance
+    result = pattern.sub(lambda m: m.group(1) + m.group(2) + m.group(3), text)
+
+    return result
+
+def decode_transcript(record):
+    try:
+        record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
+
+        # clean up of funny chars & duplicated text
+        transcription = []
+        for speaker in record["data"]["transcription"]:
+            text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
+            text = text.replace("-", "").strip()
+
+            if text != "" and len(text) > 1:
+                speaker["text"] = remove_repeated_text(replace_repeats(text))+" "
+                transcription.append(speaker)
+
+        record["data"]["transcription"] = transcription
+
+    except Exception as e:
+        record["data"] = str(e)
+    return record
+
+def get_player_transcript(player_id):
+    """
+    Get the player transcript from the approved videos
+    :param player_id:
+    :return:
+    """
+    from ..orm.PlayerTranscripts import PlayerTranscripts
+    from ..orm.PlayerResult import PlayerResult
+    from ..orm.Player import Player
+
+    player = Player({"id": player_id})
+    player.load()
+
+    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
+                                                    params=[player_id])
+    text = ""
+
+    transcripts = player_transcripts.to_list(decode_transcript)
+    for transcript in transcripts:
+        for speaker in transcript["data"]["transcription"]:
+            if speaker and "speaker" in speaker:
+                if speaker["speaker"] == transcript["selected_speaker"]:
+                    text += speaker["text"]
+
+    # remove any none latin characters from text
+    text = ''.join([i if ord(i) < 128 else '' for i in text])
+
+    return text
 
 def get_player_stats():
     """

@@ -1,26 +1,10 @@
+import base64
+import hashlib
 import json
 import os
 import threading
 from tina4_python import Debug
 from tina4_python.Queue import Queue, Config, Consumer, Producer
-
-from src.app.Scraper import get_player_bio_urls, get_youtube_videos
-
-
-def start_queue_consumer():
-    """
-    Start the QueueUtility consumer in a separate thread.
-    :return:
-    """
-    def consumer_thread():
-        try:
-            queue_utility = QueueUtility()
-            queue_utility.start_consumer()
-        except Exception as e:
-            Debug.error(f"Error in consumer thread: {e}")
-
-    consumer_thread = threading.Thread(target=consumer_thread, daemon=True)
-    consumer_thread.start()
 
 
 def process_item(queue, err, msg):
@@ -31,6 +15,19 @@ def process_item(queue, err, msg):
     :param msg:
     :return:
     """
+    from tina4_python.Database import Database
+
+    database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
+
+    dba = Database(f"mysql.connector:{database_path}",
+                   os.getenv("DATABASE_USERNAME", "doadmin"),
+                   os.getenv("DATABASE_PASSWORD", "doadmin"))
+
+    from src.app.Scraper import get_player_bio_urls, get_youtube_videos
+    from src.orm.PlayerMedia import PlayerMedia
+    from src.app.Player import get_player_transcript, split_trim_minify, submit_player_results
+    from src.orm.Player import Player
+    from src.orm.PlayerResult import PlayerResult
     if err is not None:
         Debug.error(f"Error processing message: {err}")
         return False
@@ -46,8 +43,6 @@ def process_item(queue, err, msg):
     if action == "process_player":
         player_id = payload["player_id"]
         Debug.info(f"Processing player from queue with ID: {player_id}")
-        from ..orm.Player import Player
-        from ..orm.PlayerMedia import PlayerMedia
 
         player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
         if player.count == 0:
@@ -82,6 +77,88 @@ def process_item(queue, err, msg):
         player.is_video_links_created = 1
         player.is_bio_links_created = 1
         player.save()
+
+        return True
+
+    if action == "request_player_results":
+        player_id = payload["player_id"]
+        Debug.info(f"request_player_results {player_id}: Requesting player results start")
+        try:
+            player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
+            Debug.info(f"request_player_results {player_id}: Player loaded {player}")
+            if player.count == 0:
+                Debug.error(f"request_player_results {player_id}: Player not found")
+                return False
+        except Exception as e:
+            Debug.error(f"request_player_results {player_id}: Error loading player, {e}")
+            return False
+        player = player[0]
+        if player is None:
+            Debug.error(f"request_player_results {player_id}: Player not found")
+            return False
+
+        Debug.info(f"request_player_results {player_id}: Player found")
+        if player["image"]:
+            player["image"] = player["image"]
+        else:
+            player.image = ""
+
+        Debug.info(f"request_player_results {player_id}: Getting player transcript")
+
+        transcript = get_player_transcript(player["id"])
+
+        if transcript == "":
+            Debug.error(f"request_player_results {player_id}: Transcript empty for player")
+            return False
+
+        transcription_hash = hashlib.md5(str(transcript).encode('utf-8')).hexdigest()
+        Debug.info(f"request_player_results {player_id}: Transcript hash: {transcription_hash}")
+
+        Debug.info(f"request_player_results {player_id}: Submitting player results to API")
+
+        results = submit_player_results(
+            str(player["first_name"]),
+            str(player["last_name"]),
+            str(player["image"]),
+            str(transcript),
+            str(player["candidate_id"])
+        )
+
+        Debug.info(f"request_player_results {player_id}: Player results received")
+
+        if "candidate_id" in results:
+            Debug.info(f"request_player_results {player_id}: Candidate ID: {results['candidate_id']}")
+            player = Player(player)
+            player.candidate_id = results["candidate_id"]
+            try:
+                player.save()
+            except Exception as e:
+                Debug.error(f"request_player_results {player_id}: Error saving player, {e}")
+
+        if "player" in results:
+            results["player"]["html"] = split_trim_minify(results["player"]["html"])
+            if "pdf" in results["player"]:
+                del results["player"]["pdf"]
+        if "coach" in results:
+            results["coach"]["html"] = split_trim_minify(results["coach"]["html"])
+            if "pdf" in results["coach"]:
+                del results["coach"]["pdf"]
+        if "scout" in results:
+            results["scout"]["html"] = split_trim_minify(results["scout"]["html"])
+            if "pdf" in results["scout"]:
+                del results["scout"]["pdf"]
+
+        Debug.info(f"request_player_results {player_id}: Saving player results to database")
+        player_result = PlayerResult({
+            "player_id": player_id,
+            "transcript_hash": transcription_hash,
+            "transcription": transcript,
+            "data": json.dumps({"player": results["player"], "coach": results["coach"], "scout": results["scout"]})
+        })
+        player_result.save()
+
+    queue_result = Queue(QueueUtility().config, topic="result")
+    Producer(queue_result).produce({"processed": True, "message_id": message["message_id"], "message": "OK"})
     return True
 
 
@@ -156,6 +233,15 @@ class QueueUtility(object):
         Debug.info(f"Adding item to queue: {message}")
         Producer(self.queue, message_delivered).produce(message)
 
+    def get_queue(self):
+        """
+        Gets the current item in the queue instance
+        :return:
+        """
+        if self.queue is None:
+            raise Exception("Queue is not connected")
+
+
     def start_consumer(self, callback=None):
         """
         Start the consumer
@@ -164,6 +250,24 @@ class QueueUtility(object):
         """
         if self.queue is None:
             raise Exception("Queue is not connected")
-        consumer = Consumer(self.get_queue(), process_item)
-        consumer.run(sleep=int(os.getenv("RABBITMQ_CONSUMER_INTERVAL", 10)))
+        consumer = Consumer(self.get_queue(), process_item, acknowledge=False)
+        consumer.run(sleep=int(os.getenv("RABBITMQ_CONSUMER_INTERVAL", 1)))
 
+def start_queue_consumer():
+    """
+    Start the QueueUtility consumer in a separate thread.
+    :return:
+    """
+    def consumer_thread():
+        try:
+            queue_utility = QueueUtility()
+            queue_utility.start_consumer()
+        except Exception as e:
+            Debug.error(f"Error in consumer thread: {e}")
+
+    try:
+        consumer_thread = threading.Thread(target=consumer_thread)
+        consumer_thread.start()
+        Debug.info("Queue consumer started")
+    except Exception as e:
+        Debug.error(f"Error starting consumer thread: {e}")

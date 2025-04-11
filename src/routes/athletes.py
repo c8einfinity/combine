@@ -111,47 +111,6 @@ def decode_metadata(record):
 
     return record
 
-def remove_repeated_text(input_string):
-    words = input_string.split()
-    seen = set()
-    result = []
-
-    for word in words:
-        if word not in seen:
-            seen.add(word)
-            result.append(word)
-
-    return ' '.join(result)
-
-def replace_repeats(text):
-    # Use regex to find repeated characters outside of words
-    pattern = re.compile(r'\b(\w*?)([^\W\d_])\2{2,}(\w*?)\b')
-
-    # Replace the repeated characters with a single instance
-    result = pattern.sub(lambda m: m.group(1) + m.group(2) + m.group(3), text)
-
-    return result
-
-def decode_transcript(record):
-    try:
-        record["data"] = ast.literal_eval(base64.b64decode(record["data"]).decode("utf-8"))
-
-        # clean up of funny chars & duplicated text
-        transcription = []
-        for speaker in record["data"]["transcription"]:
-            text = ''.join([i if ord(i) < 128 else '' for i in speaker["text"]])
-            text = text.replace("-", "").strip()
-
-            if text != "" and len(text) > 1:
-                speaker["text"] = remove_repeated_text(replace_repeats(text))+" "
-                transcription.append(speaker)
-
-        record["data"]["transcription"] = transcription
-
-    except Exception as e:
-        record["data"] = str(e)
-    return record
-
 def decode_player_image(record):
     try:
         record["image"] = ast.literal_eval(base64.b64decode(record["image"]).decode("utf-8"))
@@ -161,6 +120,7 @@ def decode_player_image(record):
 
 @get("/api/receptiviti/export")
 async def get_receptiviti_export(request, response):
+    from ..app.Player import decode_transcript
     from ..orm.PlayerTranscripts import PlayerTranscripts
 
     file_name = "transcript_export.csv"
@@ -305,6 +265,7 @@ async def get_athlete_results(request, response):
     if not request.session.get('logged_in'):
         return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
+    from ..app.Player import decode_transcript
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
     from ..orm.PlayerResult import PlayerResult
@@ -501,6 +462,7 @@ async def post_athlete_videos(request, response):
 
 @get("/api/athlete/{id}/videos/{video_id}/transcript")
 async def get_athlete_transcripts(request, response):
+    from ..app.Player import decode_transcript
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.PlayerTranscripts import PlayerTranscripts
@@ -736,6 +698,7 @@ async def delete_athlete_link(request, response):
 
 @get("/api/athlete/{id}/transcripts/{media_id}/classification")
 async def get_test_classification(request, response):
+    from ..app.Player import decode_transcript
     from ..app.Scraper import aatos, classification_text
     from ..orm.PlayerTranscripts import PlayerTranscripts
     from ..orm.PlayerMedia import PlayerMedia
@@ -867,9 +830,98 @@ async def post_import_csv(request, response):
 
     return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
-@post("/api/athletes/send-results")
-def post_send_results(request, response):
-    player_ids_json = request.body["playerIds"]
-    player_ids = json.loads(player_ids_json)
+@post("/api/athletes/request-results")
+async def post_send_results(request, response):
+    """
+    Queue the players to request their Receptiviti results
+    :param request:
+    :param response:
+    :return:
+    """
+    if request.body["playerIds"] == "":
+        return response("No players selected", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
+    from src.app.Player import get_player_transcript, split_trim_minify, submit_player_results
+    from src.orm.Player import Player
+    from src.orm.PlayerResult import PlayerResult
+
+    player_ids = json.loads(request.body["playerIds"])
+
+    for player_id in player_ids:
+        Debug.info(f"request_player_results {player_id}: Requesting player results start")
+        try:
+            player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
+            Debug.info(f"request_player_results {player_id}: Player loaded {player}")
+            if player.count == 0:
+                Debug.error(f"request_player_results {player_id}: Player not found")
+                return False
+        except Exception as e:
+            Debug.error(f"request_player_results {player_id}: Error loading player, {e}")
+            return False
+        player = player[0]
+        if player is None:
+            Debug.error(f"request_player_results {player_id}: Player not found")
+            return False
+
+        Debug.info(f"request_player_results {player_id}: Player found")
+        if player["image"]:
+            player["image"] = player["image"]
+        else:
+            player.image = ""
+
+        Debug.info(f"request_player_results {player_id}: Getting player transcript")
+
+        transcript = get_player_transcript(player["id"])
+
+        if transcript == "":
+            Debug.error(f"request_player_results {player_id}: Transcript empty for player")
+            return False
+
+        transcription_hash = hashlib.md5(str(transcript).encode('utf-8')).hexdigest()
+        Debug.info(f"request_player_results {player_id}: Transcript hash: {transcription_hash}")
+
+        Debug.info(f"request_player_results {player_id}: Submitting player results to API")
+
+        results = submit_player_results(
+            str(player["first_name"]),
+            str(player["last_name"]),
+            str(player["image"]),
+            str(transcript),
+            str(player["candidate_id"])
+        )
+
+        Debug.info(f"request_player_results {player_id}: Player results received")
+
+        if "candidate_id" in results:
+            Debug.info(f"request_player_results {player_id}: Candidate ID: {results['candidate_id']}")
+            player = Player(player)
+            player.candidate_id = results["candidate_id"]
+            try:
+                player.save()
+            except Exception as e:
+                Debug.error(f"request_player_results {player_id}: Error saving player, {e}")
+
+        if "player" in results:
+            results["player"]["html"] = split_trim_minify(results["player"]["html"])
+            if "pdf" in results["player"]:
+                del results["player"]["pdf"]
+        if "coach" in results:
+            results["coach"]["html"] = split_trim_minify(results["coach"]["html"])
+            if "pdf" in results["coach"]:
+                del results["coach"]["pdf"]
+        if "scout" in results:
+            results["scout"]["html"] = split_trim_minify(results["scout"]["html"])
+            if "pdf" in results["scout"]:
+                del results["scout"]["pdf"]
+
+        Debug.info(f"request_player_results {player_id}: Saving player results to database")
+        player_result = PlayerResult({
+            "player_id": player_id,
+            "transcript_hash": transcription_hash,
+            "transcription": transcript,
+            "data": json.dumps({"player": results["player"], "coach": results["coach"], "scout": results["scout"]})
+        })
+        player_result.save()
+
 
     return response("Done!")
