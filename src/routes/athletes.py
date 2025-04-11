@@ -50,7 +50,7 @@ async def get_athletes(request, response):
         if request.params["status"] == "verified-videos":
             where += " and id in (select player_id from player_media where is_valid = 1 and is_deleted = 0)"
 
-    players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
+    players = Player().select(["id", "candidate_id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
                               order_by=data_tables_filter["order_by"],
                               limit=data_tables_filter["length"],
