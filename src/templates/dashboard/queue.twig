@@ -40,11 +40,6 @@
 
                 queueGrid = $('#queue-grid').DataTable({
                     "ajax": "/api/queue",
-                    "columnDefs": [{
-                        "defaultContent": "-",
-                        "targets": "_all"
-                    }],
-                    "responsive": true,
                     "columns": [
                         {% if queue_edit_permission %}
                         {
