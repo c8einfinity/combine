@@ -180,21 +180,6 @@
         function requestResults() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // create a spinner with a counter
-            // and set it to the center of the screen
-
-            // set the spinner to be 5rem by 5rem
-            // and set the z-index to 200
-            // set the spinner to be in the center of the screen
-            let timer = 0;
-
-            timer = setInterval(function () {
-                let text = document.getElementById("requestLoadText");
-                if (text) {
-                    text.innerHTML = `Submitting request ${timer++} ...`;
-                }
-            }, 1000);
-
             document.querySelector(".content").innerHTML = `<div class="text-center" style="width: 100vw; height: 100vh; z-index: 200;">
                     <h5 id="requestLoadText" class="text-anton text-black pb-2">Submitting request ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
                     <span class="sr-only text-black">Submitting request ...</span>
