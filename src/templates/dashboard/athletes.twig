@@ -177,11 +177,46 @@
             return 'bg-secondary';
         }
 
+        function requestResults() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.querySelector(".content").innerHTML = `<div class="text-center" style="width: 100vw; height: 100vh; z-index: 200;">
+                    <h5 id="requestLoadText" class="text-anton text-black pb-2">Submitting request ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                    <span class="sr-only text-black">Submitting request ...</span>
+                </div></div>`;
+            try{
+                let selectedRows = athletesGrid.rows({selected: true})
+                    .data()
+                    .toArray()
+                    .map(rowData => rowData.id);
+
+                if (selectedRows.length !== 0) {
+                    const formData = new FormData();
+
+                    formData.append("playerIds", JSON.stringify(selectedRows));
+                    formData.append("formToken", "{{ formToken() }}");
+                    postUrl("/api/athletes/request-results", formData, "", function () {
+                        window.location.href = "/dashboard/athletes/all";
+                    })
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
         $(document).ready(function () {
             athletesGrid = $("#athletes-grid").DataTable({
+                select: {
+                    style: 'multi',
+                },
                 dom: '',
                 ajax: "/api/athletes/{{ status }}",
                 columns: [
+                    {
+                        'targets': 0,
+                        orderable: false,
+                        render:DataTable.render.select()
+                    },
                     {
                         title: "Player Id",
                         data: "id",
@@ -271,6 +306,18 @@
                     }
                     {% endif %}
                 ],
+                layout: {
+                    bottomStart: [
+                        {% if athletes_delete_permission %}
+                        function () {
+                            return `<div class="d-flex justify-content-end">
+                            <button class="py-1 px-2 btn mr-2 text-soft-green text-inter download-btn" onclick="requestResults()">Submit Reports</button>
+                        </div>`;
+                        },
+                        {% endif %}
+                        "info"
+                    ],
+                },
                 language: {
                     emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
                 },
