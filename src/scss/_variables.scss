@@ -114,13 +114,31 @@ $pagination-color: $black !default;
   border-bottom: 1px solid rgb(227, 230, 240);
 }
 
-div.dt-processing>div:last-child>div {
+div.dt-processing > div:last-child > div {
   background: $black !important;
 }
 
 div.dt-container div.dt-info {
   white-space: nowrap;
   opacity: .3;
+}
+
+table.dataTable tbody > tr.selected,
+table.dataTable tbody > tr > .selected {
+  background-color: $gray-200;
+}
+
+table.dataTable tbody tr.selected,
+table.dataTable tbody th.selected,
+table.dataTable tbody td.selected,
+table.dataTable tbody tr.selected a,
+table.dataTable tbody th.selected a,
+table.dataTable tbody td.selected a {
+  color: $black;
+}
+
+.dt-container .select-item {
+  margin-left: 1rem;
 }
 
 // Progress bar
