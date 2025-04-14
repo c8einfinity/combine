@@ -20,4 +20,3 @@ check_setup(dba)
 from .app import Setup, Utility, Scraper, QueueUtility
 from .routes import athletes, dashboard, home, users, user_groups, websocket, queue
 
-# QueueUtility.start_queue_consumer()

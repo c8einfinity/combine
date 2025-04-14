@@ -63,6 +63,7 @@
 
                             <hr class="hor-line-gradient mt-4"/>
                             <form id="csvImport" method="post" onsubmit="return false;">
+                                <input type="hidden" name="formToken" value="{{ formToken() }}" />
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="mr-3 w-100">
                                         <label class="font-weight-bold" for="importCsv">Select CSV File</label>

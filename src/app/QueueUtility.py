@@ -51,12 +51,12 @@ def process_item(queue, err, msg):
 
         player = player[0]
 
-        bio_urls = get_player_bio_urls(str(player.first_name) + " " + str(player.last_name))
+        bio_urls = get_player_bio_urls(str(player["first_name"]) + " " + str(player["last_name"]))
 
         for url in bio_urls:
-            player_media = PlayerMedia({"url": url, "media_type": "link-bio", "player_id": player.id})
+            player_media = PlayerMedia({"url": url, "media_type": "link-bio", "player_id": player["id"]})
 
-            if player_media.load("url = ? and player_id = ? and media_type = 'link-bio'", [url, player.id]):
+            if player_media.load("url = ? and player_id = ? and media_type = 'link-bio'", [url, player["id"]]):
                 # exists
                 pass
             else:
@@ -64,21 +64,22 @@ def process_item(queue, err, msg):
 
             player_media.save()
 
-        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name))
+        you_tube_links = get_youtube_videos(str(player["first_name"]) + " " + str(player["last_name"]))
         for you_tube_link in you_tube_links:
             player_media = PlayerMedia()
             player_media.url = you_tube_link["url"]
-            player_media.player_id = player.id
+            player_media.player_id = player["id"]
             player_media.media_type = 'video-youtube'
             player_media.is_valid = 1
             player_media.metadata = you_tube_link["metadata"]
             player_media.save()
 
-        player.is_video_links_created = 1
-        player.is_bio_links_created = 1
+        player["is_video_links_created"] = 1
+        player["is_bio_links_created"] = 1
+        player = Player(player)
+        player.image = None
         player.save()
 
-        return True
 
     if action == "request_player_results":
         player_id = payload["player_id"]
@@ -88,14 +89,11 @@ def process_item(queue, err, msg):
             Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
-                return False
         except Exception as e:
             Debug.error(f"request_player_results {player_id}: Error loading player, {e}")
-            return False
         player = player[0]
         if player is None:
             Debug.error(f"request_player_results {player_id}: Player not found")
-            return False
 
         Debug.info(f"request_player_results {player_id}: Player found")
         if player["image"]:
@@ -109,7 +107,6 @@ def process_item(queue, err, msg):
 
         if transcript == "":
             Debug.error(f"request_player_results {player_id}: Transcript empty for player")
-            return False
 
         transcription_hash = hashlib.md5(str(transcript).encode('utf-8')).hexdigest()
         Debug.info(f"request_player_results {player_id}: Transcript hash: {transcription_hash}")
@@ -157,9 +154,12 @@ def process_item(queue, err, msg):
         })
         player_result.save()
 
+    dba.close()
+
     queue_result = Queue(QueueUtility().config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": message["message_id"], "message": "OK"})
-    return True
+
+
 
 
 def message_delivered(queue, err, msg):
@@ -232,14 +232,6 @@ class QueueUtility(object):
         message = json.dumps({"action": action, "payload": payload})
         Debug.info(f"Adding item to queue: {message}")
         Producer(self.queue, message_delivered).produce(message)
-
-    def get_queue(self):
-        """
-        Gets the current item in the queue instance
-        :return:
-        """
-        if self.queue is None:
-            raise Exception("Queue is not connected")
 
 
     def start_consumer(self, callback=None):
