@@ -56,6 +56,11 @@
             userGroupsGrid = $("#user-groups-grid").DataTable({
                 dom: "",
                 ajax: "/api/user_groups",
+                columnDefs: [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }],
+                responsive: true,
                 columns: [
                     {
                         "title": "ID",

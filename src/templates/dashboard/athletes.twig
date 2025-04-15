@@ -114,14 +114,12 @@
                             </li>
                         {% endif %}
                     </ul>
-                    <div class="table-responsive">
-                        <table id="athletes-grid" class="table"
-                               style="width: 100%; border-top: 1px solid #e3e6f0; margin-top: 20px;">
+                        <table id="athletes-grid" class="table responsive nowrap"
+                               style="border-top: 1px solid #e3e6f0; margin-top: 20px;">
                             <thead>
                             <!-- table details filled in completely by data tables -->
                             </thead>
                         </table>
-                    </div>
                     <div id="message"></div>
                 </div>
             </div>
@@ -212,6 +210,11 @@
                 },
                 dom: '',
                 ajax: "/api/athletes/{{ status }}",
+                responsive: true,
+                columnDefs: [{
+                    "defaultContent": "-",
+                    "targets": "_all"
+                }],
                 columns: [
                     {
                         'targets': 0,

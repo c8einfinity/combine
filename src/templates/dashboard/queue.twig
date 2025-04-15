@@ -6,120 +6,154 @@
 {% extends "base.twig" %}
 
 {% block navigation %}
-    {%  include "snippets/navigation.twig" %}
+    {% include "snippets/navigation.twig" %}
 {% endblock %}
 
 {% block content_public %}
-<div class="px-3 py-4">
     <div class="content container-fluid">
-        <h3 class="text-anton text-black pb-2">Transcription Queue</h3>
-        {% if queue_visible_permission %}
-            <div class="content col-12 mt-5 pt-4 pb-5 px-4" style="height: fit-content">
-                <table id="queue-grid" class="table text-black m-0" style="width: 100%">
-                    <thead>
-                    <!-- table details filled in completely by data tables -->
-                    </thead>
-                </table>
-                <div id="message"></div>
+        <div class="card mb-4">
+            <div class="card-body p-4">
+                <h3 class="text-anton pb-2 text-uppercase">Transcription Queue</h3>
+                <hr class="hor-line-gradient"/>
+                {% if queue_visible_permission %}
+                <div style="height: fit-content">
+                    <table id="queue-grid" class="table responsive nowrap">
+                        <thead>
+                        <!-- table details filled in completely by data tables -->
+                        </thead>
+                    </table>
+                    <div id="message"></div>
+                </div>
             </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
-</div>
-{% if queue_visible_permission %}
-    <script>
-        if (typeof queueGrid === 'undefined') {
-            let queueGrid;
-        }
-        queueGrid = null;
-        $(document).ready(function() {
+    </div>
+    {% if queue_visible_permission %}
+        <script>
+            if (typeof queueGrid === 'undefined') {
+                let queueGrid;
+            }
+            queueGrid = null;
+            $(document).ready(function () {
 
-            queueGrid = $('#queue-grid').DataTable({
-                "ajax": "/api/queue",
-                "columns": [
-                    {% if queue_edit_permission %}
+                queueGrid = $('#queue-grid').DataTable({
+                    "ajax": "/api/queue",
+                    "columnDefs": [{
+                        "defaultContent": "-",
+                        "targets": "_all"
+                    }],
+                    "responsive": true,
+                    "columns": [
+                        {% if queue_edit_permission %}
                         {
                             "title": "Priority",
                             "render": function (data, type, row) {
                                 return `<a role="button" onclick="showPrioritySelector(this, ${row.id})"><img src="/images/queue/priority-${row.priority}-on.svg" alt="Current Priority" /></a>`;
                             }
                         },
-                    {% endif %}
-                    {
-                        "title": "Id",
-                        "data": "id"
-                    },
-                    {
-                        "title": "Queue Action",
-                        "data": "action"
-                    },
-                    {
-                        "title": "Date Created",
-                        "data": "date_created"
-                    },
-                    {
-                        "title": "Player",
-                        "data": "player"
-                    },
-                    {% if queue_delete_permission %}
+                        {% endif %}
+                        {
+                            "title": "Id",
+                            "data": "id"
+                        },
+                        {
+                            "title": "Queue Action",
+                            "data": "action"
+                        },
+                        {
+                            "title": "Date Created",
+                            "data": "date_created"
+                        },
+                        {
+                            "title": "Player",
+                            "data": "player"
+                        },
+                        {% if queue_delete_permission %}
                         {
                             "title": "Actions",
+                            "orderable": false,
                             "render": function (data, type, row) {
                                 let actions = [
-                                    `<a role="button" class="fas fa-trash" onclick="deleteQueueItem(${row.id})"></a>`
+                                    `<a role="button" class="btn btn-outline-light text-black" onclick="deleteQueueItem(${row.id})"><i class="fas fa-trash"></i></a>`
                                 ];
                                 return actions.join("");
                             }
                         }
-                    {% endif %}
-                ],
-                language: {
-                    emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
-                },
-                order: [[1, 'desc']],
-                "processing": true,
-                "serverSide": true,
+                        {% endif %}
+                    ],
+                    language: {
+                        emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
+                    },
+                    order: [[1, 'desc']],
+                    "processing": true,
+                    "serverSide": true,
+                });
+                teamQNavSetActive($('#queueLink')[0]);
             });
-            teamQNavSetActive($('#queueLink')[0]);
-        });
 
-        {% if queue_delete_permission %}
-        function deleteQueueItem(id) {
-            if (confirm("Delete Transcription Item?")) {
-                deleteUrl(`/api/queue/${id}`, null, 'message', function (){
-                    queueGrid.ajax.reload();
-                })
+            {% if queue_delete_permission %}
+            function deleteQueueItem(id) {
+                if (confirm("Delete Transcription Item?")) {
+                    deleteUrl(`/api/queue/${id}`, null, 'message', function () {
+                        queueGrid.ajax.reload();
+                    })
+                }
             }
-        }
-        {% endif %}
+            {% endif %}
 
-        {% if queue_edit_permission %}
+            {% if queue_edit_permission %}
             function showPrioritySelector(clickedEl, id) {
-                // remove and selectors still open
+                // remove any existing selectors
                 document.querySelectorAll('.priority-selector').forEach((el) => {
                     el.remove();
                 });
-                // create a div append it to after the button clicked
+
+                // Get the <img> element inside the clicked button
+                const priorityImg = clickedEl.querySelector('img');
+
+                // create a new priority selector
                 const prioritySelector = document.createElement('div');
                 prioritySelector.id = `prioritySelector_${id}`;
                 prioritySelector.classList.add('priority-selector');
                 clickedEl.after(prioritySelector);
-                showForm('GET', `/queue/${id}/priority`, prioritySelector.id);
+
+                // Load the priority selection form
+                showForm('GET', `/queue/${id}/priority`, prioritySelector.id, (response) => {
+                    // After the form loads, add an event listener for priority selection
+                    prioritySelector.addEventListener('change', (event) => {
+                        if (event.target.name === 'priority') {
+                            const newPriority = event.target.value;
+                            // Update the image src to reflect the new priority
+                            priorityImg.src = `/images/queue/priority-${newPriority}-on.svg`;
+                            // Close the selector
+                            prioritySelector.remove();
+                        }
+                    });
+                });
 
                 // Stop event propagation to prevent the document click listener from removing the selector
-                prioritySelector.addEventListener('click', function(event) {
+                prioritySelector.addEventListener('click', (event) => {
                     event.stopPropagation();
                 });
             }
 
-            // click anywhere to close the priority selector
+            // Click anywhere to close the priority selector (updated to work with the new changes)
             document.addEventListener('click', function (event) {
-                if (!event.target.closest('.priority-selector') && !event.target.closest('a[role="button"]')) {
-                    document.querySelectorAll('.priority-selector').forEach((el) => {
+                const prioritySelectors = document.querySelectorAll('.priority-selector');
+                if (prioritySelectors.length === 0) return; // No selectors open
+
+                const clickedInsideSelector = event.target.closest('.priority-selector');
+                const clickedOnPriorityButton = event.target.closest('a[role="button"]');
+
+                // If clicked outside both the selector and priority button, close all selectors
+                if (!clickedInsideSelector && !clickedOnPriorityButton) {
+                    prioritySelectors.forEach((el) => {
                         el.remove();
                     });
                 }
             });
-        {% endif %}
-    </script>
-{% endif %}
+            {% endif %}
+        </script>
+    {% endif %}
 {% endblock %}

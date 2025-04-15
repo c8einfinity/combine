@@ -40,12 +40,39 @@
   margin: 0 2rem;
 }
 
+// Truncate long links in links page to prevent mobile breaking layout
+.truncate-table-link {
+  @media (max-width: 860px) {
+    max-width: 224px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+}
+
+// Priority Selector Styling
 .priority-selector {
   position: absolute;
-  background-color: $gray-500;
+  background-color: rgba($black, .73);
   border-radius: 0.5rem;
   padding: 0.2rem;
-  box-shadow: 0.1rem 0.1rem 0.1rem rgba($gray-500, 0.25);
+  box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.15);
+  margin-top: 10px;
+  left: 20px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 10px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 7px solid rgba($black, .73);
+    z-index: 1;
+  }
 
   .form-check {
     padding: 0.2rem;

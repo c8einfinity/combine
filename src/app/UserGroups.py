@@ -247,7 +247,7 @@ class UserGroups:
                     permission_entries.append(
                         f'<div class="mr-3 d-inline-block font-weight-bold text-nowrap" style="font-size: 0.7rem;">'
                         f'<div class="bg-dark d-inline-block text-white text-capitalize py-1 px-2 rounded-left">{key}</div> '
-                        f'<div class="{color} d-inline-block text-white text-capitalize py-1 px-2 rounded-right" style="margin-left: -3px;">{value}</div>'
+                        f'<div class="{color} d-inline-block text-white text-capitalize py-1 px-2 rounded-right" style="margin-left: -3px; width: 24px;">{value}</div>'
                         f'</div>'
                     )
 
