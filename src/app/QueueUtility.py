@@ -157,9 +157,7 @@ def process_item(queue, err, msg):
     dba.close()
 
     queue_result = Queue(QueueUtility().config, topic="result")
-    Producer(queue_result).produce({"processed": True, "message_id": message["message_id"], "message": "OK"})
-
-
+    Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
 
 
 def message_delivered(queue, err, msg):
