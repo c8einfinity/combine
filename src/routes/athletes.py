@@ -173,9 +173,13 @@ async def get_athlete(request, response):
 
     if player.load():
         if player.image.value is not None:
-            player_image = base64.b64decode(player.image.value).decode("utf-8")
+            raw_value = str(player.image.value)
+            if raw_value.startswith("b\""):
+                raw_value = raw_value[2:-1]
+            player_image = base64.b64decode(raw_value).decode("utf-8")
         else:
             player_image = "None"
+
         html = Template.render("player/profile.twig",
                                {"player": player.to_dict(),  "player_image": player_image, "videos": videos.to_list(decode_metadata)})
         return response(html)

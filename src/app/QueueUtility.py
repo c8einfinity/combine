@@ -97,7 +97,10 @@ def process_item(queue, err, msg):
 
         Debug.info(f"request_player_results {player_id}: Player found")
         if player["image"]:
-            player["image"] = player["image"]
+            raw_value = str(player["image"])
+            if raw_value.startswith("b\""):
+                raw_value = raw_value[2:-1]
+            player["image"] = base64.b64decode(raw_value).decode("utf-8")
         else:
             player.image = ""
 
