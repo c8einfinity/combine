@@ -174,8 +174,6 @@ async def get_athlete(request, response):
     if player.load():
         if player.image.value is not None:
             raw_value = str(player.image.value)
-            if raw_value.startswith("b\""):
-                raw_value = raw_value[2:-1]
             player_image = base64.b64decode(raw_value).decode("utf-8")
         else:
             player_image = "None"
@@ -628,7 +626,10 @@ async def post_athletes_id(request, response):
     player.load()
 
     if player.image:
-        player.image = base64.b64decode(player.image.value).decode("utf-8")
+        raw_value = str(player["image"])
+        if raw_value.startswith("b\"") or raw_value.startswith("b'"):
+            raw_value = raw_value[2:-1]
+        player.image = base64.b64decode(raw_value).decode("utf-8")
     else:
         player.image = ""
 
@@ -851,5 +852,32 @@ async def post_send_results(request, response):
     player_ids = json.loads(request.body["playerIds"])
     for player_id in player_ids:
         queue.add_item("request_player_results", {"player_id": player_id})
+
+    return response("Done!")
+
+
+@get('/athletes/fix-images')
+async def get_fix_images(request, response):
+    """
+    Fix the images of the players
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..orm.Player import Player
+
+    players = Player().select("*", "image is not null and image <> ''", limit=500)
+    for player in players.to_array():
+        player["image"] = base64.b64decode(player["image"]).decode("utf-8")
+        # check if the image is a base64 string, do nothing
+        if player["image"].startswith("b'") or player["image"].startswith("b\""):
+            # remove the byte string
+            player["image"] = player["image"][2:-1]
+
+        if player["image"] != "":
+            p = Player({"id": player["id"]})
+            p.load()
+            p.image = player["image"]
+            p.save()
 
     return response("Done!")
