@@ -47,6 +47,10 @@ def download_youtube_video(url, filename):
             'outtmpl': filename
         }
 
+        # if there is a cookie file, use it
+        if os.path.exists("cookies.txt"):
+            ydl_opts["cookiefile"] = "cookies.txt"
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.cache = None
             error_code = ydl.download([url])
