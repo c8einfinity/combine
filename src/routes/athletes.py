@@ -881,3 +881,34 @@ async def get_fix_images(request, response):
             p.save()
 
     return response("Done!")
+
+@get('athlete/resend-deleted-videos')
+async def get_resend_deleted_videos(request, response):
+    """
+    Resend deleted videos to the player
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..orm.PlayerMedia import PlayerMedia
+    from ..orm.Queue import Queue
+
+    videos = PlayerMedia().select("player_id, CONCAT(('{\"player_media_id\": '), id, '}') as data", "player_id > 153 and is_valid = 1 and media_type like 'video-%'", limit=2000)
+    counter = 0
+    for video in videos.to_array():
+        try:
+            queue = Queue()
+            queue.action = 'transcribe'
+            queue.player_id = video.player_id
+            queue.data = video.data
+            queue.save()
+
+            player_media = PlayerMedia().load("player_id = ? and id = ?", [video["player_id"], video["id"]])
+            player_media.is_deleted = 0
+            player_media.save()
+            counter += 1
+        except Exception as e:
+            Debug.error("Error resending video: "+str(e))
+            continue
+
+    return response(f"Done, sent {counter} videos!")
