@@ -893,22 +893,27 @@ async def get_resend_deleted_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
 
-    videos = PlayerMedia().select("player_id, CONCAT(('{\"player_media_id\": '), id, '}') as data", "player_id > 153 and is_valid = 1 and media_type like 'video-%'", limit=2000)
+    videos = PlayerMedia().select("id, player_id, CONCAT(('{\"player_media_id\": '), id, '}') as data", "player_id > 153 and is_valid = 1 and is_deleted = 1 and media_type like 'video-%'", limit=2000)
     counter = 0
     for video in videos.to_array():
         try:
             queue = Queue()
             queue.action = 'transcribe'
-            queue.player_id = video.player_id
-            queue.data = video.data
+            queue.player_id = video["player_id"]
+            queue.data = video["data"]
             queue.save()
-
-            player_media = PlayerMedia().load("player_id = ? and id = ?", [video["player_id"], video["id"]])
-            player_media.is_deleted = 0
-            player_media.save()
-            counter += 1
         except Exception as e:
             Debug.error("Error resending video: "+str(e))
             continue
+
+        queue = queue.to_dict()
+
+        if queue["id"] > 0:
+            player_media = PlayerMedia({"player_id": video["player_id"], "id": video["id"]})
+            player_media.load()
+
+            player_media.is_deleted = 0
+            player_media.save()
+            counter += 1
 
     return response(f"Done, sent {counter} videos!")
