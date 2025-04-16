@@ -882,7 +882,7 @@ async def get_fix_images(request, response):
 
     return response("Done!")
 
-@get('athlete/resend-deleted-videos')
+@get('athletes/resend-deleted-videos')
 async def get_resend_deleted_videos(request, response):
     """
     Resend deleted videos to the player
