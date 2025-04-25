@@ -97,20 +97,17 @@
                                href="/dashboard/athletes/all">All</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-videos" %}active{% endif %}"
-                               href="/dashboard/athletes/verified-videos">Videos
-                                Verified</a>
+                            <a class="nav-link font-weight-bold text-dark {% if status == "unverified-videos" %}active{% endif %}"
+                               href="/dashboard/athletes/unverified-videos">Unverified Videos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold text-dark {% if status == "verified-speakers" %}active{% endif %}"
-                               href="/dashboard/athletes/verified-speakers">Speaker
-                                Verified</a>
+                            <a class="nav-link font-weight-bold text-dark {% if status == "unverified-speakers" %}active{% endif %}"
+                               href="/dashboard/athletes/unverified-speakers">Unverified Speaker</a>
                         </li>
                         {% if user.user_group_id == "1" %}
                             <li>
-                                <a class="nav-link font-weight-bold text-dark {% if status == "completed-reports" %}active{% endif %}"
-                                   href="/dashboard/athletes/completed-reports">Report
-                                    Complete</a>
+                                <a class="nav-link font-weight-bold text-dark {% if status == "unsent-reports" %}active{% endif %}"
+                                   href="/dashboard/athletes/unsent-reports">Unsent Reports</a>
                             </li>
                         {% endif %}
                     </ul>
