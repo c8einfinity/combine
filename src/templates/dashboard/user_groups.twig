@@ -56,6 +56,7 @@
             userGroupsGrid = $("#user-groups-grid").DataTable({
                 dom: "",
                 ajax: "/api/user_groups",
+                pageLength: sessionStorage.getItem('userGroupsPageLength') || 25,
                 columnDefs: [{
                     "defaultContent": "-",
                     "targets": "_all"
@@ -113,6 +114,10 @@
                 },
                 processing: true,
                 serverSide: true
+            });
+
+            userGroupsGrid.on('length.dt', function (e, settings, len) {
+                sessionStorage.setItem('userGroupsPageLength', len);
             });
             teamQNavSetActive($('#userGroupsLink')[0]);
         });

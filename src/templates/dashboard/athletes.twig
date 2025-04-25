@@ -211,6 +211,7 @@
                 dom: '',
                 ajax: "/api/athletes/{{ status }}",
                 responsive: true,
+                pageLength: sessionStorage.getItem('athletesPageLength') || 25,
                 columnDefs: [{
                     "defaultContent": "-",
                     "targets": "_all"
@@ -328,6 +329,11 @@
                 processing: true,
                 serverSide: true,
             });
+
+            athletesGrid.on('length.dt', function (e, settings, len) {
+                sessionStorage.setItem('athletesPageLength', len);
+            });
+
             teamQNavSetActive($('#athleteLink')[0]);
         });
 

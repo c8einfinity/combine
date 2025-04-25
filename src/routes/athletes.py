@@ -345,7 +345,8 @@ async def post_athlete_results(request, response):
     from ..app.Player import split_trim_minify
 
     # create hash of the playerText
-    transcription_hash = hashlib.md5(str(request.body["playerText"]).encode('utf-8')).hexdigest()
+    player_text: str = str(request.body["playerText"])
+    transcription_hash = hashlib.md5(player_text.encode("utf-8")).hexdigest()
     player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
     player_result = player_result.to_list()
     if len(player_result) > 0:

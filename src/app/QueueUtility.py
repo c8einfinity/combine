@@ -84,20 +84,24 @@ def process_item(queue, err, msg):
     if action == "request_player_results":
         player_id = payload["player_id"]
         Debug.info(f"request_player_results {player_id}: Requesting player results start")
+        player = None
         try:
             player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
             Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
+                raise Exception("Player not found")
+            player = player[0]
         except Exception as e:
             Debug.error(f"request_player_results {player_id}: Error loading player, {e}")
-        player = player[0]
+
         if player is None:
             Debug.error(f"request_player_results {player_id}: Player not found")
+            raise Exception("Player not found")
 
         Debug.info(f"request_player_results {player_id}: Player found")
         if player["image"]:
-            player["image"] = base64.b64decode(player["image"]).decode("utf-8")
+            player["image"] = str(player["image"])
         else:
             player.image = ""
 
@@ -108,7 +112,13 @@ def process_item(queue, err, msg):
         if transcript == "":
             Debug.error(f"request_player_results {player_id}: Transcript empty for player")
 
-        transcription_hash = hashlib.md5(str(transcript).encode('utf-8')).hexdigest()
+        try:
+            Debug.info(f"request_player_results {player_id}: Transcript: {transcript}")
+            transcription_hash = hashlib.md5(transcript.encode("utf-8")).hexdigest()
+        except Exception as e:
+            Debug.error(f"request_player_results {player_id}: Error hashing transcript, {e}")
+            transcription_hash = ""
+
         Debug.info(f"request_player_results {player_id}: Transcript hash: {transcription_hash}")
 
         Debug.info(f"request_player_results {player_id}: Submitting player results to API")
@@ -158,6 +168,7 @@ def process_item(queue, err, msg):
 
     queue_result = Queue(QueueUtility().config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
+    return None
 
 
 def message_delivered(queue, err, msg):

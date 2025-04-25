@@ -44,6 +44,7 @@
                         "targets": "_all"
                     }],
                     "responsive": true,
+                    "pageLength": sessionStorage.getItem('queuePageLength') || 25,
                     "columns": [
                         {% if queue_edit_permission %}
                         {
@@ -88,6 +89,10 @@
                     order: [[1, 'desc']],
                     "processing": true,
                     "serverSide": true,
+                });
+
+                queueGrid.on('length.dt', function (e, settings, len) {
+                    sessionStorage.setItem('queuePageLength', len);
                 });
                 teamQNavSetActive($('#queueLink')[0]);
             });

@@ -155,6 +155,7 @@
             usersGrid = $("#users-grid").DataTable({
                 dom: "",
                 ajax: "/api/users",
+                pageLength: sessionStorage.getItem('usersPageLength') || 25,
                 columnDefs: [{
                     "defaultContent": "-",
                     "targets": "_all"
@@ -226,6 +227,11 @@
                 processing: true,
                 serverSide: true
             });
+
+            usersGrid.on('length.dt', function (e, settings, len) {
+                sessionStorage.setItem('usersPageLength', len);
+            });
+
             teamQNavSetActive($('#usersLink')[0]);
         });
 

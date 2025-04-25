@@ -137,7 +137,7 @@ def decode_transcript(record):
         record["data"] = str(e)
     return record
 
-def get_player_transcript(player_id):
+def get_player_transcript(player_id: int) -> str:
     """
     Get the player transcript from the approved videos
     :param player_id:
@@ -164,7 +164,7 @@ def get_player_transcript(player_id):
     # remove any none latin characters from text
     text = ''.join([i if ord(i) < 128 else '' for i in text])
 
-    return text
+    return str(text)
 
 def get_player_stats():
     """
