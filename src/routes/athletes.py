@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 
 from tina4_python import Debug
-from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK
+from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK, HTTP_NOT_FOUND
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import re
@@ -68,6 +68,8 @@ async def get_athletes(request, response):
                               order_by=data_tables_filter["order_by"],
                               limit=data_tables_filter["length"],
                               skip=data_tables_filter["start"], )
+    if players.count == 0:
+        return response("No players found", HTTP_NOT_FOUND, TEXT_PLAIN)
 
     data = players.to_paginate()
 
