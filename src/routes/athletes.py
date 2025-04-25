@@ -69,7 +69,7 @@ async def get_athletes(request, response):
                               limit=data_tables_filter["length"],
                               skip=data_tables_filter["start"], )
     if players.count == 0:
-        return response("No players found", HTTP_NOT_FOUND, TEXT_PLAIN)
+        return response('{"error": "No matching players found"}', HTTP_NOT_FOUND, TEXT_PLAIN)
 
     data = players.to_paginate()
 

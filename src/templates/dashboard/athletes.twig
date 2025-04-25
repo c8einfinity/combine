@@ -206,7 +206,9 @@
                     style: 'multi',
                 },
                 dom: '',
-                ajax: "/api/athletes/{{ status }}",
+                ajax: {
+                    url: "/api/athletes/{{ status }}",
+                },
                 responsive: true,
                 pageLength: sessionStorage.getItem('athletesPageLength') || 25,
                 columnDefs: [{
@@ -217,7 +219,7 @@
                     {
                         'targets': 0,
                         orderable: false,
-                        render:DataTable.render.select()
+                        render: DataTable.render.select()
                     },
                     {
                         title: "Player Id",
