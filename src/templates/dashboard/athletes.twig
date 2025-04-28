@@ -110,6 +110,10 @@
                                    href="/dashboard/athletes/unsent-reports">Unsent Reports</a>
                             </li>
                         {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold text-dark {% if status == "incomplete-bios" %}active{% endif %}"
+                               href="/dashboard/athletes/incomplete-bios">Incomplete Bios</a>
+                        </li>
                     </ul>
                         <table id="athletes-grid" class="table responsive nowrap"
                                style="border-top: 1px solid #e3e6f0; margin-top: 20px;">

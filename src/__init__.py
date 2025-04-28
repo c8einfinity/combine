@@ -5,6 +5,7 @@ from tina4_python.Migration import migrate
 from tina4_python.ORM import orm
 
 from .app.Setup import check_setup, check_players
+global dba
 
 database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
 

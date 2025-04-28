@@ -11,27 +11,10 @@
 <main class="container-fluid">
     <div class="mb-4">
         <h3 class="text-body text-uppercase">Overview</h3>
-        <hr class="hor-line-gradient"/>
+        <hr class="hor-line-gradient" />
     </div>
     {% if home_visible_permission %}
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-3 mb-4">
-                <div class="card">
-                    <div class="card-body p-4">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div>
-                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.processed }}
-                                    / {{ total_transcribed_stats.total_transcribed }}</h3>
-                                <p class="card-text font-weight-bold">Speaker Confirmed</p>
-                            </div>
-                            <div>
-                                <img src="/images/dashboard/icon-transcribed.svg" alt="Transcribe Icon"
-                                     class="img-fluid">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="col-12 col-md-6 col-lg-3 mb-4">
                 <div class="card">
                     <div class="card-body p-4">
@@ -41,7 +24,7 @@
                                 <p class="card-text font-weight-bold">Players Loaded</p>
                             </div>
                             <div>
-                                <img src="/images/dashboard/icon-loaded.svg" alt="Transcribe Icon" class="img-fluid">
+                                <img src="/images/dashboard/icon-loaded.svg" alt="Players loaded Icon" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -52,11 +35,32 @@
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.total_media }}</h3>
-                                <p class="card-text font-weight-bold">Videos Found</p>
+                                <h3 class="card-title fw-bolder text-darker-green">
+                                    {{ total_transcribed_stats.confirmed_videos }} / {{ total_transcribed_stats.valid_media }}
+                                </h3>
+                                <p class="card-text font-weight-bold">Verified and Confirmed</p>
                             </div>
                             <div>
-                                <img src="/images/dashboard/icon-videos.svg" alt="Transcribe Icon" class="img-fluid">
+                                <img src="/images/dashboard/icon-confirmed.svg" alt="Confirmed Icon"
+                                     class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h3 class="card-title fw-bolder text-darker-green">
+                                    {{ total_transcribed_stats.reports_sent }} / {{ player_stats.total_players }}
+                                </h3>
+                                <p class="card-text font-weight-bold">Reports Submitted</p>
+                            </div>
+                            <div>
+                                <img src="/images/dashboard/icon-reports-sent.svg" alt="Reports submitted icon" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -67,11 +71,11 @@
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.unprocessed }}</h3>
-                                <p class="card-text font-weight-bold">Pending Transcripts</p>
+                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.unprocessed }} / {{ player_stats.total_players }}</h3>
+                                <p class="card-text font-weight-bold">Pending Verification</p>
                             </div>
                             <div>
-                                <img src="/images/dashboard/icon-pending.svg" alt="Transcribe Icon" class="img-fluid">
+                                <img src="/images/dashboard/icon-pending.svg" alt="Pending Icon" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -79,6 +83,72 @@
             </div>
         </div>
     {% endif %}
+    <div class="my-4">
+        <h3 class="text-body text-uppercase">Progress</h3>
+        <hr class="hor-line-gradient" />
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h3 class="card-title fw-bolder text-darker-green">
+                                {{ total_transcribed_stats.total_media }}
+                            </h3>
+                            <p class="card-text font-weight-bold">Videos</p>
+                        </div>
+                        <div>
+                            <img src="/images/dashboard/icon-videos.svg" alt="Video icon" class="img-fluid">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-flex flex-column">
+                        <dl class="row">
+                            <dt class="col-3">Media Verified: </dt>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.confirmed_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                            <dt class="col-3">Transcribed:</dt>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.transcribed_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                            <dt class="col-3">Speaker Verified:</dt>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.speaker_verified_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                        </dl>
+                        {%
+                            set progress = (total_transcribed_stats.confirmed_videos / total_transcribed_stats.total_media) * 100
+                         %}
+                        <progress value="{{ progress }}" max="100" class="w-100"></progress>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h3 class="card-title fw-bolder text-darker-green">
+                                {{ total_transcribed_stats.incomplete_bios }}
+                            </h3>
+                            <p class="card-text font-weight-bold">Incomplete Bios</p>
+                        </div>
+                        <div>
+                            <img src="/images/dashboard/icon-bios.svg" alt="Incomplete Biographies icon" class="img-fluid">
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-flex flex-column">
+                        {% if total_transcribed_stats.incomplete_player_bios.count > 0  %}
+                            {% for player in total_transcribed_stats.incomplete_player_bios %}
+                                <a href="/athlete/{{ player.id }}" class="text-black font-weight-bold">{{ player.first_name }} {{ player.last_name }}</a>
+                            {% endfor %}
+                            <a href="/dashboard/athletes/incomplete-bios" class="btn btn-dark w-25 text-success my-2" role="button">View all <i class="fa-solid fa-eye ml-2"></i></a>
+                        {% else %}
+                            <p class="text-muted">No incomplete bios to display</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
     $(document).ready(function () {
         teamQNavSetActive($('#homeLink')[0]);

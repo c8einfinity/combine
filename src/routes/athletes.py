@@ -62,6 +62,8 @@ async def get_athletes(request, response):
             where += " and id in (select player_id from player_media where is_valid = 0 and is_deleted = 0)"
         if request.params["status"] == "verified-videos":
             where += " and id in (select player_id from player_media where is_valid = 1 and is_deleted = 0)"
+        if request.params["status"] == "incomplete-bios":
+            where += " and (image is null or first_name = '' or last_name = '' or sport = '' or position = '' or date_of_birth is null or home_town = '' or team = '')"
 
     players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
