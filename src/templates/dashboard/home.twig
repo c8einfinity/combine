@@ -136,7 +136,7 @@
                     </div>
                     <hr />
                     <div class="d-flex flex-column">
-                        {% if total_transcribed_stats.incomplete_player_bios.count > 0  %}
+                        {% if total_transcribed_stats.incomplete_player_bios and total_transcribed_stats.incomplete_player_bios.count > 0  %}
                             {% for player in total_transcribed_stats.incomplete_player_bios %}
                                 <a href="/athlete/{{ player.id }}" class="text-black font-weight-bold">{{ player.first_name }} {{ player.last_name }}</a>
                             {% endfor %}
