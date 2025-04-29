@@ -20,10 +20,14 @@ def get_player_results(candidate_id):
     :param candidate_id:
     :return:
     """
-    results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
-                            json={"candidate_id": candidate_id},
-                            headers={"Content-Type": "application/json",
-                                     "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
+    try:
+        results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
+                                json={"candidate_id": candidate_id},
+                                headers={"Content-Type": "application/json",
+                                         "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
+    except Exception as e:
+        print(f"Error fetching results: {e}")
+        return {"error": str(e), "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
     return results.json()
 
