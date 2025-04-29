@@ -29,7 +29,13 @@ def get_player_results(candidate_id):
         print(f"Error fetching results: {e}")
         return {"error": str(e), "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
-    return results.json()
+    report = results.json()
+
+    if "player" in report:
+        return report
+
+    print("No result:", results)
+    return {"error": "No results found", "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
 def split_trim_minify(text):
     """
