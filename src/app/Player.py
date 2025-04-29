@@ -3,6 +3,7 @@ import base64
 import io
 import json
 import re
+from json import JSONDecodeError
 
 import requests
 import os
@@ -29,10 +30,13 @@ def get_player_results(candidate_id):
         print(f"Error fetching results: {e}")
         return {"error": str(e), "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
-    report = results.json()
+    try:
+        report = results.json()
 
-    if "player" in report:
-        return report
+        if "player" in report:
+            return report
+    except JSONDecodeError:
+        print("JSON Error from TEAMQ result:", results)
 
     print("No result:", results)
     return {"error": "No results found", "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
