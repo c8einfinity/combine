@@ -58,6 +58,7 @@
                         <form id="profileDetails" onsubmit="return false;">
                             <div class="row">
                                 <div class="col-12 col-lg">
+                                    <input type="hidden" name="formToken" value="{{ formToken() }}">
                                     <input type="hidden" name="id" value="{{ player.id }}">
                                     <div class="form-group">
                                         <label for="firstNameInput" class="font-weight-bold">First Name</label>
