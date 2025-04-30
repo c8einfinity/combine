@@ -21,6 +21,7 @@
                             <h3 class="text-anton pb-2 text-uppercase">Add Athlete</h3>
                             <hr class="hor-line-gradient"/>
                             <form id="athlete" method="post" onsubmit="return false;">
+                                <input type="hidden" name="formToken" value="{{ formToken() }}" />
                                 <div class="row">
                                     <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
                                         <label for="firstName" class="font-weight-bold">First Name</label>
