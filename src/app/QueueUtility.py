@@ -136,6 +136,7 @@ def process_item(queue, err, msg):
         if "candidate_id" in results:
             Debug.info(f"request_player_results {player_id}: Candidate ID: {results['candidate_id']}")
             player = Player(player)
+            player.image = player["image"].decode("utf-8")
             player.candidate_id = results["candidate_id"]
             try:
                 player.save()
