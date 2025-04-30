@@ -101,7 +101,7 @@ def process_item(queue, err, msg):
 
         Debug.info(f"request_player_results {player_id}: Player found")
         if player["image"]:
-            player["image"] = str(player["image"])
+            player["image"] = player["image"]
         else:
             player.image = ""
 
