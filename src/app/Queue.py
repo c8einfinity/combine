@@ -6,20 +6,23 @@ def get_total_transcribed_stats():
     """
     from .. import dba
 
-    unprocessed_queue = dba.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 and action = 'transcribe'")
+    untranscribed_media = dba.fetch_one('select count(*) as untranscribed_count from player_transcripts where '
+                                        'cast(data as char) like \'{"transcription": [[]%\' group by player_media_id')
 
-    processed_queue = dba.fetch_one("select count(*) as processed_count from player_transcripts where verified_user_id > 0")
+    speaker_verified = dba.fetch_one("select count(*) as speaker_verified_count from player_transcripts where "
+                                     "verified_user_id > 0")
 
-    total_media = dba.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1")
+    total_media = dba.fetch_one("select count(*) as total_media_count from player_media where media_type = "
+                                "'video-youtube' and is_deleted = 0 and is_valid = 1")
 
-    valid_media = dba.fetch_one("select count(*) as valid_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1 and is_sorted = 1")
-
-    confirmed_videos = dba.fetch_one("select count(*) as verified_videos_count from player_transcripts where verified_user_id > 0")
+    valid_media = dba.fetch_one("select count(*) as valid_media_count from player_media where media_type = "
+                                "'video-youtube' and is_deleted = 0 and is_valid = 1 and is_sorted = 1")
 
     reports_sent = dba.fetch_one("select count(distinct player_id) as reports_sent_count from player_result")
 
     incomplete_bios = dba.fetch_one("select count(*) as incomplete_bios_count from player where "
-                                    "image is null or first_name = '' or last_name = '' or sport = '' or position = '' or date_of_birth is null or home_town = '' or team = ''")
+                                    "image is null or first_name = '' or last_name = '' or sport = '' or position = "
+                                    "'' or date_of_birth is null or home_town = '' or team = ''")
     incomplete_player_bios = None
 
     if incomplete_bios["incomplete_bios_count"] > 0:
@@ -30,10 +33,9 @@ def get_total_transcribed_stats():
     dba.close()
 
     return {
-        "unprocessed": unprocessed_queue['unprocessed_count'],
-        "confirmed_videos": confirmed_videos['verified_videos_count'],
-        "processed": processed_queue['processed_count'],
-        "total_transcribed": unprocessed_queue['unprocessed_count'] + processed_queue['processed_count'],
+        "untranscribed": untranscribed_media['untranscribed_count'],
+        "processed": speaker_verified['speaker_verified_count'],
+        "total_transcribed": total_media['total_media_count'] - untranscribed_media['untranscribed_count'],
         "total_media": total_media['total_media_count'],
         "valid_media": valid_media['valid_media_count'],
         "reports_sent": reports_sent['reports_sent_count'],

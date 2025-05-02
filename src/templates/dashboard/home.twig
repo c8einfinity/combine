@@ -71,7 +71,7 @@
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
-                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.unprocessed }} / {{ player_stats.total_players }}</h3>
+                                <h3 class="card-title fw-bolder text-darker-green">{{ total_transcribed_stats.valid_media - total_transcribed_stats.untranscribed }} / {{ player_stats.total_players }}</h3>
                                 <p class="card-text font-weight-bold">Pending Verification</p>
                             </div>
                             <div>
@@ -106,16 +106,16 @@
                     <div class="d-flex flex-column">
                         <dl class="row">
                             <dt class="col-3">Media Verified: </dt>
-                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.confirmed_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.valid_media }} / {{ total_transcribed_stats.total_media }}</dd>
                             <dt class="col-3">Transcribed:</dt>
-                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.transcribed_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.total_transcribed }} / {{ total_transcribed_stats.total_media }}</dd>
                             <dt class="col-3">Speaker Verified:</dt>
-                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.speaker_verified_videos }} / {{ total_transcribed_stats.total_media }}</dd>
+                            <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.processed }} / {{ total_transcribed_stats.total_media }}</dd>
                         </dl>
                         {%
-                            set progress = (total_transcribed_stats.confirmed_videos / total_transcribed_stats.total_media) * 100
+                            set progress = (total_transcribed_stats.processed / total_transcribed_stats.total_media) * 100
                          %}
-                        <progress value="{{ progress }}" max="100" class="w-100"></progress>
+                        <progress value="{{ progress|round }}" max="100" class="w-100"></progress>
                     </div>
                 </div>
             </div>
