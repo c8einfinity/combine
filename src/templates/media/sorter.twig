@@ -18,30 +18,30 @@
 
                 </div>
                 <div class="col">
-                <a href="{% if video %}{{ video.url }}{% endif %}" target="_blank">Click here to watch the video directly on YouTube if it does not display in the frame above</a>
-                <form method="post" onsubmit="return false">
-                    {{  ("SomeValue"~RANDOM()) | formToken }}
-                    <input type="hidden" name="player_id" value="{{ player.id }}">
-                    <input type="hidden" name="player_media_id" value="{{ video.id }}">
-                    <input type="hidden" name="is_valid" value="0">
-                    <br>
-                    <div class="row">
-                        <div class="col">
-                            <button class="btn btn-danger" onclick="document.forms[0].is_valid.value = 0; document.forms[0].submit()">NO</button>
+                    <a href="{% if video %}{{ video.url }}{% endif %}" target="_blank">Click here to watch the video directly on YouTube if it does not display in the frame above</a>
+                    <form method="post" onsubmit="return false">
+                        <input type="hidden" name="player_id" value="{{ player.id }}">
+                        <input type="hidden" name="player_media_id" value="{{ video.id }}">
+                        <input type="hidden" name="is_valid" value="0">
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <button class="btn btn-danger" onclick="document.forms[0].is_valid.value = 0; document.forms[0].submit()">NO</button>
+                            </div>
+                            <div clss="col">
+                            <h4>Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?</h4>
+                            </div>
+                            <div class="col">
+                                <button class="btn btn-primary" style="float: right" onclick="document.forms[0].is_valid.value = 1; document.forms[0].submit()">Yes</button>
+                            </div>
                         </div>
-                        <div clss="col">
-                        <h4>Video contains audio of {{ player.first_name}} {{ player.last_name}} speaking?</h4>
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col"><h4 class="text-center">{{ counter }}</h4></div>
+                            <div class="col"></div>
                         </div>
-                        <div class="col">
-                            <button class="btn btn-primary" style="float: right" onclick="document.forms[0].is_valid.value = 1; document.forms[0].submit()">Yes</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col"><h4 class="text-center">{{ counter }}</h4></div>
-                        <div class="col"></div>
-                    </div>
-                </form>
+                        {{  ("SomeValue"~RANDOM()) | formToken }}
+                    </form>
                 </div>
 
             </div>
