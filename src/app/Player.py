@@ -189,14 +189,26 @@ def get_player_stats():
 
     players = Player.__dba__.fetch_one("select count(*) as total_players from player")
 
-    player_bio_linked = Player.__dba__.fetch_one("select count(*) as total_bio_links from player where is_bio_links_created = 1")
+    player_bio_linked = Player.__dba__.fetch_one("select count(*) as total_bio_links from player where "
+                                                 "is_bio_links_created = 1")
 
-    player_videos_linked = Player.__dba__.fetch_one("select count(*) as total_videos from player where is_video_links_created = 1")
+    player_videos_linked = Player.__dba__.fetch_one("select count(*) as total_videos from player where "
+                                                    "is_video_links_created = 1")
+
+    confirmed_players = Player.__dba__.fetch_one("select count(distinct player.id) as total_confirmed_players from player "
+                                                 "join player_media on player.id = player_media.player_id "
+                                                 "join player_transcripts on player.id = player_transcripts.player_id "
+                                                 "and player_media.id = player_transcripts.player_media_id "
+                                                 "and player_media.is_sorted = 1 "
+                                                 "and player_media.is_deleted = 0 "
+                                                 "and player_media.is_valid = 1 "
+                                                 "and player_transcripts.verified_user_id > 0")
 
     return {
         "total_players": players['total_players'],
         "total_bio_links": player_bio_linked['total_bio_links'],
-        "total_videos": player_videos_linked['total_videos']
+        "total_videos": player_videos_linked['total_videos'],
+        "total_confirmed_players": confirmed_players['total_confirmed_players']
     }
 
 def resize_profile_image(image_data):

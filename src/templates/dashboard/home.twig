@@ -10,7 +10,7 @@
 {% block content_public %}
 <main class="container-fluid">
     <div class="mb-4">
-        <h3 class="text-body text-uppercase">Overview</h3>
+        <h3 class="text-body text-uppercase">Athlete Overview</h3>
         <hr class="hor-line-gradient" />
     </div>
     {% if home_visible_permission %}
@@ -21,10 +21,10 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h3 class="card-title fw-bolder text-darker-green">{{ player_stats.total_players }}</h3>
-                                <p class="card-text font-weight-bold">Players Loaded</p>
+                                <p class="card-text font-weight-bold">Athletes Loaded</p>
                             </div>
                             <div>
-                                <img src="/images/dashboard/icon-loaded.svg" alt="Players loaded Icon" class="img-fluid">
+                                <img src="/images/dashboard/icon-loaded.svg" alt="Athletes loaded Icon" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div>
                                 <h3 class="card-title fw-bolder text-darker-green">
-                                    {{ total_transcribed_stats.confirmed_videos }} / {{ total_transcribed_stats.valid_media }}
+                                    {{ player_stats.total_confirmed_players }} / {{ player_stats.total_players }}
                                 </h3>
                                 <p class="card-text font-weight-bold">Verified and Confirmed</p>
                             </div>
