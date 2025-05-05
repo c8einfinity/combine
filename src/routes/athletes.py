@@ -644,10 +644,7 @@ async def post_athletes_id(request, response):
     player.load()
 
     if player.image:
-        raw_value = str(player["image"])
-        if raw_value.startswith("b\"") or raw_value.startswith("b'"):
-            raw_value = raw_value[2:-1]
-        player.image = base64.b64decode(raw_value).decode("utf-8")
+        player.image = base64.b64decode(player.image).decode("utf-8")
     else:
         player.image = ""
 
