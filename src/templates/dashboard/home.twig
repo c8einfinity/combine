@@ -112,10 +112,12 @@
                             <dt class="col-3">Speaker Verified:</dt>
                             <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.processed }} / {{ total_transcribed_stats.total_media }}</dd>
                         </dl>
+                        {% if total_transcribed_stats.processed > 0 and total_transcribed_stats.total_media > 0 %}
                         {%
                             set progress = (total_transcribed_stats.processed / total_transcribed_stats.total_media) * 100
                          %}
                         <progress value="{{ progress|round }}" max="100" class="w-100"></progress>
+                        {% endif %}
                     </div>
                 </div>
             </div>
