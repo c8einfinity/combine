@@ -33,13 +33,13 @@ def get_total_transcribed_stats():
     dba.close()
 
     return {
-        "untranscribed": untranscribed_media['untranscribed_count'],
-        "processed": speaker_verified['speaker_verified_count'],
-        "total_transcribed": total_media['total_media_count'] - untranscribed_media['untranscribed_count'],
-        "total_media": total_media['total_media_count'],
-        "valid_media": valid_media['valid_media_count'],
-        "reports_sent": reports_sent['reports_sent_count'],
-        "incomplete_bios": incomplete_bios['incomplete_bios_count'],
+        "untranscribed": untranscribed_media['untranscribed_count'] if untranscribed_media else 0,
+        "processed": speaker_verified['speaker_verified_count'] if speaker_verified else 0,
+        "total_transcribed": total_media['total_media_count'] - untranscribed_media['untranscribed_count'] if total_media and untranscribed_media else 0,
+        "total_media": total_media['total_media_count'] if total_media else 0,
+        "valid_media": valid_media['valid_media_count'] if valid_media else 0,
+        "reports_sent": reports_sent['reports_sent_count'] if reports_sent else 0,
+        "incomplete_bios": incomplete_bios['incomplete_bios_count'] if incomplete_bios else 0,
         "incomplete_player_bios": incomplete_player_bios
     }
 
