@@ -204,7 +204,7 @@ class QueueUtility(object):
         self.config = None
         self.channel = None
         self.connect()
-        self.set_queue("qfinder")
+        self.set_queue(os.getenv("RABBITMQ_QUEUE_NAME", "qfinder"))
 
     def connect(self):
         """
