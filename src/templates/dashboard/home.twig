@@ -1,6 +1,6 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
-{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+{% set home_visible_permission = user.user_group_id == "1" or user_permissions.permissions.Home.visible == "1"  %}
 {% extends "base.twig" %}
 
 {% block navigation %}
