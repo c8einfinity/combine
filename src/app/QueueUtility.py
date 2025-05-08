@@ -26,8 +26,13 @@ def process_item(queue, err, msg):
         Debug.error(f"Failed to decode message: {e}")
         return False
 
+    if message is None:
+        Debug.error("Message is None")
+        return False
+
     action = message["action"]
     payload = message["payload"]
+    dba = None
 
     if "action" in message:
         database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
@@ -168,8 +173,8 @@ def process_item(queue, err, msg):
             "data": json.dumps({"player": results["player"], "coach": results["coach"], "scout": results["scout"]})
         })
         player_result.save()
-
-    dba.close()
+    if dba is not None:
+        dba.close()
 
     queue_result = Queue(QueueUtility().config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
