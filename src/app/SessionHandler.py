@@ -11,6 +11,10 @@ class SessionHandler:
         :param user:
         :return:
         """
+        print("Setting user session")
+        print(request.session)
+        print(user)
+        print(user_permissions)
         request.session.set("user", user)
         request.session.set("logged_in", True)
         request.session.set("user_permissions", user_permissions)
@@ -24,6 +28,9 @@ class SessionHandler:
         :param request:
         :return:
         """
+        print("Unsetting user session")
+        print(request.session)
+
         request.session.set("logged_in", False)
         request.session.set("user", None)
         request.session.set("user_permissions", None)
