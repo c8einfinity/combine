@@ -13,9 +13,7 @@ class SessionHandler:
         :return:
         """
         Debug.info("Setting user session")
-        Debug.info(request.session)
-        Debug.info(user)
-        Debug.info(user_permissions)
+
         request.session.set("user", user)
         request.session.set("logged_in", True)
         request.session.set("user_permissions", user_permissions)
@@ -30,7 +28,6 @@ class SessionHandler:
         :return:
         """
         Debug.info("Unsetting user session")
-        Debug.info(request.session)
 
         request.session.set("logged_in", False)
         request.session.set("user", None)
