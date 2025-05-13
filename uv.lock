@@ -1104,24 +1104,24 @@ wheels = [
 
 [[package]]
 name = "tina4-python"
-version = "0.2.92"
+version = "0.2.98"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
+    { name = "asyncer" },
     { name = "bcrypt" },
     { name = "cryptography" },
     { name = "hypercorn" },
     { name = "jinja2" },
     { name = "libsass" },
     { name = "litequeue" },
-    { name = "poetry-plugin-export" },
     { name = "pyjwt" },
     { name = "python-dotenv" },
     { name = "simple-websocket" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/33/af/ea070ee44af20a24da6144c1ab61c1473635eda89c5f396ca865cec7a26b/tina4_python-0.2.92.tar.gz", hash = "sha256:3cbc68bf1737a07746827f26c0e187167a34eb0712f99b0c1cf15f4158fb1a9f", size = 306643, upload-time = "2025-04-30T12:46:36.771Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/09/0a/963855db82cbe82f804046bd23ec95b7f6cf7ec9485375395502ca59c3fa/tina4_python-0.2.98.tar.gz", hash = "sha256:e7aac70d7b6efbe3457fd4118d83b815e84f168f6060d4754549686bcc3b3ad9", size = 301371, upload-time = "2025-05-13T12:13:18.188Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ee/ee/88434a7ccc6f6a33822a5ae1333030ca144fb2cb6a01ffb9ff7d0cfb49ef/tina4_python-0.2.92-py3-none-any.whl", hash = "sha256:61cb864b126f7380cb956e54d063b63f30a1b91834f1cd8e9598de7a5ab58200", size = 316592, upload-time = "2025-04-30T12:46:34.077Z" },
+    { url = "https://files.pythonhosted.org/packages/4b/15/0bb899b6afd568303cf1712c5926c7d1fcff7ca289f8ffcb9d34b309dba8/tina4_python-0.2.98-py3-none-any.whl", hash = "sha256:f7e73bfc6dfd8cf22a0da223877c31f2d2ac86fdf0fb626d24f58d035bca5c5e", size = 316096, upload-time = "2025-05-13T12:13:11.679Z" },
 ]
 
 [[package]]
