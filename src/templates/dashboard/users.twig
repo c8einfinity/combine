@@ -1,9 +1,9 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
-{% set users_visible_permission = user_permissions.permissions.Users.visible == "1" or user.user_group_id == "1" %}
-{% set users_create_permission = user_permissions.permissions.Users.create == "1" or user.user_group_id == "1" %}
-{% set users_edit_permission = user_permissions.permissions.Users.edit == "1" or user.user_group_id == "1" %}
-{% set users_delete_permission = user_permissions.permissions.Users.delete == "1" or user.user_group_id == "1" %}
+{% set users_visible_permission = user.user_group_id == "1" or user_permissions.permissions.Users.visible == "1" %}
+{% set users_create_permission = user.user_group_id == "1" or user_permissions.permissions.Users.create == "1" %}
+{% set users_edit_permission = user.user_group_id == "1" or user_permissions.permissions.Users.edit == "1" %}
+{% set users_delete_permission = user.user_group_id == "1" or user_permissions.permissions.Users.delete == "1" %}
 {% extends "base.twig" %}
 
 {% block navigation %}

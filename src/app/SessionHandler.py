@@ -1,5 +1,6 @@
 # Copyright 2025 Code Infinity
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
+from tina4_python import Debug
 
 class SessionHandler:
     @staticmethod
@@ -11,6 +12,8 @@ class SessionHandler:
         :param user:
         :return:
         """
+        Debug.info("Setting user session")
+
         request.session.set("user", user)
         request.session.set("logged_in", True)
         request.session.set("user_permissions", user_permissions)
@@ -24,6 +27,8 @@ class SessionHandler:
         :param request:
         :return:
         """
+        Debug.info("Unsetting user session")
+
         request.session.set("logged_in", False)
         request.session.set("user", None)
         request.session.set("user_permissions", None)

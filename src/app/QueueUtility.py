@@ -16,18 +16,6 @@ def process_item(queue, err, msg):
     :return:
     """
     from tina4_python.Database import Database
-
-    database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
-
-    dba = Database(f"mysql.connector:{database_path}",
-                   os.getenv("DATABASE_USERNAME", "doadmin"),
-                   os.getenv("DATABASE_PASSWORD", "doadmin"))
-
-    from src.app.Scraper import get_player_bio_urls, get_youtube_videos
-    from src.orm.PlayerMedia import PlayerMedia
-    from src.app.Player import get_player_transcript, split_trim_minify, submit_player_results
-    from src.orm.Player import Player
-    from src.orm.PlayerResult import PlayerResult
     if err is not None:
         Debug.error(f"Error processing message: {err}")
         return False
@@ -38,8 +26,29 @@ def process_item(queue, err, msg):
         Debug.error(f"Failed to decode message: {e}")
         return False
 
+    if message is None:
+        Debug.error("Message is None")
+        return False
+
     action = message["action"]
     payload = message["payload"]
+    dba = None
+
+    if "action" in message:
+        database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
+
+        dba = Database(f"mysql.connector:{database_path}",
+                       os.getenv("DATABASE_USERNAME", "doadmin"),
+                       os.getenv("DATABASE_PASSWORD", "doadmin"))
+
+
+    from src.app.Scraper import get_player_bio_urls, get_youtube_videos
+    from src.orm.PlayerMedia import PlayerMedia
+    from src.app.Player import get_player_transcript, split_trim_minify, submit_player_results
+    from src.orm.Player import Player
+    from src.orm.PlayerResult import PlayerResult
+
+
     if action == "process_player":
         player_id = payload["player_id"]
         Debug.info(f"Processing player from queue with ID: {player_id}")
@@ -164,8 +173,8 @@ def process_item(queue, err, msg):
             "data": json.dumps({"player": results["player"], "coach": results["coach"], "scout": results["scout"]})
         })
         player_result.save()
-
-    dba.close()
+    if dba is not None:
+        dba.close()
 
     queue_result = Queue(QueueUtility().config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
@@ -195,7 +204,7 @@ class QueueUtility(object):
         self.config = None
         self.channel = None
         self.connect()
-        self.set_queue("qfinder")
+        self.set_queue(os.getenv("RABBITMQ_QUEUE_NAME", "qfinder"))
 
     def connect(self):
         """

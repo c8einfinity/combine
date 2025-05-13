@@ -1,35 +1,38 @@
-[tool.poetry]
+[project]
 name = "combine"
 version = "0.1.0"
 description = ""
-authors = ["Andre van Zuydam <andrevanzuydam@gmail.com>"]
+authors = [
+    { name = "Andre van Zuydam", email = "andrevanzuydam@gmail.com" },
+    { name = "Jacques van Zuydam", email = "jtvanzuydam@gmail.com" }
+]
+requires-python = "~=3.12"
 readme = "README.md"
-package-mode = false
+dependencies = [
+    "mysql-connector-python>=9.1.0,<10",
+    "redis>=5.2.1,<6",
+    "pika>=1.3.2,<2",
+    "poetry-plugin-export>=1.9.0,<2",
+    "requests>=2.32.3,<3",
+    "beautifulsoup4>=4.12.3,<5",
+    "semantic-text-splitter>=0.22.0,<0.23",
+    "google>=3.0.0,<4",
+    "pdfkit>=1.0.0,<2",
+    "asyncer>=0.0.8,<0.0.9",
+    "pillow>=11.2.1,<12",
+    "tina4-python>=0.2.92",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-tina4-python = "^0.2.46"
-mysql-connector-python = "^9.1.0"
-redis = "^5.2.1"
-pika = "^1.3.2"
-poetry-plugin-export = "^1.9.0"
-requests = "^2.32.3"
-beautifulsoup4 = "^4.12.3"
-semantic-text-splitter = "^0.22.0"
-google = "^3.0.0"
-weasyprint = "^64.1"
-wkhtmltopdf = "^0.2"
-pdfkit = "^1.0.0"
-asyncer = "^0.0.8"
+[dependency-groups]
+dev = [
+    "poetry-plugin-export>=1.9.0,<2",
+    "jurigged>=0.6.0,<0.7",
+    "hypercorn>=0.17.3,<0.18",
+]
 
-[tool.poetry.group.dev.dependencies]
-poetry-plugin-export = "^1.9.0"
-jurigged = "^0.6.0"
-hypercorn = "^0.17.3"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
+[tool.uv]
+package = false
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

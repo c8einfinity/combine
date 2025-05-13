@@ -66,6 +66,9 @@ async def session(request, response):
     print("OK")
     print(request.session.get("logged_in"))
 
+    html = Template.render("sessiontest.twig")
+    return response(html)
+
 
 @get("/test/results")
 async def index(request, response):

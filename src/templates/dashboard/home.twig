@@ -1,6 +1,6 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
-{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+{% set home_visible_permission = user.user_group_id == "1" or user_permissions.permissions.Home.visible == "1"  %}
 {% extends "base.twig" %}
 
 {% block navigation %}
@@ -112,10 +112,12 @@
                             <dt class="col-3">Speaker Verified:</dt>
                             <dd class="col-9 font-weight-bold">{{ total_transcribed_stats.processed }} / {{ total_transcribed_stats.total_media }}</dd>
                         </dl>
+                        {% if total_transcribed_stats.processed > 0 and total_transcribed_stats.total_media > 0 %}
                         {%
                             set progress = (total_transcribed_stats.processed / total_transcribed_stats.total_media) * 100
                          %}
                         <progress value="{{ progress|round }}" max="100" class="w-100"></progress>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -1,9 +1,9 @@
 {% set user = request.session.get("user") %}
 {% set user_permissions = request.session.get("user_permissions") %}
-{% set athletes_visible_permission = user_permissions.permissions.Athletes.visible == "1" or user.user_group_id == "1" %}
-{% set athletes_create_permission = user_permissions.permissions.Athletes.create == "1" or user.user_group_id == "1" %}
-{% set athletes_delete_permission = user_permissions.permissions.Athletes.delete == "1" or user.user_group_id == "1" %}
-{% set profile_visible_permission = user_permissions.permissions.Profile.visible == "1" or user.user_group_id == "1" %}
+{% set athletes_visible_permission = user.user_group_id == "1" or user_permissions.permissions.Athletes.visible == "1" %}
+{% set athletes_create_permission = user.user_group_id == "1" or user_permissions.permissions.Athletes.create == "1" %}
+{% set athletes_delete_permission = user.user_group_id == "1" or user_permissions.permissions.Athletes.delete == "1" %}
+{% set profile_visible_permission = user.user_group_id == "1" or user_permissions.permissions.Profile.visible == "1" %}
 {% extends "base.twig" %}
 
 {% block navigation %}

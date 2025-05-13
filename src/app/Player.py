@@ -205,10 +205,10 @@ def get_player_stats():
                                                  "and player_transcripts.verified_user_id > 0")
 
     return {
-        "total_players": players['total_players'],
-        "total_bio_links": player_bio_linked['total_bio_links'],
-        "total_videos": player_videos_linked['total_videos'],
-        "total_confirmed_players": confirmed_players['total_confirmed_players']
+        "total_players": players['total_players'] if players else 0,
+        "total_bio_links": player_bio_linked['total_bio_links'] if player_bio_linked else 0,
+        "total_videos": player_videos_linked['total_videos'] if player_videos_linked else 0,
+        "total_confirmed_players": confirmed_players['total_confirmed_players'] if confirmed_players else 0
     }
 
 def resize_profile_image(image_data):
