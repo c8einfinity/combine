@@ -1,76 +1,184 @@
-anyio==4.9.0 ; python_version >= "3.12" and python_version < "4.0"
-asyncer==0.0.8 ; python_version >= "3.12" and python_version < "4.0"
-bcrypt==4.3.0 ; python_version >= "3.12" and python_version < "4.0"
-beautifulsoup4==4.13.4 ; python_version >= "3.12" and python_version < "4.0"
-build==1.2.2.post1 ; python_version >= "3.12" and python_version < "4.0"
-cachecontrol==0.14.3 ; python_version >= "3.12" and python_version < "4.0"
-certifi==2025.4.26 ; python_version >= "3.12" and python_version < "4.0"
-cffi==1.17.1 ; python_version >= "3.12" and python_version < "4.0"
-charset-normalizer==3.4.2 ; python_version >= "3.12" and python_version < "4.0"
-cleo==2.1.0 ; python_version >= "3.12" and python_version < "4.0"
-colorama==0.4.6 ; python_version >= "3.12" and python_version < "4.0" and os_name == "nt"
-crashtest==0.4.1 ; python_version >= "3.12" and python_version < "4.0"
-cryptography==44.0.3 ; python_version >= "3.12" and python_version < "4.0"
-distlib==0.3.9 ; python_version >= "3.12" and python_version < "4.0"
-dulwich==0.22.8 ; python_version >= "3.12" and python_version < "4.0"
-fastjsonschema==2.21.1 ; python_version >= "3.12" and python_version < "4.0"
-filelock==3.18.0 ; python_version >= "3.12" and python_version < "4.0"
-findpython==0.6.3 ; python_version >= "3.12" and python_version < "4.0"
-google==3.0.0 ; python_version >= "3.12" and python_version < "4.0"
-h11==0.16.0 ; python_version >= "3.12" and python_version < "4.0"
-h2==4.2.0 ; python_version >= "3.12" and python_version < "4.0"
-hpack==4.1.0 ; python_version >= "3.12" and python_version < "4.0"
-httpcore==1.0.9 ; python_version >= "3.12" and python_version < "4.0"
-httpx==0.28.1 ; python_version >= "3.12" and python_version < "4.0"
-hypercorn==0.17.3 ; python_version >= "3.12" and python_version < "4.0"
-hyperframe==6.1.0 ; python_version >= "3.12" and python_version < "4.0"
-idna==3.10 ; python_version >= "3.12" and python_version < "4.0"
-installer==0.7.0 ; python_version >= "3.12" and python_version < "4.0"
-jaraco-classes==3.4.0 ; python_version >= "3.12" and python_version < "4.0"
-jaraco-context==6.0.1 ; python_version >= "3.12" and python_version < "4.0"
-jaraco-functools==4.1.0 ; python_version >= "3.12" and python_version < "4.0"
-jeepney==0.9.0 ; python_version >= "3.12" and python_version < "4.0" and sys_platform == "linux"
-jinja2==3.1.6 ; python_version >= "3.12" and python_version < "4.0"
-keyring==25.6.0 ; python_version >= "3.12" and python_version < "4.0"
-libsass==0.23.0 ; python_version >= "3.12" and python_version < "4.0"
-litequeue==0.9 ; python_version >= "3.12" and python_version < "4.0"
-markupsafe==3.0.2 ; python_version >= "3.12" and python_version < "4.0"
-more-itertools==10.7.0 ; python_version >= "3.12" and python_version < "4.0"
-msgpack==1.1.0 ; python_version >= "3.12" and python_version < "4.0"
-mysql-connector-python==9.3.0 ; python_version >= "3.12" and python_version < "4.0"
-packaging==25.0 ; python_version >= "3.12" and python_version < "4.0"
-pbs-installer==2025.4.9 ; python_version >= "3.12" and python_version < "4.0"
-pdfkit==1.0.0 ; python_version >= "3.12" and python_version < "4.0"
-pika==1.3.2 ; python_version >= "3.12" and python_version < "4.0"
-pillow==11.2.1 ; python_version >= "3.12" and python_version < "4.0"
-pkginfo==1.12.1.2 ; python_version >= "3.12" and python_version < "4.0"
-platformdirs==4.3.8 ; python_version >= "3.12" and python_version < "4.0"
-poetry-core==2.1.3 ; python_version >= "3.12" and python_version < "4.0"
-poetry-plugin-export==1.9.0 ; python_version >= "3.12" and python_version < "4.0"
-poetry==2.1.3 ; python_version >= "3.12" and python_version < "4.0"
-priority==2.0.0 ; python_version >= "3.12" and python_version < "4.0"
-pycparser==2.22 ; python_version >= "3.12" and python_version < "4.0"
-pyjwt==2.10.1 ; python_version >= "3.12" and python_version < "4.0"
-pyproject-hooks==1.2.0 ; python_version >= "3.12" and python_version < "4.0"
-python-dotenv==1.1.0 ; python_version >= "3.12" and python_version < "4.0"
-pywin32-ctypes==0.2.3 ; python_version >= "3.12" and python_version < "4.0" and sys_platform == "win32"
-rapidfuzz==3.13.0 ; python_version >= "3.12" and python_version < "4.0"
-redis==5.2.1 ; python_version >= "3.12" and python_version < "4.0"
-requests-toolbelt==1.0.0 ; python_version >= "3.12" and python_version < "4.0"
-requests==2.32.3 ; python_version >= "3.12" and python_version < "4.0"
-secretstorage==3.3.3 ; python_version >= "3.12" and python_version < "4.0" and sys_platform == "linux"
-semantic-text-splitter==0.22.0 ; python_version >= "3.12" and python_version < "4.0"
-shellingham==1.5.4 ; python_version >= "3.12" and python_version < "4.0"
-simple-websocket==1.1.0 ; python_version >= "3.12" and python_version < "4.0"
-sniffio==1.3.1 ; python_version >= "3.12" and python_version < "4.0"
-soupsieve==2.7 ; python_version >= "3.12" and python_version < "4.0"
-tina4-python @ git+https://github.com/jacquestvanzuydam/tina4-python.git@5e1e469533dd01a95f335d09a955d67b5f3baea9 ; python_version >= "3.12" and python_version < "4.0"
-tomlkit==0.13.2 ; python_version >= "3.12" and python_version < "4.0"
-trove-classifiers==2025.5.9.12 ; python_version >= "3.12" and python_version < "4.0"
-typing-extensions==4.13.2 ; python_version >= "3.12" and python_version < "4.0"
-urllib3==2.4.0 ; python_version >= "3.12" and python_version < "4.0"
-virtualenv==20.31.2 ; python_version >= "3.12" and python_version < "4.0"
-watchdog==6.0.0 ; python_version >= "3.12" and python_version < "4.0"
-wsproto==1.2.0 ; python_version >= "3.12" and python_version < "4.0"
-xattr==1.1.4 ; python_version >= "3.12" and python_version < "4.0" and sys_platform == "darwin"
-zstandard==0.23.0 ; python_version >= "3.12" and python_version < "4.0"
+# This file was autogenerated by uv via the following command:
+#    uv pip compile pyproject.toml -o requirements.txt
+anyio==4.9.0
+    # via
+    #   asyncer
+    #   httpx
+asyncer==0.0.8
+    # via combine (pyproject.toml)
+bcrypt==4.3.0
+    # via tina4-python
+beautifulsoup4==4.13.4
+    # via
+    #   combine (pyproject.toml)
+    #   google
+build==1.2.2.post1
+    # via poetry
+cachecontrol==0.14.3
+    # via poetry
+certifi==2025.4.26
+    # via
+    #   httpcore
+    #   httpx
+    #   requests
+cffi==1.17.1
+    # via
+    #   cryptography
+    #   xattr
+charset-normalizer==3.4.2
+    # via requests
+cleo==2.1.0
+    # via poetry
+crashtest==0.4.1
+    # via cleo
+cryptography==44.0.3
+    # via tina4-python
+distlib==0.3.9
+    # via virtualenv
+dulwich==0.22.8
+    # via poetry
+fastjsonschema==2.21.1
+    # via poetry
+filelock==3.18.0
+    # via
+    #   cachecontrol
+    #   virtualenv
+findpython==0.6.3
+    # via poetry
+google==3.0.0
+    # via combine (pyproject.toml)
+h11==0.16.0
+    # via
+    #   httpcore
+    #   hypercorn
+    #   wsproto
+h2==4.2.0
+    # via hypercorn
+hpack==4.1.0
+    # via h2
+httpcore==1.0.9
+    # via httpx
+httpx==0.28.1
+    # via pbs-installer
+hypercorn==0.17.3
+    # via tina4-python
+hyperframe==6.1.0
+    # via h2
+idna==3.10
+    # via
+    #   anyio
+    #   httpx
+    #   requests
+installer==0.7.0
+    # via poetry
+jaraco-classes==3.4.0
+    # via keyring
+jaraco-context==6.0.1
+    # via keyring
+jaraco-functools==4.1.0
+    # via keyring
+jinja2==3.1.6
+    # via tina4-python
+keyring==25.6.0
+    # via poetry
+libsass==0.23.0
+    # via tina4-python
+litequeue==0.9
+    # via tina4-python
+markupsafe==3.0.2
+    # via jinja2
+more-itertools==10.7.0
+    # via
+    #   jaraco-classes
+    #   jaraco-functools
+msgpack==1.1.0
+    # via cachecontrol
+mysql-connector-python==9.3.0
+    # via combine (pyproject.toml)
+packaging==25.0
+    # via
+    #   build
+    #   findpython
+    #   poetry
+pbs-installer==2025.4.9
+    # via poetry
+pdfkit==1.0.0
+    # via combine (pyproject.toml)
+pika==1.3.2
+    # via combine (pyproject.toml)
+pillow==11.2.1
+    # via combine (pyproject.toml)
+pkginfo==1.12.1.2
+    # via poetry
+platformdirs==4.3.8
+    # via
+    #   poetry
+    #   virtualenv
+poetry==2.1.3
+    # via poetry-plugin-export
+poetry-core==2.1.3
+    # via
+    #   poetry
+    #   poetry-plugin-export
+poetry-plugin-export==1.9.0
+    # via
+    #   combine (pyproject.toml)
+    #   tina4-python
+priority==2.0.0
+    # via hypercorn
+pycparser==2.22
+    # via cffi
+pyjwt==2.10.1
+    # via tina4-python
+pyproject-hooks==1.2.0
+    # via
+    #   build
+    #   poetry
+python-dotenv==1.1.0
+    # via tina4-python
+rapidfuzz==3.13.0
+    # via cleo
+redis==5.2.1
+    # via combine (pyproject.toml)
+requests==2.32.3
+    # via
+    #   combine (pyproject.toml)
+    #   cachecontrol
+    #   poetry
+    #   requests-toolbelt
+requests-toolbelt==1.0.0
+    # via poetry
+semantic-text-splitter==0.22.0
+    # via combine (pyproject.toml)
+shellingham==1.5.4
+    # via poetry
+simple-websocket==1.1.0
+    # via tina4-python
+sniffio==1.3.1
+    # via anyio
+soupsieve==2.7
+    # via beautifulsoup4
+tina4-python==0.2.93
+    # via combine (pyproject.toml)
+tomlkit==0.13.2
+    # via poetry
+trove-classifiers==2025.5.9.12
+    # via poetry
+typing-extensions==4.13.2
+    # via beautifulsoup4
+urllib3==2.4.0
+    # via
+    #   dulwich
+    #   requests
+virtualenv==20.31.2
+    # via poetry
+watchdog==6.0.0
+    # via tina4-python
+wsproto==1.2.0
+    # via
+    #   hypercorn
+    #   simple-websocket
+xattr==1.1.4
+    # via poetry
+zstandard==0.23.0
+    # via pbs-installer
