@@ -18,6 +18,10 @@ warnings.filterwarnings("ignore")
 
 database_path = os.getenv("DATABASE_PATH", "db-mysql-nyc3-mentalmetrix-do-user-4490318-0.c.db.ondigitalocean.com/25060:qfinder")
 
+# if option is passed with staging then use staging database
+if "--staging" in sys.argv:
+    database_path = f"{database_path}_staging"
+
 aatos = Aatos
 aatos.LLM_URLS = [os.getenv("AATOS_URL", "http://192.168.88.99:8001")]
 
