@@ -99,6 +99,8 @@ def process_item(queue, err, msg):
             Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
+                queue_result = Queue(QueueUtility().config, topic="result")
+                Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
                 raise Exception("Player not found")
             player = player[0]
         except Exception as e:
