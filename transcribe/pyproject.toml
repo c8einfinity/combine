@@ -15,4 +15,5 @@ dependencies = [
     "pydub (>=0.25.1,<0.26.0)",
     "transformers",
     "pika",
+    "tina4-python",
 ]
