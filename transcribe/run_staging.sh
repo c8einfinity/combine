@@ -1,1 +1,1 @@
-screen -dmS rag_staging -Logfile staging.log poetry run python app.py stop --staging &
+screen -dmS rag_staging -Logfile staging.log uv run python app.py stop --staging &
