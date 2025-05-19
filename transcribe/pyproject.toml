@@ -16,4 +16,5 @@ dependencies = [
     "transformers",
     "pika>=1.3.2,<2",
     "tina4-python>=0.2.92",
+    "sentencepiece>=0.2.0",
 ]
