@@ -1,0 +1,11 @@
+<label for="positionInput" class="font-weight-bold">Position</label>
+<select class="form-control" id="positionInput" name="position">
+    <option value="0" {% if position == 0 %}selected{% endif %}>Select Position</option>
+    {% for position in positions %}
+        <option value="{{ position.name }}"
+            {% if position.name == selected_position %}
+                selected
+            {% endif %}
+        >{{ position.name }}</option>
+    {% endfor %}
+</select>

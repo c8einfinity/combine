@@ -58,10 +58,20 @@ def check_players(filter=""):
     except Exception as e:
         print(str(e))
 
-def sync_sports_positions():
+def sync_sports_positions(dba):
     from ..orm.Sport import Sport
     from ..orm.SportPosition import SportPosition
     Debug("Syncing sports and positions from API")
+    try:
+        Debug("Clearing sport and sport_position tables")
+        dba.execute("SET FOREIGN_KEY_CHECKS = 0")
+        dba.execute("truncate table sport_position")
+        dba.execute("truncate table sport")
+        dba.execute("SET FOREIGN_KEY_CHECKS = 1")
+    except Exception as e:
+        Debug.error("Error truncating sport and sport_position tables")
+        Debug.error(str(e))
+        return
     try:
         sports_request = requests.get(f"{os.getenv("TEAMQ_ENDPOINT")}/api/get-all-sports",
                                 json={},

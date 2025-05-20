@@ -28,6 +28,7 @@ async def get_athletes(request, response):
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
     from ..orm.Player import Player
+    from ..orm.Sport import Sport
     from ..app.Player import player_bio_complete, player_report_sent
 
     data_tables_filter = get_data_tables_filter(request)
@@ -183,6 +184,7 @@ async def get_athlete(request, response):
 
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
+    from ..orm.Sport import Sport
 
     videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video-%' and is_deleted = 0 ",
                                   params=[request.params["id"]])
@@ -195,12 +197,51 @@ async def get_athlete(request, response):
         else:
             player_image = "None"
 
+        sports = Sport().select('*', limit=100).to_list()
+
         html = Template.render("player/profile.twig",
-                               {"player": player.to_dict(),  "player_image": player_image, "videos": videos.to_list(decode_metadata)})
+                               {"player": player.to_dict(),  "player_image": player_image,
+                                "videos": videos.to_list(decode_metadata), "sports": sports})
         return response(html)
     else:
         return response("Player error, or player not found")
 
+@get("/api/athlete/{id}/sport-positions/{sport_name}")
+async def get_athlete_sport_position_select(request, response):
+    """
+    Get the sport positions for the athlete
+    :param request:
+    :param response:
+    :return:
+    """
+    if not request.session.get('logged_in'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
+    from ..orm.Sport import Sport
+    from ..orm.SportPosition import SportPosition
+    from ..orm.Player import Player
+    from urllib.parse import unquote
+
+    player = Player({"id": request.params["id"]})
+    player.load()
+    player = player.to_dict()
+
+    # url decode sport_name param
+    sport_name = unquote(request.params["sport_name"])
+
+    sport = Sport().select('*', "name = ?", params=[sport_name], limit=1).to_list()
+    if len(sport) == 0:
+        return response("Sport not found", HTTP_NOT_FOUND, TEXT_PLAIN)
+
+    sport_positions = SportPosition().select("*", "sport_id = ?", params=[sport[0]["id"]], limit=100)
+    selected_position = player["position"]
+
+    if sport_positions.count == 0:
+        return response("No positions found for this sport", HTTP_NOT_FOUND, TEXT_PLAIN)
+
+    html = Template.render_twig_template("components/position_select.twig", {"positions": sport_positions.to_list(), "selected_position": selected_position})
+
+    return response(html)
 
 @get("/api/athlete/{id}/report")
 async def get_athlete_full_report(request, response):
