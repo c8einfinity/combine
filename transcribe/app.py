@@ -104,9 +104,14 @@ def decode_data(record):
 terminated = False
 while not terminated:
     try:
-        dba = Database(f"mysql.connector:{database_path}",
-                       os.getenv("DATABASE_USERNAME", "doadmin"),
-                       os.getenv("DATABASE_PASSWORD", "doadmin"))
+        try:
+            dba = Database(f"mysql.connector:{database_path}",
+                           os.getenv("DATABASE_USERNAME", "doadmin"),
+                           os.getenv("DATABASE_PASSWORD", "doadmin"))
+        except Exception as e:
+            print("ERROR CONNECTING TO DATABASE", str(e))
+            time.sleep(1)
+            continue
 
         queue = dba.fetch("select * from queue where processed = 0 and action = 'transcribe' order by priority desc", limit=1).to_list(decode_data)
 
