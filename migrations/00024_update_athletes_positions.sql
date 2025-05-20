@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS position_mapping;
 
 CREATE TABLE position_mapping (
                                             abbreviation VARCHAR(10),
-                                            full_name VARCHAR(50)
+                                            full_name VARCHAR(50),
+                                            PRIMARY KEY (abbreviation)
 );
 
 -- Insert the mapping of abbreviations to full names
