@@ -15,17 +15,25 @@ VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippe
     "GOOGLE_API_KEY", "AIzaSyC6pg48SaZk1-t7o9lVuYf59EjkzV7Lamk")
 
 
-def get_player_bio_urls(player_name):
+def get_player_bio_urls(player_name, player_sport):
     """
     Gets a list of bio information
     :param player_name:
     :return:
     """
-    results = Google.search(player_name + " full player bio for NFL latest")
+
+    search_criteria = f"{player_name} full player bio for {player_sport} latest"
+
+    if player_sport == "American Football":
+        search_criteria = f"{player_name} full player bio for NFL latest"
+    if player_sport == "EU Football/ Soccer":
+        search_criteria = f"{player_name} full player bio for Soccer latest"
+
+    results = Google.search(search_criteria)
 
     final_results = []
     for result in results:
-        if "nfl" in result:
+        if "nfl" in result or "football" in result or "soccer" in result:
             final_results.append(result)
 
     return final_results

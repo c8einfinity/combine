@@ -60,7 +60,7 @@ def process_item(queue, err, msg):
 
         player = player[0]
 
-        bio_urls = get_player_bio_urls(str(player["first_name"]) + " " + str(player["last_name"]))
+        bio_urls = get_player_bio_urls(str(player["first_name"]) + " " + str(player["last_name"]), player["sport"])
 
         for url in bio_urls:
             player_media = PlayerMedia({"url": url, "media_type": "link-bio", "player_id": player["id"]})
@@ -73,7 +73,13 @@ def process_item(queue, err, msg):
 
             player_media.save()
 
-        you_tube_links = get_youtube_videos(str(player["first_name"]) + " " + str(player["last_name"]))
+        video_sport_search_criteria = str(player["sport"])
+        if player["sport"] == "American Football":
+            video_sport_search_criteria = "NFL, American Football"
+        if player["sport"] == "EU Football/ Soccer":
+            video_sport_search_criteria = "Soccer, European Union Football"
+
+        you_tube_links = get_youtube_videos(str(player["first_name"]) + " " + str(player["last_name"]), video_sport_search_criteria)
         for you_tube_link in you_tube_links:
             player_media = PlayerMedia()
             player_media.url = you_tube_link["url"]

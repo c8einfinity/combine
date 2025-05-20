@@ -468,7 +468,13 @@ async def get_athlete_videos(request, response):
     player.load()
 
     if "search" in request.params and request.params["search"] == "1":
-        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name))
+        video_sport_search_criteria = str(player.sport)
+        if player.sport == "American Football":
+            video_sport_search_criteria = "NFL, American Football"
+        if player.sport == "EU Football/ Soccer":
+            video_sport_search_criteria = "Soccer, European Union Football"
+
+        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
         for you_tube_link in you_tube_links:
             player_media = PlayerMedia()
             player_media.url = you_tube_link["url"]
@@ -659,7 +665,13 @@ async def post_athletes(request, response):
 
         player_media.save()
 
-    you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name))
+    video_sport_search_criteria = str(player.sport)
+    if player.sport == "American Football":
+        video_sport_search_criteria = "NFL, American Football"
+    if player.sport == "EU Football/ Soccer":
+        video_sport_search_criteria = "Soccer, European Union Football"
+
+    you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
     for you_tube_link in you_tube_links:
         player_media = PlayerMedia()
         player_media.url = you_tube_link["url"]
