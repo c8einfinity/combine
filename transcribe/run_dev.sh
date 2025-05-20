@@ -1,1 +1,1 @@
-screen -dmS rag -L  poetry run python app.py stop &
+screen -dmS rag -L  uv run python app.py stop &

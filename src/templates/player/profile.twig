@@ -82,9 +82,19 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="sportInput" class="font-weight-bold">Sport</label>
-                                        <input class="form-control" id="sportInput" name="sport" disabled
-                                               type="text" value="{{ player.sport }}"
-                                               placeholder="Sport">
+                                        <select class="form-control" id="sportInput" name="sport"
+                                                {% if user.user_group_id != "1" %} disabled {% endif %} >
+                                            <option value="None">Select Sport</option>
+                                            {% for sport in sports %}
+                                                <option value="{{ sport.name }}"
+                                                        {% if player.sport == sport.name %} selected {% endif %}>
+                                                    {{ sport.name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="positionSelect">
+                                        <p>Getting positions for selected sport</p>
                                     </div>
                                     <div class="form-group">
                                         <label for="emailInput" class="font-weight-bold">Email</label>
@@ -100,13 +110,7 @@
                                                value="{{ player.team }}"
                                                placeholder="Team">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="positionInput" class="font-weight-bold">Position</label>
-                                        <input class="form-control" id="positionInput" name="position"
-                                               type="text"
-                                               value="{{ player.position }}"
-                                               placeholder="Position">
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="homeTownInput" class="font-weight-bold">Home Town</label>
                                         <input class="form-control" id="homeTownInput" name="homeTown"
@@ -185,7 +189,19 @@
             showTab($('.btn-outline-dark')[0]);
             $(document).ready(function () {
                 teamQNavSetActive($('#athleteLink')[0]);
+                render_position_input($('#sportInput').val());
             });
+            $('#sportInput').change(function () {
+                render_position_input($(this).val());
+            });
+            function render_position_input(sport) {
+                if (sport == "None") {
+                    $('#positionSelect').html('<p>Select a sport to see positions</p>');
+                    return;
+                }
+                $('#positionSelect').html('<p>Getting positions for selected sport</p>');
+                loadPage('/api/athlete/{{ player.id }}/sport-positions/' + sport, 'positionSelect');
+            }
         </script>
     {% endif %}
 

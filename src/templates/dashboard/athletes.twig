@@ -35,7 +35,10 @@
                                     <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">
                                         <label for="sport" class="font-weight-bold">Sport</label>
                                         <select class="form-control" name="sport" id="sport">
-                                            <option>Football</option>
+                                            <option value="">Select Sport</option>
+                                            {% for sport in sports %}
+                                                <option value="{{ sport.name }}">{{ sport.name }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="mb-3 mb-lg-0 col-12 col-md-6 col-lg">

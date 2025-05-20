@@ -1,4 +1,7 @@
+from datetime import datetime
 import json
+import requests
+import os
 
 from tina4_python import tina4_auth
 from tina4_python import Debug
@@ -54,3 +57,57 @@ def check_players(filter=""):
                 player.save()
     except Exception as e:
         print(str(e))
+
+def sync_sports_positions(dba):
+    from ..orm.Sport import Sport
+    from ..orm.SportPosition import SportPosition
+    Debug("Syncing sports and positions from API")
+    try:
+        Debug("Clearing sport and sport_position tables")
+        dba.execute("SET FOREIGN_KEY_CHECKS = 0")
+        dba.execute("truncate table sport_position")
+        dba.execute("truncate table sport")
+        dba.execute("SET FOREIGN_KEY_CHECKS = 1")
+    except Exception as e:
+        Debug.error("Error truncating sport and sport_position tables")
+        Debug.error(str(e))
+        return
+    try:
+        sports_request = requests.get(f"{os.getenv("TEAMQ_ENDPOINT")}/api/get-all-sports",
+                                json={},
+                                headers={"Content-Type": "application/json",
+                                         "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
+        sports_request = sports_request.json()
+        if "info" in sports_request and "sports" in sports_request["info"]:
+            sports = sports_request["info"]["sports"]
+            for sport in sports:
+                sport_id = sport["id"]
+                sport_name = sport["name"]
+
+                sport = Sport({"id": sport_id})
+                sport.load()
+                sport.name = sport_name
+                sport.date_updated = datetime.now()
+                sport.save()
+                Debug(f"Getting {sport_name} positions from API")
+                positions_request = requests.get(f"{os.getenv("TEAMQ_ENDPOINT")}/api/get-all-sports-positions/{sport_id}",
+                                        json={},
+                                        headers={"Content-Type": "application/json",
+                                                 "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
+                positions_request = positions_request.json()
+                if "info" in positions_request and "positions" in positions_request["info"]:
+                    positions = positions_request["info"]["positions"]
+                    for position in positions:
+                        position_id = position["id"]
+                        position_name = position["position"]
+
+                        sport_position = SportPosition({"id": position_id})
+                        sport_position.load()
+                        sport_position.name = position_name
+                        sport_position.sport_id = sport_id
+                        sport_position.date_updated = datetime.now()
+                        sport_position.save()
+
+    except:
+        Debug.error("Error getting sports and positions from API")
+        return

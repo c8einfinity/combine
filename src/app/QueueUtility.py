@@ -99,6 +99,8 @@ def process_item(queue, err, msg):
             Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
+                queue_result = Queue(QueueUtility().config, topic="result")
+                Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
                 raise Exception("Player not found")
             player = player[0]
         except Exception as e:
@@ -259,8 +261,10 @@ class QueueUtility(object):
         :param callback:
         :return:
         """
+        print("Starting consumer")
         if self.queue is None:
             raise Exception("Queue is not connected")
+
         consumer = Consumer(self.get_queue(), process_item, acknowledge=False)
         consumer.run(sleep=int(os.getenv("RABBITMQ_CONSUMER_INTERVAL", 1)))
 

@@ -20,3 +20,9 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: qfinder
       RABBITMQ_DEFAULT_PASS: QFinderRMQ1234!
+  redis:
+    image: redis:7.0.5
+    restart: always
+    container_name: "combine-redis"
+    ports:
+      - "6379:6379"

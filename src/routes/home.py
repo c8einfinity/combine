@@ -57,7 +57,7 @@ async def login(request, response):
 
 @get("/logout")
 async def get_logout(request, response):
-    SessionHandler.unset_user_session(request)
+    request.session.close()
 
     return response.redirect("/")
 

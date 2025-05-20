@@ -51,8 +51,10 @@ async def get_dashboard_home(request, response):
 async def get_dashboard_athletes(request, response):
     if not request.session.get('logged_in'):
         return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+    from ..orm.Sport import Sport
+    sports = Sport().select("*", limit=100).to_list()
 
-    html = Template.render_twig_template("dashboard/athletes.twig", data={"status": request.params["status"]})
+    html = Template.render_twig_template("dashboard/athletes.twig", data={"status": request.params["status"], "sports": sports})
 
     return response(html)
 

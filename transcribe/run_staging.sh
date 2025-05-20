@@ -1,0 +1,1 @@
+screen -dmS rag_staging -Logfile staging.log uv run python app.py stop --staging &
