@@ -182,6 +182,7 @@ def process_item(queue, err, msg):
         })
         player_result.save()
     if dba is not None:
+        dba.commit()
         dba.close()
 
     queue_result = Queue(QueueUtility().config, topic="result")
