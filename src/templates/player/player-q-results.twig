@@ -35,7 +35,7 @@
                     <textarea id="playerText" name="playerText" class="form-control mt-2" rows="20"
                               placeholder="Text to submit"
                               onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
-                    {{ "textSubmitForm" | formToken }}
+                    {{ ("textSubmitForm"~RANDOM()) | formToken }}
                 </form>
                 <div class="mt-1">
                     <b

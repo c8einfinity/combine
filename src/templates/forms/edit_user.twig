@@ -31,7 +31,7 @@
 
     <input type="hidden" name="id" value="{{ user.id }}"/>
 
-    {{ "usersModalForm"~RANDOM() | formToken }}
+    {{ ("usersModalForm"~RANDOM()) | formToken }}
 </form>
 
 <script>

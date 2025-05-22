@@ -92,7 +92,7 @@
                     <p class="pt-1">Already have an account?
                         <a href="/login" class="link">Log in</a>
                     </p>
-                    {{ "signUpForm" | formToken }}
+                    {{ ("signUpForm"~RANDOM()) | formToken }}
                 </form>
 
                 <div id="message"></div>

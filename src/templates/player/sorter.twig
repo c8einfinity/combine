@@ -21,7 +21,6 @@
                         the video directly on YouTube if it does not display in the frame above.</a>
                 {% endif %}
                 <form id="videoInformation" method="post" onsubmit="return false">
-                    {{ ("SomeValue"~RANDOM()) | formToken }}
                     <input type="hidden" name="player_id" value="{{ player.id }}">
                     <input type="hidden" name="player_media_id" value="{{ video.id }}">
                     <input id="is_valid" type="hidden" name="is_valid" value="0">
@@ -45,7 +44,7 @@
                             </button>
                         </div>
                     </div>
-                    {{ "videoInformationForm"~RANDOM() | formToken }}
+                    {{ ("videoInformationForm"~RANDOM()) | formToken }}
                 </form>
             </div>
             <script>
