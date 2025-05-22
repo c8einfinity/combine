@@ -49,7 +49,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                {{ "athleteForm" | formToken }}
+                                {{ "athleteForm"~RANDOM() | formToken }}
                             </form>
                             <div id="formMessage"></div>
                         </div>
@@ -81,7 +81,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                {{ "csvImportForm" | formToken }}
+                                {{ "csvImportForm"~RANDOM() | formToken }}
                             </form>
                             <div id="formImportMessage"></div>
                         </div>
