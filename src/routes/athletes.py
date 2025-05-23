@@ -985,3 +985,17 @@ async def get_resend_deleted_videos(request, response):
             counter += 1
 
     return response(f"Done, sent {counter} videos!")
+
+@get('athletes/get-sports')
+async def get_sports(request, response):
+    """
+    Get the sports from the TeamQ api
+    :param request:
+    :param response:
+    :return:
+    """
+    from ..app.Setup import sync_sports_positions
+
+    sync_sports_positions(dba)
+
+    return response("Done!")
