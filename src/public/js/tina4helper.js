@@ -18,20 +18,6 @@ function sendRequest (url, request, method, callback) {
         method = 'GET';
     }
 
-    //Inject the new token
-    if (formToken !== null) {
-        const regex = /formToken=(.*)/gm;
-        const subst = `formToken=${formToken}`;
-        url = url.replace(regex, subst);
-        if (url.indexOf('formToken') === -1) {
-            if (url.indexOf('?') === -1) {
-                url += '?formToken='+formToken;
-            } else {
-                url += '&formToken='+formToken;
-            }
-        }
-    }
-
     const xhr = new XMLHttpRequest();
     xhr.open(method, url, true);
 
