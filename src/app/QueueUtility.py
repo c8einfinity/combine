@@ -145,7 +145,12 @@ def process_item(queue, err, msg):
             str(player["last_name"]),
             str(player["image"]),
             str(transcript),
-            str(player["candidate_id"])
+            str(player["candidate_id"]),
+            str(player["sport"]),
+            str(player["position"]),
+            str(player["date_of_birth"]),
+            str(player["home_town"]),
+            str(player["team"])
         )
 
         Debug.info(f"request_player_results {player_id}: Player results received")

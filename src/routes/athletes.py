@@ -423,7 +423,12 @@ async def post_athlete_results(request, response):
         str(player.last_name),
         str(player.image),
         request.body["playerText"],
-        str(player.candidate_id)
+        str(player.candidate_id),
+        str(player.sport),
+        str(player.position),
+        str(player.date_of_birth),
+        str(player.home_town),
+        str(player.team)
     )
 
     if "candidate_id" in results:

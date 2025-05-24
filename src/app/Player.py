@@ -53,7 +53,7 @@ def split_trim_minify(text):
     minified_text = ' '.join(line.strip() for line in lines)
     return minified_text
 
-def submit_player_results(first_name, last_name, image="", text="", candidate_id=""):
+def submit_player_results(first_name, last_name, image="", text="", candidate_id="", sport="", position="", date_of_birth="", home_town="", team=""):
     """
     Submit the player results to the API to get the Receptiviti results
     :param first_name:
@@ -64,9 +64,29 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     :return:
     """
     from tina4_python import Debug
+    from ..orm.Sport import Sport
+    from ..orm.SportPosition import SportPosition
+
+    # get the sport and position ids from the database
+    sport = Sport({"name": sport})
+    sport.load()
+
+    if sport.id is None:
+        Debug.error(f"Sport {sport} not found in the database")
+        return {"error": "Sport not found"}
+    position = SportPosition({"name": position, "sport_id": sport.id})
+    position.load()
+
+    if position.id is None:
+        Debug.error(f"Position {position} not found in the database")
+        return {"error": "Position not found"}
+
+    sport = sport.to_dict()
+    position = position.to_dict()
 
     data = {"first_name": first_name, "last_name": last_name, "image": image,
-            "candidate_id": candidate_id, "text": text}
+            "candidate_id": candidate_id, "text": text, "sport_id": sport["id"],
+            "position_id": position["id"], "dob": date_of_birth, "home_town": home_town, "team": team}
 
     Debug.info(f"submit_player_results: {data}")
 
