@@ -189,7 +189,7 @@
             showTab($('.btn-outline-dark')[0]);
             $(document).ready(function () {
                 teamQNavSetActive($('#athleteLink')[0]);
-                render_position_input($('#sportInput').val());
+
             });
             $('#sportInput').change(function () {
                 render_position_input($(this).val());
@@ -202,6 +202,7 @@
                 $('#positionSelect').html('<p>Getting positions for selected sport</p>');
                 loadPage('/api/athlete/{{ player.id }}/sport-positions/' + sport, 'positionSelect');
             }
+            render_position_input('{{ player.sport }}');
         </script>
     {% endif %}
 

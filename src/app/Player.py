@@ -53,9 +53,42 @@ def split_trim_minify(text):
     minified_text = ' '.join(line.strip() for line in lines)
     return minified_text
 
+def get_sport_position_ids(sport_name, position_name):
+    """
+    Get the sport and position ids from the database
+    :param sport_name:
+    :param position_name:
+    :return:
+    """
+    from tina4_python import Debug
+    from ..orm.Sport import Sport
+    from ..orm.SportPosition import SportPosition
+
+    # get the sport and position ids from the database
+    sport = Sport().select("id, name", limit=1, filter="name = ?", params=[str(sport_name)])
+    sport = sport.to_list()
+
+    if len(sport) == 0:
+        Debug.error(f"Sport {sport_name} not found in the database")
+        return {"error": "Sport not found"}
+
+    position = SportPosition().select("id, name", limit=1, filter="name = ?", params=[str(position_name)])
+    position = position.to_list()
+
+    if len(position) == 0:
+        Debug.error(f"Position {position_name} not found in the database")
+        return {"error": "Position not found"}
+
+    return {"sport_id": sport[0]["id"], "position_id": position[0]["id"]}
+
 def submit_player_results(first_name, last_name, image="", text="", candidate_id="", sport="", position="", date_of_birth="", home_town="", team=""):
     """
     Submit the player results to the API to get the Receptiviti results
+    :param team:
+    :param home_town:
+    :param date_of_birth:
+    :param position:
+    :param sport:
     :param first_name:
     :param last_name:
     :param image:
@@ -64,29 +97,13 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     :return:
     """
     from tina4_python import Debug
-    from ..orm.Sport import Sport
-    from ..orm.SportPosition import SportPosition
 
     # get the sport and position ids from the database
-    sport = Sport({"name": sport})
-    sport.load()
-
-    if sport.id is None:
-        Debug.error(f"Sport {sport} not found in the database")
-        return {"error": "Sport not found"}
-    position = SportPosition({"name": position, "sport_id": sport.id})
-    position.load()
-
-    if position.id is None:
-        Debug.error(f"Position {position} not found in the database")
-        return {"error": "Position not found"}
-
-    sport = sport.to_dict()
-    position = position.to_dict()
+    sport_position = get_sport_position_ids(sport, position)
 
     data = {"first_name": first_name, "last_name": last_name, "image": image,
-            "candidate_id": candidate_id, "text": text, "sport_id": sport["id"],
-            "position_id": position["id"], "dob": date_of_birth, "home_town": home_town, "team": team}
+            "candidate_id": candidate_id, "text": text, "sport_id": sport_position["sport_id"],
+            "position_id": sport_position["position_id"], "dob": date_of_birth, "home_town": home_town, "team": team}
 
     Debug.info(f"submit_player_results: {data}")
 
@@ -98,6 +115,46 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
         return results.json()
     except Exception as e:
         Debug.error(f"submit_player_results: {e}")
+        return {"error": str(e)}
+
+def submit_player_teamq_details(player):
+    """
+    Submit the player details to the TEAMQ API
+    :param player:
+    :return:
+    """
+    from tina4_python import Debug
+
+    if type(player) is not dict:
+        player = player.to_dict()
+
+    if "candidate_id" not in player:
+        Debug.error("submit_player_teamq_details: player does not have a candidate_id")
+        return {"error": "Error updating TeamQ, athlete does not have a TeamQ id, submit the player results first"}
+
+    sport_position = get_sport_position_ids(player["sport"], player["position"])
+
+    data = {
+        "first_name": player["first_name"],
+        "last_name": player["last_name"],
+        "image": player["image"],
+        "sport_id": sport_position["sport_id"],
+        "position_id": sport_position["position_id"],
+        "date_of_birth": player["date_of_birth"],
+        "home_town": player["home_town"],
+        "team": player["team"]
+    }
+
+    Debug.info(f"submit_player_teamq_details: {data}")
+
+    try:
+        response = requests.put(f"{os.getenv('TEAMQ_ENDPOINT')}/player/{player["candidate_id"]}/update-candidate",
+                                 json=data,
+                                 headers={"Content-Type": "application/json",
+                                          "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")})
+        return response.json()
+    except Exception as e:
+        Debug.error(f"submit_player_teamq_details: {e}")
         return {"error": str(e)}
 
 def player_bio_complete(player_id):

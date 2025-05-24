@@ -13,7 +13,7 @@ from tina4_python.Router import get, post, delete
 import re
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
-from ..app.Player import get_player_results, submit_player_results, resize_profile_image
+from ..app.Player import get_player_results, submit_player_results, resize_profile_image, submit_player_teamq_details
 from .. import dba
 
 @get("/api/athletes/{status}")
@@ -708,9 +708,14 @@ async def post_athletes_id(request, response):
 
     player_params["image"] = player.image
 
+    if player.candidate_id:
+        player_params["candidate_id"] = str(player.candidate_id)
+
     player = Player(player_params)
     if player.save():
-        return response("Player saved")
+        teamq_updated = submit_player_teamq_details(player)
+
+        return response(f"Player saved. {'TeamQ updated.' if teamq_updated["error"] is None else teamq_updated['error']}", HTTP_OK, TEXT_PLAIN)
     else:
         return response("Failed to save player!")
 
