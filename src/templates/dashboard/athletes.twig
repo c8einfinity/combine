@@ -91,7 +91,19 @@
         {% endif %}
         <div class="card">
             <div class="card-body p-4">
-                <h3 class="text-anton pb-2 text-uppercase">Athletes</h3>
+                <div class="row">
+                    <h3 class="col-8 text-anton pb-2 text-uppercase">Athletes</h3>
+                    <div class="col-4 d-flex justify-content-end align-items-center flex-row">
+                        <label for="sportFilter" class="font-weight-bold d-block font-weight-bold mr-2">Show Sport</label>
+                        <select class="form-control w-50" name="sportFilter" id="sportFilter">
+                            <option value="">All</option>
+                            {% for sport in sports %}
+                                <option value="{{ sport.name }}" {% if selectedSport == sport.name %}selected{% endif %}>{{ sport.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
                 <hr class="hor-line-gradient"/>
                 <div class="content" style="height: fit-content">
                     <!-- Tabs to filter by transcription statuses: videos verified and speaker verified -->
@@ -215,7 +227,7 @@
                 },
                 dom: '',
                 ajax: {
-                    url: "/api/athletes/{{ status }}",
+                    url: "/api/athletes/{{ status }}{% if selectedSport %}?selectedSport={{ selectedSport }}{% endif %}",
                 },
                 responsive: true,
                 pageLength: sessionStorage.getItem('athletesPageLength') || 25,
@@ -342,6 +354,13 @@
             });
 
             teamQNavSetActive($('#athleteLink')[0]);
+
+
+        });
+
+        $('#sportFilter').on('change', function () {
+            console.log(`Selected sport: ${this.value}`);
+            location.href = `/dashboard/athletes/{{status}}?selectedSport=${this.value ? this.value : 'all'}`;
         });
 
         {% if athletes_delete_permission %}

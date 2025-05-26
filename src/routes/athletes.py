@@ -66,6 +66,9 @@ async def get_athletes(request, response):
         if request.params["status"] == "incomplete-bios":
             where += " and (image is null or first_name = '' or last_name = '' or sport = '' or position = '' or date_of_birth is null or home_town = '' or team = '')"
 
+    if "selectedSport" in request.params and request.params["selectedSport"] != "":
+        where += f" and sport = '{request.params["selectedSport"]}'"
+
     players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
                               order_by=data_tables_filter["order_by"],
