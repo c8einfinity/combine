@@ -359,14 +359,14 @@
         });
 
         $('#sportFilter').on('change', function () {
-            console.log(`Selected sport: ${this.value}`);
             location.href = `/dashboard/athletes/{{status}}?selectedSport=${this.value ? this.value : 'all'}`;
         });
 
         {% if athletes_delete_permission %}
         function deleteAthlete(id) {
             if (confirm("Delete Athlete ?")) {
-                deleteUrl(`/api/athlete/${id}`, null, 'message', function () {
+                const formToken =  "{{ formToken() }}";
+                deleteUrl(`/api/athlete/${id}?formToken=${formToken}`, null, 'message', function () {
                     athletesGrid.ajax.reload();
                 })
             }

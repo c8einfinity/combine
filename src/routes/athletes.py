@@ -756,19 +756,22 @@ async def delete_athlete(request, response):
 
     player = Player({"id": request.params["id"]})
     if player.delete():
-        player_medias = PlayerMedia().select("*", 'player_id = ?', params=[request.params["id"]])
+        player_medias = PlayerMedia().select("*", 'player_id = ?',
+                                             params=[request.params["id"]])
+
         for player_media in player_medias.to_array():
             player_media = PlayerMedia({"id": player_media["id"]})
             player_media.delete()
 
-        player_transcripts = PlayerTranscripts().select("*", 'player_id = ?')
+        player_transcripts = PlayerTranscripts().select("*", 'player_id = ?',
+                                                        params=[request.params["id"]])
         for player_transcript in player_transcripts.to_array():
             player_transcript = PlayerTranscripts({"id": player_transcript["id"]})
             player_transcript.delete()
 
-        return response("Player deleted")
-    else:
-        return response("Failed to delete player!")
+        return response("Player, media and transcripts deleted")
+
+    return response("Failed to delete player!")
 
 
 @delete("/api/athlete/{id}/links/{link_id}")
