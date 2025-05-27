@@ -53,6 +53,7 @@
                         </label>
                     </div>
                 </div>
+                {{ ("videoSpeakerVerified"~RANDOM()) | formToken }}
             </form>
         {% endif %}
         <div class="bg-lighter p-4 rounded border mb-4" style="overflow: auto; height:35vh">

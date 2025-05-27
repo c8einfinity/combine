@@ -99,13 +99,19 @@
 
         {% if videos_edit_permission %}
         function addToQueue(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append('player_media_id', videoId);
+            formData.append('formToken', '{{ formToken() }}');
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
 
         function toggleIncludeVideo(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append('player_media_id', videoId);
+            formData.append('formToken', '{{ formToken() }}');
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
@@ -113,7 +119,10 @@
 
         {% if videos_delete_permission %}
         function removeVideo(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append('player_media_id', videoId);
+            formData.append('formToken', '{{ formToken() }}');
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')
             });
         }
