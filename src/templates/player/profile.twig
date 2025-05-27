@@ -199,8 +199,9 @@
                     $('#positionSelect').html('<p>Select a sport to see positions</p>');
                     return;
                 }
+
                 $('#positionSelect').html('<p>Getting positions for selected sport</p>');
-                loadPage('/api/athlete/{{ player.id }}/sport-positions/' + sport, 'positionSelect');
+                loadPage(`/api/athlete/{{ player.id }}/sport-positions/${encodeURIComponent(sport)}`, 'positionSelect');
             }
             render_position_input('{{ player.sport }}');
         </script>
