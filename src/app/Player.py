@@ -128,7 +128,7 @@ def submit_player_teamq_details(player):
     if type(player) is not dict:
         player = player.to_dict()
 
-    if "candidate_id" not in player:
+    if "candidate_id" not in player or player["candidate_id"] is None or player["candidate_id"] == "":
         Debug.error("submit_player_teamq_details: player does not have a candidate_id")
         return {"error": "Error updating TeamQ, athlete does not have a TeamQ id, submit the player results first"}
 
