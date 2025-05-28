@@ -6,6 +6,15 @@ import threading
 from tina4_python import Debug
 from tina4_python.Queue import Queue, Config, Consumer, Producer
 
+config = Config()
+config.queue_type = 'rabbitmq'
+config.prefix = ""
+config.rabbitmq_config = {
+    'host': os.getenv('RABBITMQ_SERVER'),
+    'port': 5672,
+    'username': os.getenv('RABBITMQ_USERNAME'),
+    'password': os.getenv('RABBITMQ_PASSWORD'),
+}
 
 def process_item(queue, err, msg):
     """
@@ -95,7 +104,6 @@ def process_item(queue, err, msg):
         player.image = None
         player.save()
 
-
     if action == "request_player_results":
         player_id = payload["player_id"]
         Debug.info(f"request_player_results {player_id}: Requesting player results start")
@@ -105,7 +113,7 @@ def process_item(queue, err, msg):
             Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
-                queue_result = Queue(QueueUtility().config, topic="result")
+                queue_result = Queue(config, topic="result")
                 Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
                 raise Exception("Player not found")
             player = player[0]
@@ -190,7 +198,7 @@ def process_item(queue, err, msg):
         dba.commit()
         dba.close()
 
-    queue_result = Queue(QueueUtility().config, topic="result")
+    queue_result = Queue(config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
     return None
 
@@ -224,17 +232,8 @@ class QueueUtility(object):
         """
         Connect to RabbitMQ server and create a channel.
         """
-        config = Config()
-        config.queue_type = 'rabbitmq'
-        config.prefix = ""
-        config.rabbitmq_config = {
-            'host': os.getenv('RABBITMQ_SERVER'),
-            'port': 5672,
-            'username': os.getenv('RABBITMQ_USERNAME'),
-            'password': os.getenv('RABBITMQ_PASSWORD'),
-        }
-
-        self.config = config
+        if config:
+            self.config = config
 
     def set_queue(self, queue_name):
         """
