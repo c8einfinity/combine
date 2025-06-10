@@ -210,7 +210,7 @@
                     const formData = new FormData();
 
                     formData.append("playerIds", JSON.stringify(selectedRows));
-                    formData.append("formToken", "{{ formToken() }}");
+                    formData.append("formToken", "{{ formToken({"url": "/api/athlete/request-results/?t="~RANDOM()}) }}");
                     postUrl("/api/athletes/request-results", formData, "", function () {
                         window.location.href = "/dashboard/athletes/all";
                     })
@@ -365,7 +365,8 @@
         {% if athletes_delete_permission %}
         function deleteAthlete(id) {
             if (confirm("Delete Athlete ?")) {
-                const formToken =  "{{ formToken() }}";
+                {% set deleteToken = formToken({"url":"api/athlete?t="~RANDOM()}) %}
+                const formToken =  "{{ deleteToken }}";
                 deleteUrl(`/api/athlete/${id}?formToken=${formToken}`, null, 'message', function () {
                     athletesGrid.ajax.reload();
                 })
