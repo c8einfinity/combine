@@ -99,13 +99,17 @@
 
         {% if videos_edit_permission %}
         function addToQueue(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            {% set queueToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/transcript/queue?t="~RANDOM()}) %}
+            const formToken =  "{{ queueToken }}";
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
 
         function toggleIncludeVideo(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            {% set includeVideoToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/include?t="~RANDOM()}) %}
+            const formToken =  "{{ includeVideoToken }}";
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
@@ -113,7 +117,9 @@
 
         {% if videos_delete_permission %}
         function removeVideo(videoId) {
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId}, "videoFeedback", function (data) {
+            {% set removeVideoToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/remove?t="~RANDOM()}) %}
+            const formToken =  "{{ removeVideoToken }}";
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')
             });
         }
