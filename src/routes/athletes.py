@@ -636,7 +636,7 @@ async def get_athlete_links_data(request, response):
     if data_tables_filter["where"] != "":
         where += " and " + data_tables_filter["where"]
 
-    player_media = PlayerMedia().select(["id", "url", "media_type", "player_id", "is_valid", "date_created"],
+    player_media = PlayerMedia().select(["id", "url", "media_type", "player_id", "is_valid", "date_created", "is_deleted", "is_sorted"],
                                         where,
                                         [0, request.params["id"]],
                                         order_by=data_tables_filter["order_by"],
