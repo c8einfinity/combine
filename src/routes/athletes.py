@@ -784,6 +784,18 @@ async def delete_athlete_link(request, response):
     else:
         return response("Failed to delete media!")
 
+@post("/api/athlete/{id}/links/{link_id}/restore")
+async def post_athlete_link_restore(request, response):
+    from ..orm.PlayerMedia import PlayerMedia
+
+    player_media = PlayerMedia({"id": request.params["link_id"]})
+    if player_media.load():
+        player_media.is_deleted = 0
+        player_media.save()
+        return response("Player Media restored")
+    else:
+        return response("Failed to restore media!")
+
 
 @get("/api/athlete/{id}/transcripts/{media_id}/classification")
 async def get_test_classification(request, response):

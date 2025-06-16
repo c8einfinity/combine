@@ -70,7 +70,7 @@
     <span class="bg-dark rounded-left p-1">Deleted</span>
     <span class="${row.is_deleted ? 'bg-danger' : 'bg-success'} rounded-right p-1">${row.is_deleted}</span>
 </div>`;
-                                if (row.media_type != 'link-bio') {
+                                if (row.media_type !== 'link-bio') {
                                     html += `<div class="d-flex text-white" style="font-size: 0.7rem; font-weight: bold;">
     <span class="bg-dark rounded-left p-1">Sorted</span>
     <span class="${!row.is_sorted ? 'bg-danger' : 'bg-success'} rounded-right p-1">${row.is_sorted}</span>
@@ -99,7 +99,7 @@
                                 }
                                 {% endif %}
                                 {% if videos_edit_permission %}
-                                    if (row.media_type == 'video-youtube' && !row.is_deleted) {
+                                    if (row.media_type === 'video-youtube' && !row.is_deleted) {
                                         buttons += `<button class="btn btn-outline-light text-black" onclick="queueLink(${row.id})"><i class="fas fa-upload"></i></button>`;
                                     }
                                 {% endif %}
@@ -132,6 +132,15 @@
                         linksGrid.ajax.reload();
                     })
                 }
+            }
+
+            function restoreLink(link_id) {
+                const formToken = "{{ formToken({'url': '/api/athlete/'~player_id~'/links/'~link_id~'/restore?t='~RANDOM()}) }}";
+                const formData = new FormData();
+                formData.append("formToken", formToken);
+                postUrl(`/api/athlete/{{ player_id }}/links/${link_id}/restore`, formData, 'linkMessage', function () {
+                    linksGrid.ajax.reload();
+                })
             }
             {% endif %}
             {% if videos_edit_permission %}
