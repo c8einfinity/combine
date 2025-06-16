@@ -17,6 +17,8 @@ def get_data_tables_filter(request):
 
     if "search" in params:
         search = params["search"]
+        # sanitize search value to only include alphanumeric characters and spaces
+        search["value"] = ''.join(c for c in search["value"] if c.isalnum() or c.isspace())
         search_values = search["value"].split(" ")
 
     for column in columns:
