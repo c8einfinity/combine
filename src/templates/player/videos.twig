@@ -101,7 +101,10 @@
         function addToQueue(videoId) {
             {% set queueToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/transcript/queue?t="~RANDOM()}) %}
             const formToken =  "{{ queueToken }}";
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append("player_media_id", videoId);
+            formData.append("formToken", formToken);
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript/queue`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
@@ -109,7 +112,10 @@
         function toggleIncludeVideo(videoId) {
             {% set includeVideoToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/include?t="~RANDOM()}) %}
             const formToken =  "{{ includeVideoToken }}";
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append("player_media_id", videoId);
+            formData.append("formToken", formToken);
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/include`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos');
             })
         }
@@ -119,7 +125,10 @@
         function removeVideo(videoId) {
             {% set removeVideoToken = formToken({"url":"/api/athlete/"~player.id~"/videos/${videoId}/remove?t="~RANDOM()}) %}
             const formToken =  "{{ removeVideoToken }}";
-            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, {player_media_id: videoId, formToken: formToken}, "videoFeedback", function (data) {
+            const formData = new FormData();
+            formData.append("player_media_id", videoId);
+            formData.append("formToken", formToken);
+            postUrl(`/api/athlete/{{ player.id }}/videos/${videoId}/remove`, formData, "videoFeedback", function (data) {
                 loadPage('/api/athlete/{{ player.id }}/videos', 'tabVideos')
             });
         }
