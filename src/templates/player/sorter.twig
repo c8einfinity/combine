@@ -5,8 +5,8 @@
                 <div class="progress-bar progress-bar-qfinder font-weight-bold" role="progressbar"
                      style="width: {{ ((videos_processed / (remaining_videos + videos_processed)) * 100)|round }}%"
                      aria-valuenow="{{ videos_processed }}" aria-valuemin="0"
-                     aria-valuemax="{{ remaining_videos + videos_processed }}">{{ videos_processed }}
-                    of {{ remaining_videos + videos_processed }}</div>
+                     aria-valuemax="{{ videos_processed }}">{{ videos_processed }}
+                    of {{ remaining_videos }}</div>
             </div>
             <h3 class="text-center mt-5 mb-4">{{ video.title }}</h3>
             <div class="embed-responsive embed-responsive-16by9 card border-0">
