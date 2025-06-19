@@ -6,6 +6,7 @@ from .. import dba
 from ..app.Utility import get_data_tables_filter
 from tina4_python.Constant import HTTP_OK, HTTP_SERVER_ERROR, TEXT_PLAIN, APPLICATION_JSON
 from tina4_python.Template import Template
+from tina4_python.Debug import Debug
 
 
 class UserGroups:
@@ -106,6 +107,11 @@ class UserGroups:
                 "access_point": "Receptiviti CSV",
                 "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-"),
                 "depends": ""
+            },
+            {
+                "access_point": "Settings",
+                "permissions": UserGroups.get_user_group_permission_entries("0", "-", "-", "-"),
+                "depends": ""
             }
         ]
 
@@ -113,13 +119,39 @@ class UserGroups:
     def get_user_group_permissions(user_group):
         """
         Function to return a user group's permissions.
-        :param user_group:
+        :param dict user_group:
         :return:
         """
-        if "permissions" in user_group and user_group["permissions"] and user_group["permissions"] != "None":
-            return json.loads(user_group["permissions"])
+        initial_permissions = UserGroups.get_initial_user_group_permission_list()
 
-        return UserGroups.get_initial_user_group_permission_list()
+        if not user_group or not isinstance(user_group, dict):
+            from ..orm.UserGroup import UserGroup
+            if isinstance(user_group, UserGroup):
+                # fix the type if it's an ORM object
+                user_group_permissions = user_group.permissions.value
+                user_group = user_group.to_dict()
+                user_group["permissions"] = user_group_permissions
+
+        if "permissions" in user_group and user_group["permissions"] and user_group["permissions"] != "None":
+            # fix any missing or new permissions from the initial list
+            if isinstance(user_group["permissions"], str):
+                try:
+                    current_permissions = json.loads(user_group["permissions"])
+                except json.JSONDecodeError:
+                    Debug(f"Error decoding permissions for user group {user_group['id']}: {user_group['permissions']}")
+                    current_permissions = []
+
+            elif isinstance(user_group["permissions"], list):
+                current_permissions = user_group["permissions"]
+
+            for initial_permission in initial_permissions:
+                access_point = initial_permission["access_point"]
+                if access_point not in [perm["access_point"] for perm in current_permissions]:
+                    current_permissions.append(initial_permission)
+
+            return current_permissions
+
+        return initial_permissions
 
     @staticmethod
     def get_access_point_navigation_data(access_point):
@@ -147,6 +179,9 @@ class UserGroups:
             case "Receptiviti CSV":
                 page_url = "/api/receptiviti/export"
                 nav_element_id = "receptivitiCsvLink"
+            case "Settings":
+                page_url = "/settings"
+                nav_element_id = "settingsLink"
             case _:
                 page_url = ""
                 nav_element_id = ""
@@ -290,7 +325,7 @@ class UserGroups:
             data["user_group_permissions"]["name"] = user_group.name.value
 
             if user_group.permissions.value:
-                data["user_group_permissions"]["permissions_list"] = user_group.permissions.value
+                data["user_group_permissions"]["permissions_list"] = UserGroups.get_user_group_permissions(user_group)
 
             id_param = str(user_group.id)
             title = "EDIT USER GROUP"
