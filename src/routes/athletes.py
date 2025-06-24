@@ -964,7 +964,7 @@ async def post_send_results(request, response):
     for player_id in player_ids:
         queue.add_item("request_player_results", {"player_id": player_id})
 
-    return response("Done!")
+    return response(f"{len(player_ids)} items queued!")
 
 
 @get('/athletes/fix-images')
