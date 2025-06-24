@@ -124,10 +124,10 @@
                                                placeholder="Enter biography sport search parameters for {{ sport.name }}" />
                                     </div>
                                     <div class="col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-soft-green w-100 btn-text-lg" onclick="updateSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}', 'videoSportSearchParameters_{{ sport.id }}')">Update</button>
+                                        <button type="button" class="btn btn-soft-green w-100 btn-text-lg" onclick="updateSetting('{{ 'bio_sport_' ~ sport.id ~ '_search_parameters' }}', 'bioSportSearchParameters_{{ sport.id }}')">Update</button>
                                     </div>
                                     <div class="col-md-1 d-flex align-items-end">
-                                        <button type="button" class="btn btn-danger w-100 btn-text-lg" onclick="deleteSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}')">Delete</button>
+                                        <button type="button" class="btn btn-danger w-100 btn-text-lg" onclick="deleteSetting('{{ 'bio_sport_' ~ sport.id ~ '_search_parameters' }}')">Delete</button>
                                     </div>
                                 </div>
                             {% endif %}
