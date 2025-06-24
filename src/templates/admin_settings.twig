@@ -1,0 +1,212 @@
+{% set user = request.session.get("user") %}
+{% set user_permissions = request.session.get("user_permissions") %}
+{% set home_visible_permission = user_permissions.permissions.Home.visible == "1" or user.user_group_id == "1" %}
+
+{% extends "base.twig" %}
+
+{% block navigation %}
+    {%  include "snippets/navigation.twig" %}
+{% endblock %}
+
+{% block content_public %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-body p-4">
+                    <h3 class="text-anton pb-2 text-uppercase">Settings</h3>
+                    <hr class="hor-line-gradient"/>
+                    <h5 class="text-anton pb-2 text-uppercase">Video Search Parameters per Sports</h5>
+                    <hr class="hor-line-gradient"/>
+                    <form id="videoSearchSettingsForm" onsubmit="return false;">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="defaultVideoSportSearchParameters">Default Video Sport Search Parameters</label>
+                                    <input type="text" class="form-control" id="defaultVideoSportSearchParameters"
+                                           name="defaultVideoSportSearchParameters"
+                                           value="{{ admin_settings.video_sport_search_parameters }}"
+                                           placeholder="Enter default video sport search parameters" />
+
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="addSearchParams()">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label for="defaultBiographySportSearchParameters">Default Biography Sport Search Parameters</label>
+                                    <input type="text" class="form-control" id="defaultBiographySportSearchParameters"
+                                           name="defaultBiographySportSearchParameters"
+                                           value="{{ admin_settings.bio_sport_search_parameters }}"
+                                           placeholder="Enter default biography sport search parameters" />
+
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="addSearchParams()">
+                                    Update
+                                </button>
+                            </div>
+                        </div>
+                        <hr class="hor-line-gradient w-50"/>
+                        {% for sport in sports %}
+                            {% if admin_settings['video_sport_' ~ sport.id ~ '_search_parameters'] %}
+                            <div class="form-group row">
+                                <div class="col-md-10">
+                                    <label for="videoSportSearchParameters_{{ sport.id }}">
+                                        {{ sport.name }} Video Sport Search Parameters
+                                    </label>
+                                    <input type="text" class="form-control"
+                                           id="videoSportSearchParameters_{{ sport.id }}"
+                                           name="videoSportSearchParameters_{{ sport.id }}"
+                                           value="{{ admin_settings['video_sport_' ~ sport.id ~ '_search_parameters'] }}"
+                                           placeholder="Enter video sport search parameters for {{ sport.name }}" />
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-soft-green w-100 btn-text-lg" onclick="updateSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}', 'videoSportSearchParameters_{{ sport.id }}')">Update</button>
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger w-100 btn-text-lg" onclick="deleteSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}')">Delete</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        <hr class="hor-line-gradient w-50"/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="videoSportSearchRequest">Video Sport Search Parameters</label>
+                                    <input type="text" class="form-control" id="videoSportSearchRequest"
+                                           name="videoSportSearchRequest"
+                                           placeholder="Enter video sport search parameter" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="videoSportSearchRequestSport">Select Sport for Parameters</label>
+                                    <select class="form-control" id="videoSportSearchRequestSport"
+                                            name="videoSportSearchRequestSport">
+                                        <option value="">Select Sport</option>
+                                        {% for sport in sports %}
+                                            <option value="{{ sport.id }}">{{ sport.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="addSearchParams()">
+                                    Add / Update
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><p class="text-muted">Example of search parameters using Football: <q><i>NFL, American Football</i></q></p></div>
+                        </div>
+                        {% for sport in sports %}
+                            {% if admin_settings['bio_sport_' ~ sport.id ~ '_search_parameters'] %}
+                                <div class="form-group row">
+                                    <div class="col-md-10">
+                                        <label for="bioSportSearchParameters_{{ sport.id }}">
+                                            {{ sport.name }} Biography Search Parameters
+                                        </label>
+                                        <input type="text" class="form-control"
+                                               id="bioSportSearchParameters_{{ sport.id }}"
+                                               name="bioSportSearchParameters_{{ sport.id }}"
+                                               value="{{ admin_settings['bio_sport_' ~ sport.id ~ '_search_parameters'] }}"
+                                               placeholder="Enter biography sport search parameters for {{ sport.name }}" />
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-end">
+                                        <button type="button" class="btn btn-soft-green w-100 btn-text-lg" onclick="updateSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}', 'videoSportSearchParameters_{{ sport.id }}')">Update</button>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger w-100 btn-text-lg" onclick="deleteSetting('{{ 'video_sport_' ~ sport.id ~ '_search_parameters' }}')">Delete</button>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <hr class="hor-line-gradient w-50"/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="bioSportSearchRequest">Biography Sport Search Parameters</label>
+                                    <input type="text" class="form-control" id="bioSportSearchRequest"
+                                           name="bioSportSearchRequest"
+                                           placeholder="Enter video sport search parameter" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="bioSportSearchRequestSport">Select Sport for Parameters</label>
+                                    <select class="form-control" id="bioSportSearchRequestSport"
+                                            name="bioSportSearchRequestSport">
+                                        <option value="">Select Sport</option>
+                                        {% for sport in sports %}
+                                            <option value="{{ sport.id }}">{{ sport.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-soft-green w-100 btn-text-lg"
+                                        onclick="addSearchParams()">
+                                    Add / Update
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col"><p class="text-muted">Example of search parameters using Football: <q><i>full player biography for NFL latest</i></q></p></div>
+                        </div>
+                        {{ ("videoSearchSettingForm"~RANDOM()) | formToken }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="message"></div>
+</div>
+<script>
+    function addSearchParams() {
+        submitForm(
+            "videoSearchSettingsForm",
+            "/settings/add-update-search-parameters",
+            "message",
+            function (data) {
+              window.location = "/settings";
+            },
+        );
+    }
+
+    function updateSetting(setting_key, input_id) {
+        const inputValue = document.getElementById(input_id).value;
+        if (!inputValue) {
+            alert("Please enter a value for the setting.");
+            return;
+        }
+        {% set updateToken = formToken({"url":"setting/update?t="~RANDOM()}) %}
+        const formToken =  "{{ updateToken }}";
+        const formData = new FormData();
+        formData.append('formToken', formToken);
+        formData.append('setting_value', inputValue);
+
+        postUrl(`/setting/update/${setting_key}`, formData, 'message', function (data) {
+            window.location = "/settings";
+        });
+    }
+
+    function deleteSetting(setting_key) {
+        {% set deleteToken = formToken({"url":"setting/delete?t="~RANDOM()}) %}
+        const formToken =  "{{ deleteToken }}";
+        deleteUrl(`/setting/delete/${setting_key}?formToken=${formToken}`, null, 'message', function (data) {
+            window.location = "/settings";
+        })
+    }
+</script>
+{% endblock %}

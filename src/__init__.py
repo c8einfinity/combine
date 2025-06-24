@@ -23,4 +23,4 @@ if os.getenv("TEAMQ_REFRESH_SPORTS", "TRUE") == "TRUE":
 
 # import everything
 from .app import Setup, Utility, Scraper, QueueUtility
-from .routes import athletes, dashboard, home, users, user_groups, websocket, queue
+from .routes import athletes, dashboard, home, users, user_groups, websocket, queue, settings

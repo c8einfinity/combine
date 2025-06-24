@@ -118,6 +118,14 @@
                 teamQNavSetActive(activeElement, true);
             }
         }
+
+        const settingsLink = document.getElementById('settingsLink');
+        if (settingsLink) {
+            settingsLink.addEventListener('click', function() {
+                teamQNavSetActive(this);
+            });
+        }
+
     });
 </script>
 </body>

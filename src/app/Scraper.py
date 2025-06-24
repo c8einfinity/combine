@@ -18,16 +18,25 @@ VIDEO_INFO_URL = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippe
 def get_player_bio_urls(player_name, player_sport):
     """
     Gets a list of bio information
+    :param player_sport:
     :param player_name:
     :return:
     """
+    from ..orm.Sport import Sport
+    from ..orm.AdminSetting import AdminSetting
 
-    search_criteria = f"{player_name} full player bio for {player_sport} latest"
+    setting_query = "setting_key = 'bio_sport_search_parameters'"
+    if player_sport:
+        sport = Sport().select("*", "name = ?", params=[str(player_sport)], limit=1)
+        if sport.count > 0:
+            setting_query = f"setting_key = 'bio_sport_{sport[0]["id"]}_search_parameters'"
 
-    if player_sport == "American Football":
-        search_criteria = f"{player_name} full player bio for NFL latest"
-    if player_sport == "EU Football/ Soccer":
-        search_criteria = f"{player_name} full player bio for Soccer latest"
+    search_query_setting = AdminSetting().select("*", setting_query, limit=1)
+    bio_sport_search_criteria = str(player_sport)
+    if search_query_setting.count > 0:
+        bio_sport_search_criteria = search_query_setting[0]["setting_value"]
+
+    search_criteria = f"{player_name} {bio_sport_search_criteria}"
 
     results = Google.search(search_criteria)
 

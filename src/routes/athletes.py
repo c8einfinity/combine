@@ -655,13 +655,15 @@ async def get_athlete_links_data(request, response):
 async def post_athletes(request, response):
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
+    from ..orm.Sport import Sport
+    from ..orm.AdminSetting import AdminSetting
     from ..app.Scraper import get_player_bio_urls
 
     player = Player(request.body)
     player.save()
 
     # add to queue
-    bio_urls = get_player_bio_urls(str(player.first_name) + " " + str(player.last_name))
+    bio_urls = get_player_bio_urls(str(player.first_name) + " " + str(player.last_name), player.sport)
 
     for url in bio_urls:
         player_media = PlayerMedia({"url": url, "media_type": "link-bio", "player_id": player.id})
@@ -674,11 +676,16 @@ async def post_athletes(request, response):
 
         player_media.save()
 
+    setting_query = "setting_key = 'video_sport_search_parameters'"
+    if player.sport:
+        sport = Sport().select("*", "name = ?", params=[str(player.sport)], limit=1)
+        if sport.count > 0:
+            setting_query = f"setting_key = 'video_sport_{sport[0]["id"]}_search_parameters'"
+
+    search_query_setting = AdminSetting().select("*", setting_query, limit=1)
     video_sport_search_criteria = str(player.sport)
-    if player.sport == "American Football":
-        video_sport_search_criteria = "NFL, American Football"
-    if player.sport == "EU Football/ Soccer":
-        video_sport_search_criteria = "Soccer, European Union Football"
+    if search_query_setting.count > 0:
+        video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
     you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
     for you_tube_link in you_tube_links:
