@@ -207,6 +207,7 @@ def process_item(queue, err, msg):
 
     queue_result = Queue(config, topic="result")
     Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
+    queue.done(msg.message_id)
     return None
 
 
