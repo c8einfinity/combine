@@ -211,7 +211,9 @@
 
                     formData.append("playerIds", JSON.stringify(selectedRows));
                     formData.append("formToken", "{{ formToken({"url": "/api/athlete/request-results/?t="~RANDOM()}) }}");
-                    postUrl("/api/athletes/request-results", formData, "formMessage");
+                    postUrl("/api/athletes/request-results", formData, "content", function(data) {
+                        location.href = `/dashboard/athletes/{{status}}`;
+                    });
                 }
             } catch (err) {
                 console.log(err);
