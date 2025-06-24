@@ -471,16 +471,23 @@ async def get_athlete_videos(request, response):
 
     from ..orm.Player import Player
     from ..orm.PlayerMedia import PlayerMedia
+    from ..orm.Sport import Sport
+    from ..orm.AdminSetting import AdminSetting
 
     player = Player({"id": request.params["id"]})
     player.load()
 
     if "search" in request.params and request.params["search"] == "1":
+        setting_query = "setting_key = 'video_sport_search_parameters'"
+        if player.sport:
+            sport = Sport().select("*", "name = ?", params=[str(player.sport)], limit=1)
+            if sport.count > 0:
+                setting_query = f"setting_key = 'video_sport_{sport[0]["id"]}_search_parameters'"
+
+        search_query_setting = AdminSetting().select("*", setting_query, limit=1)
         video_sport_search_criteria = str(player.sport)
-        if player.sport == "American Football":
-            video_sport_search_criteria = "NFL, American Football"
-        if player.sport == "EU Football/ Soccer":
-            video_sport_search_criteria = "Soccer, European Union Football"
+        if search_query_setting.count > 0:
+            video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
         you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
         for you_tube_link in you_tube_links:

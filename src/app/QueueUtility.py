@@ -56,6 +56,8 @@ def process_item(queue, err, msg):
     from src.app.Player import get_player_transcript, split_trim_minify, submit_player_results
     from src.orm.Player import Player
     from src.orm.PlayerResult import PlayerResult
+    from src.orm.Sport import Sport
+    from src.orm.AdminSetting import AdminSetting
 
 
     if action == "process_player":
@@ -82,11 +84,16 @@ def process_item(queue, err, msg):
 
             player_media.save()
 
-        video_sport_search_criteria = str(player["sport"])
-        if player["sport"] == "American Football":
-            video_sport_search_criteria = "NFL, American Football"
-        if player["sport"] == "EU Football/ Soccer":
-            video_sport_search_criteria = "Soccer, European Union Football"
+        setting_query = "setting_key = 'video_sport_search_parameters'"
+        if player["sport"]:
+            sport = Sport().select("*", "name = ?", params=[str(player.sport)], limit=1)
+            if sport.count > 0:
+                setting_query = f"setting_key = 'video_sport_{sport[0]["id"]}_search_parameters'"
+
+        search_query_setting = AdminSetting().select("*", setting_query, limit=1)
+        video_sport_search_criteria = str(player.sport)
+        if search_query_setting.count > 0:
+            video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
         you_tube_links = get_youtube_videos(str(player["first_name"]) + " " + str(player["last_name"]), video_sport_search_criteria)
         for you_tube_link in you_tube_links:
