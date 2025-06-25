@@ -1,4 +1,4 @@
-<label for="positionInput" class="font-weight-bold">Position</label>
+<label for="positionInput" class="font-weight-bold">Position<span class="text-danger px-2">*</span></label>
 <select class="form-control" id="positionInput" name="position">
     <option value="0" {% if position == 0 %}selected{% endif %}>Select Position</option>
     {% for position in positions %}
