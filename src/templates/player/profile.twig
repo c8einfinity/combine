@@ -61,14 +61,14 @@
                                     <input type="hidden" name="formToken" value="{{ formToken() }}">
                                     <input type="hidden" name="id" value="{{ player.id }}">
                                     <div class="form-group">
-                                        <label for="firstNameInput" class="font-weight-bold">First Name</label>
+                                        <label for="firstNameInput" class="font-weight-bold">First Name<span class="text-danger px-2">*</span></label>
                                         <input class="form-control" id="firstNameInput" name="firstName"
                                                type="text"
                                                value="{{ player.first_name }}"
                                                placeholder="First Name">
                                     </div>
                                     <div class="form-group">
-                                        <label for="lastNameInput" class="font-weight-bold">Last Name</label>
+                                        <label for="lastNameInput" class="font-weight-bold">Last Name<span class="text-danger px-2">*</span></label>
                                         <input class="form-control" id="lastNameInput" name="lastName"
                                                type="text"
                                                value="{{ player.last_name }}"
@@ -81,7 +81,7 @@
                                                placeholder="Height">
                                     </div>
                                     <div class="form-group">
-                                        <label for="sportInput" class="font-weight-bold">Sport</label>
+                                        <label for="sportInput" class="font-weight-bold">Sport<span class="text-danger px-2">*</span></label>
                                         <select class="form-control" id="sportInput" name="sport"
                                                 {% if user.user_group_id != "1" %} disabled {% endif %} >
                                             <option value="None">Select Sport</option>
@@ -105,14 +105,14 @@
                                 </div>
                                 <div class="col-12 col-lg">
                                     <div class="form-group">
-                                        <label for="teamInput" class="font-weight-bold">Team</label>
+                                        <label for="teamInput" class="font-weight-bold">Team<span class="text-danger px-2">*</span></label>
                                         <input class="form-control" id="teamInput" name="team" type="text"
                                                value="{{ player.team }}"
                                                placeholder="Team">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="homeTownInput" class="font-weight-bold">Home Town</label>
+                                        <label for="homeTownInput" class="font-weight-bold">Home Town<span class="text-danger px-2">*</span></label>
                                         <input class="form-control" id="homeTownInput" name="homeTown"
                                                type="text"
                                                value="{{ player.home_town }}"
@@ -125,7 +125,7 @@
                                                placeholder="Major">
                                     </div>
                                     <div class="form-group">
-                                        <label for="dateOfBirthInput" class="font-weight-bold">Date Of Birth</label>
+                                        <label for="dateOfBirthInput" class="font-weight-bold">Date Of Birth<span class="text-danger px-2">*</span></label>
                                         <input class="form-control" id="dateOfBirthInput" name="dateOfBirth"
                                                type="text"
                                                value="{{ player.date_of_birth }}" placeholder="Date of Birth">
@@ -146,13 +146,21 @@
                                                 {% endif %}
                                             </div>
                                             {% if profile_edit_permission %}
-                                                <input class="custom-file-upload mt-3" id="file-upload"
+                                            <div class="form-group mt-1">
+                                                <label for="file-upload" class="font-weight-bold text-xs">Upload profile image<span class="text-md text-danger px-2">*</span></label>
+                                                <input class="custom-file-upload" id="file-upload"
                                                        name="picture-upload"
                                                        type="file" accept="image/*"
                                                        onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')">
+                                            </div>
                                             {% endif %}
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-lg">
+                                    <p class="alert alert-info p-1"><span class="text-danger px-2">*</span><span class="text-muted">Denotes required fields to remove <q>Incomplete Biography</q> flag.</span></p>
                                 </div>
                             </div>
                         </form>

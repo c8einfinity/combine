@@ -326,27 +326,47 @@ def import_csv_player_data(file_data):
     :return:
     """
     from ..orm.Player import Player
+    from src.app.QueueUtility import QueueUtility
+    import csv
+    import io
 
-    read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
-    count = 0
-    queue = QueueUtility()
-    for row in read_data:
-        # Check if the player already exists
-        player = Player().select("*", filter="first_name = ? and last_name = ?", params=[row['first_name'], row['last_name']], limit=1)
-        if player.count == 0:
-            # Create a new player
-            player = Player()
-            player.first_name = row['first_name']
-            player.last_name = row['last_name']
-            player.sport = row['sport']
-            player.position = row['position']
-            player.team = row['team']
-            player.is_video_links_created = 0
-            player.is_bio_links_created = 0
-            player.save()
-            count += 1
-            player = player.to_dict()
-            queue.add_item("process_player", {"player_id": player["id"]})
+    try:
+        # Validate file_data
+        if not file_data or not isinstance(file_data, str):
+            raise ValueError("Invalid file data provided")
 
-    return count
+        read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
+        count = 0
+        queue = QueueUtility()
+
+        for row in read_data:
+            # Validate required fields
+            if not all(key in row for key in ["first_name", "last_name", "sport", "position", "team"]):
+                raise ValueError(f"Missing required fields in row: {row}")
+
+            # Check if the player already exists
+            player = Player().select("*", filter="first_name = ? and last_name = ?", params=[row['first_name'], row['last_name']], limit=1)
+            if player.count == 0:
+                # Create a new player
+                player = Player({
+                    "first_name": row['first_name'],
+                    "last_name": row['last_name'],
+                    "sport": row['sport'],
+                    "position": row['position'],
+                    "team": row['team'],
+                    "is_bio_links_created": 0,
+                    "is_video_links_created": 0
+                })
+                player.save()
+
+                count += 1
+                player = player.to_dict()
+                queue.add_item("process_player", {"player_id": player["id"]})
+
+        return count
+
+    except Exception as e:
+        print(f"Error importing CSV player data: {e}")
+        Debug.error(f"Error importing CSV player data: {e}")
+        return 0
 
