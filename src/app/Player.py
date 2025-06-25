@@ -335,15 +335,11 @@ def import_csv_player_data(file_data):
         player = Player().select("*", filter="first_name = ? and last_name = ?", params=[row['first_name'], row['last_name']], limit=1)
         if player.count == 0:
             # Create a new player
-            player = Player()
-            player.first_name = row['first_name']
-            player.last_name = row['last_name']
-            player.sport = row['sport']
-            player.position = row['position']
-            player.team = row['team']
-            player.is_video_links_created = 0
-            player.is_bio_links_created = 0
+            player = Player({"first_name": row['first_name'], "last_name": row['last_name'],
+                            "sport": row['sport'], "position": row['position'], "team": row['team'],
+                             "is_bio_links_created": 0, "is_video_links_created": 0})
             player.save()
+
             count += 1
             player = player.to_dict()
             queue.add_item("process_player", {"player_id": player["id"]})
