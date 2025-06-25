@@ -86,12 +86,12 @@ def process_item(queue, err, msg):
 
         setting_query = "setting_key = 'video_sport_search_parameters'"
         if player["sport"]:
-            sport = Sport().select("*", "name = ?", params=[str(player.sport)], limit=1)
+            sport = Sport().select("*", "name = ?", params=[str(player["sport"])], limit=1)
             if sport.count > 0:
                 setting_query = f"setting_key = 'video_sport_{sport[0]["id"]}_search_parameters'"
 
         search_query_setting = AdminSetting().select("*", setting_query, limit=1)
-        video_sport_search_criteria = str(player.sport)
+        video_sport_search_criteria = str(player["sport"])
         if search_query_setting.count > 0:
             video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
