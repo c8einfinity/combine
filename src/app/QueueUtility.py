@@ -83,6 +83,7 @@ def process_item(queue, err, msg):
                 player_media.is_valid = 1
 
             player_media.save()
+            dba.commit()
 
         setting_query = "setting_key = 'video_sport_search_parameters'"
         if player["sport"]:
@@ -104,6 +105,7 @@ def process_item(queue, err, msg):
             player_media.is_valid = 1
             player_media.metadata = you_tube_link["metadata"]
             player_media.save()
+            dba.commit()
 
         player["is_video_links_created"] = 1
         player["is_bio_links_created"] = 1
