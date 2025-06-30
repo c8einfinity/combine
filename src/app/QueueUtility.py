@@ -119,12 +119,12 @@ def process_item(queue, err, msg):
         player = None
         try:
             player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
-            Debug.info(f"request_player_results {player_id}: Player loaded {player}")
             if player.count == 0:
                 Debug.error(f"request_player_results {player_id}: Player not found")
                 queue_result = Queue(config, topic="result")
                 Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
                 raise Exception("Player not found")
+            Debug.info(f"request_player_results {player_id}: Player loaded")
             player = player[0]
         except Exception as e:
             Debug.error(f"request_player_results {player_id}: Error loading player, {e}")
