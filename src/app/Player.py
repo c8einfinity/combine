@@ -12,9 +12,6 @@ import csv
 from PIL import Image
 from PIL.Image import Resampling
 
-from src.app.QueueUtility import QueueUtility
-
-
 def get_player_results(candidate_id):
     """
     Fetch results from the API
@@ -65,15 +62,23 @@ def get_sport_position_ids(sport_name, position_name):
     from ..orm.SportPosition import SportPosition
 
     # get the sport and position ids from the database
-    sport = Sport().select("id, name", limit=1, filter="name = ?", params=[str(sport_name)])
-    sport = sport.to_list()
+    try:
+        sport = Sport().select("id, name", limit=1, filter="name = ?", params=[str(sport_name)])
+        sport = sport.to_list()
+    except Exception as e:
+        Debug.error(f"Error fetching sport {sport_name} from the database, {e}")
+        return {"error": "Sport not found"}
 
     if len(sport) == 0:
         Debug.error(f"Sport {sport_name} not found in the database")
         return {"error": "Sport not found"}
 
-    position = SportPosition().select("id, name", limit=1, filter="name = ?", params=[str(position_name)])
-    position = position.to_list()
+    try:
+        position = SportPosition().select("id, name", limit=1, filter="name = ?", params=[str(position_name)])
+        position = position.to_list()
+    except Exception as e:
+        Debug.error(f"Error fetching position {position_name} from the database, {e}")
+        return {"error": "Position not found"}
 
     if len(position) == 0:
         Debug.error(f"Position {position_name} not found in the database")
@@ -101,11 +106,17 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     # get the sport and position ids from the database
     sport_position = get_sport_position_ids(sport, position)
 
+    if sport_position["error"] is not None:
+        Debug.error(f"submit_player_results: {sport_position['error']}")
+        return {"error": sport_position["error"]}
+
     data = {"first_name": first_name, "last_name": last_name, "image": image,
             "candidate_id": candidate_id, "text": text, "sport_id": sport_position["sport_id"],
             "position_id": sport_position["position_id"], "dob": date_of_birth, "home_town": home_town, "team": team}
 
     Debug.info(f"submit_player_results: {data}")
+
+    Debug.info(f"submit_player_results")
 
     try:
         results = requests.post(f"{os.getenv("TEAMQ_ENDPOINT")}/recruit/assessment",
@@ -133,6 +144,9 @@ def submit_player_teamq_details(player):
         return {"error": "Error updating TeamQ, athlete does not have a TeamQ id, submit the player results first"}
 
     sport_position = get_sport_position_ids(player["sport"], player["position"])
+    if sport_position["error"] is not None:
+        Debug.error(f"submit_player_teamq_details: {sport_position['error']}")
+        return {"error": sport_position["error"]}
 
     data = {
         "first_name": player["first_name"],
@@ -325,6 +339,7 @@ def import_csv_player_data(file_data):
     :param file_data:
     :return:
     """
+    from tina4_python import Debug
     from ..orm.Player import Player
     from src.app.QueueUtility import QueueUtility
     import csv
