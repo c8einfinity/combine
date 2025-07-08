@@ -33,17 +33,17 @@ def process_item(queue, err, msg):
 
     if err is not None:
         Debug.error(f"Error processing message: {err}", file_name="queue.log")
-        return False
+        return None
 
     try:
         message = json.loads(msg.data)
     except json.JSONDecodeError as e:
         Debug.error(f"Failed to decode message: {e}", file_name="queue.log")
-        return False
+        return None
 
     if message is None:
         Debug.error("Message is None", file_name="queue.log")
-        return False
+        return None
 
 
     action = message["action"]
@@ -90,7 +90,7 @@ def process_item(queue, err, msg):
                     player_media.is_valid = 1
 
                 player_media.save()
-                dba.commit()
+                player_media.__dba__.commit()
 
             setting_query = "setting_key = 'video_sport_search_parameters'"
             if player["sport"]:
@@ -226,8 +226,7 @@ def process_item(queue, err, msg):
         Debug.info("Processing complete, committing changes to database", file_name="queue.log")
         if dba is not None:
             dba.close()
-
-    return None
+            return None
 
 
 def message_delivered(queue, err, msg):

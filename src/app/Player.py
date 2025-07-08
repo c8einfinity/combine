@@ -1,13 +1,11 @@
 import ast
 import base64
 import io
-import json
 import re
 from json import JSONDecodeError
 
 import requests
 import os
-import csv
 
 from PIL import Image
 from PIL.Image import Resampling
@@ -249,7 +247,6 @@ def get_player_transcript(player_id: int) -> str:
     :return:
     """
     from ..orm.PlayerTranscripts import PlayerTranscripts
-    from ..orm.PlayerResult import PlayerResult
     from ..orm.Player import Player
 
     player = Player({"id": player_id})
@@ -350,7 +347,16 @@ def import_csv_player_data(file_data):
         if not file_data or not isinstance(file_data, str):
             raise ValueError("Invalid file data provided")
 
+        # Sanitize and prepare the CSV data
+        file_data = file_data.strip()
+        # remove any non-UTF-8 characters
+        file_data = re.sub(r'[^\x00-\x7F]+', '', file_data)
+
+        if not file_data.startswith("first_name,last_name,sport,position,team"):
+            raise ValueError("CSV data does not start with the expected header row")
+
         read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
+
         count = 0
         queue = QueueUtility()
 
@@ -373,6 +379,7 @@ def import_csv_player_data(file_data):
                     "is_video_links_created": 0
                 })
                 player.save()
+                player.__dba__.commit()
 
                 count += 1
                 player = player.to_dict()
