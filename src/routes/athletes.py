@@ -69,7 +69,7 @@ async def get_athletes(request, response):
     if "selectedSport" in request.params and request.params["selectedSport"] != "":
         where += f" and sport = '{request.params["selectedSport"]}'"
 
-    players = Player().select(["id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
+    players = Player().select(["'-' as checkbox", "id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
                               where,
                               order_by=data_tables_filter["order_by"],
                               limit=data_tables_filter["length"],
