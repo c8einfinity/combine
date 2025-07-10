@@ -28,7 +28,6 @@ async def get_athletes(request, response):
         return response(":(", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
     from ..orm.Player import Player
-    from ..orm.Sport import Sport
     from ..app.Player import player_bio_complete, player_report_sent
 
     data_tables_filter = get_data_tables_filter(request)
@@ -933,18 +932,83 @@ async def post_import_csv(request, response):
     """
     from ..app.Player import import_csv_player_data
 
-    if "importCsv" not in request.body:
+    if "temp_file_path" not in request.body and "importCsv" not in request.body:
         return response("No file found", HTTP_SERVER_ERROR, TEXT_PLAIN)
 
+    file_content = None
+    temp_file_path = ""
+
+    if "temp_file_path" in request.body and os.path.exists(request.body["temp_file_path"]):
+        # get the file contents from the temp file
+        file_content = open(request.body["temp_file_path"], "r", encoding="utf-8").read()
+        temp_file_path = request.body["temp_file_path"]
+
     # decode file contents
-    file_content = base64.b64decode(request.body["importCsv"]["content"]).decode('utf-8')
-    import_count = import_csv_player_data(str(file_content))
+    if "importCsv" in request.body and "content" in request.body["importCsv"]:
+        file_content = base64.b64decode(request.body["importCsv"]["content"]).decode('utf-8')
 
-    if import_count > 0:
-        return response("Imported "+str(import_count)+" players")
-    Debug.error("No players imported")
+    # loop over the request.body to find any sport_{index} and position_{index} fields
+    mapped_fields = {}
+    for key in request.body:
+        if key.startswith("sport_") or key.startswith("position_"):
+            index = key.split("_")[1]
+            if index not in mapped_fields:
+                mapped_fields[index] = {}
+            mapped_fields[index][key] = request.body[key]
 
-    return response("No players imported", HTTP_SERVER_ERROR, TEXT_PLAIN)
+    try:
+        import_data = import_csv_player_data(str(file_content), temp_file_path, mapped_fields)
+    except Exception as e:
+        Debug.error(f"Error importing players from csv, {str(e)}")
+        return response(f"Error importing players from csv, {str(e)}", HTTP_SERVER_ERROR, TEXT_PLAIN)
+
+    html_response = ""
+
+    if import_data["count"] > 0:
+        html_response = Template.render_twig_template("components/modal_form.twig",
+                        {"title": "Import Players", "content": "Imported "+str(import_data["count"])+" players"})
+
+    if len(import_data["invalid_data"]) > 0:
+        invalid_sports = []
+        invalid_positions = []
+        from ..orm.Sport import Sport
+        from ..orm.SportPosition import SportPosition
+
+        sports = Sport().select("*", limit=100).to_list()
+        for sport in sports:
+            # get the position for the sport
+            sport["positions"] = SportPosition().select("*", "sport_id = ?", params=[sport["id"]], limit=100).to_list()
+
+        for invalid in import_data["invalid_data"]:
+            if "sport" in invalid and invalid["sport"] not in invalid_sports and not any(sport["name"] == invalid["sport"] for sport in sports):
+                invalid_sports.append(invalid["sport"])
+            if "position" in invalid and invalid["position"] and not any(pos["position"] == invalid["position"] for pos in invalid_positions):
+                invalid_positions.append({"sport": invalid["sport"], "position": invalid["position"], "available_positions": []})
+
+        for invalid_position in invalid_positions:
+            # find the sport in the sports list
+            for sport in sports:
+                if sport["name"] == invalid_position["sport"]:
+                    invalid_position["available_positions"] = sport["positions"]
+                    break
+
+        invalid_data_html = Template.render_twig_template("components/csv_mapping_modal.twig", {
+            "sports": sports,
+            "invalid_data": import_data["invalid_data"],
+            "invalid_sports": invalid_sports,
+            "invalid_positions": invalid_positions,
+            "temp_file_path": import_data["temp_file_path"],
+        })
+
+        html_response = Template.render_twig_template("components/modal_form.twig",
+                        {"title": "Invalid CSV Data", "content": invalid_data_html, "onclick": "submitCSVMapping()"})
+
+    if "error" in import_data:
+        Debug.error("No players imported")
+        html_response = Template.render_twig_template("components/modal_form.twig",
+                        {"title": "Error Importing Players", "content": "<p>No players imported due to an unexpected error.</p>"})
+
+    return response(html_response, HTTP_OK, TEXT_HTML)
 
 @post("/api/athletes/request-results")
 async def post_send_results(request, response):

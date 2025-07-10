@@ -13,7 +13,7 @@
                 {{ content }}
             </div>
             <div class="modal-footer">
-                {% if not error %}
+                {% if not error and onclick %}
                     <button type="button" class="btn btn-soft-green" onclick="{{ onclick }}">
                         {{ "Save" if "Edit" in title|capitalize else "Ok" }}
                     </button>

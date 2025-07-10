@@ -1,0 +1,52 @@
+<h4 class="p-2">Correct the corresponding sports / positions from the imported data to QFinder</h4>
+<div class="p-2">
+    <form id="csvMapping">
+        <input type="hidden" name="temp_file_path" value="{{ temp_file_path }}" />
+        {% if invalid_sports %}
+            <h5>Match the sport with the correct QFinder record:</h5>
+            {% for sport in invalid_sports %}
+                <div class="form-group">
+                    <input type="hidden" name="sport_{{ loop.index }}_old" value="{{ sport }}" />
+                    <label for="sport_{{ loop.index }}">{{ sport }}</label>
+                    <select class="form-control" id="sport_{{ loop.index }}" name="sport_{{ loop.index }}">
+                        {% for qfinder_sport in sports %}
+                            <option value="{{ qfinder_sport.name }}">{{ qfinder_sport.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% if invalid_positions %}
+            <h5>Match the position with the correct QFinder record:</h5>
+            {% for position in invalid_positions %}
+                {% if position["available_positions"] %}
+                <div class="form-group">
+                    <input type="hidden" name="position_{{ loop.index }}_old" value="{{ position["position"] }}" />
+                    <label for="position_{{ loop.index }}">{{ position["sport"] }} - {{ position["position"] }}</label>
+                    <select class="form-control" id="position_{{ loop.index }}" name="position_{{ loop.index }}">
+                        {% for qfinder_position in position["available_positions"] %}
+                            <option value="{{ qfinder_position.name }}">{{ qfinder_position.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
+                    <div>Cannot map position <q>{{ position["position"] }}</q> for unknown sport {{ position.sport }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {{ ("csvMapping"~RANDOM()) | formToken }}
+    </form>
+    <div id="csvMappingMessage"></div>
+</div>
+<script>
+    function submitCSVMapping() {
+        // close the modal and clear the message area
+        $('#formModal').modal('hide');
+        $('.modal-backdrop').remove();
+        submitForm(
+            'csvMapping',
+            "/api/athletes/import-csv",
+            "formImportMessage",
+        );
+    }
+</script>

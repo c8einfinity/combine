@@ -4,6 +4,7 @@ import io
 import re
 from json import JSONDecodeError
 
+import tempfile
 import requests
 import os
 
@@ -330,18 +331,21 @@ def resize_profile_image(image_data):
 
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
-def import_csv_player_data(file_data):
+
+
+def validate_csv_player_data(file_data):
     """
-    Import player data from a CSV file
+    Validate the CSV file, check the sport and position names, return a list of invalid rows
     :param file_data:
     :return:
     """
     from tina4_python import Debug
-    from ..orm.Player import Player
-    from src.app.QueueUtility import QueueUtility
+    from ..orm.Sport import Sport
+    from ..orm.SportPosition import SportPosition
     import csv
     import io
 
+    invalid_rows = []
     try:
         # Validate file_data
         if not file_data or not isinstance(file_data, str):
@@ -354,6 +358,102 @@ def import_csv_player_data(file_data):
 
         if not file_data.startswith("first_name,last_name,sport,position,team"):
             raise ValueError("CSV data does not start with the expected header row")
+
+        read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
+
+        for row in read_data:
+            # Validate required fields
+            if not all(key in row for key in ["first_name", "last_name", "sport", "position", "team"]):
+                invalid_rows.append(row)
+                continue
+
+            # Check if sport exists
+            sport = Sport().select("id", filter="name = ?", params=[row['sport']], limit=1)
+            if sport.count == 0:
+                invalid_rows.append(row)
+                continue
+
+            # Check if position exists
+            position = SportPosition().select("id", filter="name = ?", params=[row['position']], limit=1)
+            if position.count == 0:
+                invalid_rows.append(row)
+                continue
+
+        return invalid_rows
+
+    except Exception as e:
+        Debug.error(f"Error validating CSV player data: {e}")
+        return []
+
+"""
+mapped fields example:
+{
+    '1': {
+        'sport_1': 'Soccer',
+        'sport_1_old': 'Socer'
+    },
+    '2': {
+        'sport_2': 'Soccer',
+        'sport_2_old': 'EU Football'
+    },
+    '3': {
+        'position_3': 'Center Midfielder',
+        'position_3_old': 'Midfielder'
+    },
+    '4': {
+        'position_4': 'Center Forward',
+        'position_4_old': 'Forward'
+    }
+}
+"""
+def import_csv_player_data(file_data, temp_file_path, mapped_fields=None):
+    """
+    Import player data from a CSV file
+    :param file_data:
+    :param temp_file_path: Path to the temporary file where the CSV data will be stored
+    :param mapped_fields: Optional mapping of fields, to fix sports and positions not in the database
+    :return:
+    """
+    from tina4_python import Debug
+    from ..orm.Player import Player
+    from src.app.QueueUtility import QueueUtility
+    import csv
+    import io
+
+    try:
+        # Validate file_data
+        if not file_data or not isinstance(file_data, str):
+            raise ValueError("Invalid file data provided")
+        # Store in a temporary file
+        if not temp_file_path or temp_file_path == "":
+            with tempfile.NamedTemporaryFile(delete=False, mode='w+', encoding='utf-8') as temp_file:
+                temp_file.write(file_data)
+                temp_file_path = temp_file.name
+                Debug.info(f"Temporary file created at: {temp_file_path}")
+
+        # fix the file data with the mapped fields if provided
+        if mapped_fields is not None and isinstance(mapped_fields, dict):
+            new_rows = []
+            for row in file_data.splitlines():
+                for key, value in mapped_fields.items():
+                    if f"sport_{key}" in value:
+                        row = row.replace(value[f"sport_{key}_old"], value[f"sport_{key}"])
+
+                    if f"position_{key}" in value:
+                        row = row.replace(value[f"position_{key}_old"], value[f"position_{key}"])
+                new_rows.append(row)
+            file_data = "\n".join(new_rows)
+            # remove temporary file if it exists
+            if os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
+
+            # write the updated file data to the temporary file
+            with open(temp_file_path, 'w+', encoding='utf-8') as temp_file:
+                temp_file.write(file_data)
+
+        invalid_data = validate_csv_player_data(file_data)
+        if len(invalid_data) > 0:
+            return {"count": 0, "invalid_data": invalid_data, "temp_file_path": temp_file_path}
 
         read_data = csv.DictReader(io.StringIO(file_data), delimiter=",")
 
@@ -385,10 +485,18 @@ def import_csv_player_data(file_data):
                 player = player.to_dict()
                 queue.add_item("process_player", {"player_id": player["id"]})
 
-        return count
+        # unlink the temporary file if it exists
+        if 'temp_file_path' in locals() and os.path.exists(temp_file_path):
+            os.unlink(temp_file_path)
+
+        return {"count": count, "invalid_data": invalid_data}
 
     except Exception as e:
+        #unlink the temporary file if it exists
+        if 'temp_file_path' in locals() and os.path.exists(temp_file_path):
+            os.unlink(temp_file_path)
+
         print(f"Error importing CSV player data: {e}")
         Debug.error(f"Error importing CSV player data: {e}")
-        return 0
+        return {"count": 0, "invalid_data": [], "error": str(e)}
 
