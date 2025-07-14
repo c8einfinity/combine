@@ -34,7 +34,7 @@ async def get_athletes(request, response):
 
     where = "id <> 0"
     if data_tables_filter["where"] != "":
-        where += " and " + data_tables_filter["where"]
+        where += f" and ({data_tables_filter["where"]})"
 
     if request.params["status"] != "all":
         if request.params["status"] == "unsent-reports":
