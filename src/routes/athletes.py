@@ -41,15 +41,18 @@ async def get_athletes(request, response):
             where += " and id not in (select player_id from player_result)"
         if request.params["status"] == "completed-reports":
             where += " and id in (select player_id from player_result)"
+
         if request.params["status"] == "unverified-speakers":
-            where += (" and id in (select pt.player_id from player_transcripts pt "
-                      "join player_media pm "
-                      "on pt.player_id = pm.player_id "
-                      "and pt.verified_user_id = 0 "
-                      "and pm.is_sorted = 1 "
-                      "AND pm.is_valid = 1 "
-                      "AND pm.media_type = 'video-youtube' "
-                      "group by pt.player_id)")
+            where += (" and id in (select pt.player_id "
+                      "from player_transcripts pt "
+                      "where pt.player_media_id in ( select id from player_media pm where pm.is_sorted = 1 "
+                      "and pm.is_valid = 1 "
+                      "and pm.is_deleted = 0 "
+                      "and pm.media_type like 'video-%' "
+                      "and pt.player_id = pm.player_id ) "
+                      "and pt.verified_user_id > 0 "
+                      "group by pt.player_id)" )
+
         if request.params["status"] == "verified-speakers":
             where += (" and id in (SELECT pt.player_id FROM player_transcripts pt "
                       "JOIN player_media pm "
@@ -59,7 +62,14 @@ async def get_athletes(request, response):
                       "AND pm.media_type = 'video-youtube' "
                       "GROUP BY pt.player_id HAVING COUNT(pt.id) = COUNT(pm.id))")
         if request.params["status"] == "unverified-videos":
-            where += " and id in (select player_id from player_media where is_valid = 0 and is_deleted = 0)"
+            where += (
+                " and id in ("
+                "select player_id from player_media "
+                "where is_deleted = 0 "
+                "group by player_id "
+                "having sum(is_sorted = 0) > sum(is_sorted = 1)"
+                ")"
+            )
         if request.params["status"] == "verified-videos":
             where += " and id in (select player_id from player_media where is_valid = 1 and is_deleted = 0)"
         if request.params["status"] == "incomplete-bios":
