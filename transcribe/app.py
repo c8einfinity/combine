@@ -42,7 +42,7 @@ def download_youtube_video(url, filename):
     error_code = None
     if not os.path.exists(filename+".wav"):
         ydl_opts = {
-            'format': 'm4a/bestaudio/best',
+            'format': 'aac/mp3/m4a/bestaudio/best',
             # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
             'postprocessors': [{  # Extract audio using ffmpeg
                 'key': 'FFmpegExtractAudio',
@@ -118,6 +118,11 @@ while not terminated:
         if len(queue) == 1:
             print("FOUND", queue[0])
             media_file = dba.fetch("select * from player_media where id = "+str(queue[0]["data"]["player_media_id"])).to_list()
+            if len(media_file) == 0:
+                print("NO MEDIA FILE FOUND FOR", queue[0]["data"]["player_media_id"])
+                dba.update("queue", {"player_media_id": str(queue[0]["data"]["player_media_id"]), "processed": 1, "data": {"error": "No media file found"}})
+                dba.commit()
+                continue
             try:
                 video_url = media_file[0]["url"]
                 audio_filename = "audio/"+media_file[0]["url"].replace("https://www.youtube.com/watch?v=", "").strip()+".wav"
@@ -149,7 +154,6 @@ while not terminated:
                 dba.update("queue", {"id": queue[0]["id"], "processed": 1, "data": {"error": str(e)}})
                 dba.update("player_media", {"id": media_file[0]["id"], "is_deleted": 1})
                 dba.commit()
-
 
             time.sleep(1)
         else:
