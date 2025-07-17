@@ -9,8 +9,10 @@ def get_total_transcribed_stats():
     untranscribed_media = dba.fetch_one('select count(*) as untranscribed_count from player_transcripts where '
                                         'cast(data as char) like \'{"transcription": [[]%\' group by player_media_id')
 
-    speaker_verified = dba.fetch_one("select count(*) as speaker_verified_count from player_transcripts where "
-                                     "verified_user_id > 0")
+    speaker_verified = dba.fetch_one("select count(*) as speaker_verified_count from player_transcripts a where "
+                                     "verified_user_id > 0 and exists (select 1 from player_media b where "
+                                     "a.player_id = b.player_id and is_deleted = 0 and is_valid = 1 "
+                                     "and a.player_media_id = b.id)")
 
     total_media = dba.fetch_one("select count(*) as total_media_count from player_media where media_type = "
                                 "'video-youtube' and is_deleted = 0 and is_valid = 1")
