@@ -51,13 +51,20 @@ def get_player_transcribed_stats(player_id):
     """
     from .. import dba
 
-    unprocessed_queue = dba.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 and action = 'transcribe' and player_id = ?", [player_id])
+    unprocessed_queue = dba.fetch_one("select count(*) as unprocessed_count from queue where processed = 0 "
+                                      "and action = 'transcribe' and player_id = ?", [player_id])
 
-    processed_queue = dba.fetch_one("select count(*) as processed_count from player_transcripts where player_id = ? and verified_user_id > 0", [player_id])
+    processed_queue = dba.fetch_one("select count(*) as processed_count from player_transcripts a where player_id = ? "
+                                    "and verified_user_id > 0 and exists "
+                                    "(select player_id from player_media b where b.player_id = a.player_id "
+                                    "and a.player_media_id = b.id and is_deleted = 0 and is_sorted = 1)", [player_id])
 
-    total_media = dba.fetch_one("select count(*) as total_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and player_id = ?", [player_id])
+    total_media = dba.fetch_one("select count(*) as total_media_count from player_media where "
+                                "media_type = 'video-youtube' and is_deleted = 0 and player_id = ?", [player_id])
 
-    valid_media = dba.fetch_one("select count(*) as valid_media_count from player_media where media_type = 'video-youtube' and is_deleted = 0 and is_valid = 1 and is_sorted = 1 and player_id = ?", [player_id])
+    valid_media = dba.fetch_one("select count(*) as valid_media_count from player_media where "
+                                "media_type = 'video-youtube' and is_deleted = 0 "
+                                "and is_valid = 1 and is_sorted = 1 and player_id = ?", [player_id])
 
     dba.close()
 
