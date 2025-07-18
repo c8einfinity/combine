@@ -7,7 +7,7 @@ from datetime import datetime
 from urllib.parse import urlparse, parse_qs
 
 from tina4_python import Debug
-from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK, HTTP_NOT_FOUND
+from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK, HTTP_NOT_FOUND, HTTP_BAD_REQUEST
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete
 import re
@@ -764,12 +764,15 @@ async def post_athlete_links(request, response):
         # strip out the video id from the url "?v=" param
         parsed_url = urlparse(request.body["url"])
         params = parse_qs(parsed_url.query)
+
         if params.get("v"):
             video_id = params.get("v")[0]
             video_meta = get_youtube_info(video_id)
             if video_meta:
                 player_media.is_valid = 1
                 player_media.metadata = video_meta
+        else:
+            return response("Invalid YouTube URL")
 
     if player_media.save():
         return response("Player Media saved")
