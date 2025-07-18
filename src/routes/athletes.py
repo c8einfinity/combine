@@ -50,9 +50,9 @@ async def get_athletes(request, response):
                       "and pm.is_valid = 1 "
                       "and pm.is_deleted = 0 "
                       "and pm.media_type like 'video-%' "
-                      "and pt.player_id = pm.player_id ) "
+                      "and pt.player_media_id = pm.id ) "
                       "and pt.player_id = t.id "
-                      "and pt.verified_user_id > 0 "
+                      "and pt.verified_user_id = 0 "
                       "group by pt.player_id)" )
 
         if request.params["status"] == "verified-speakers":
