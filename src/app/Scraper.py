@@ -47,6 +47,25 @@ def get_player_bio_urls(player_name, player_sport):
 
     return final_results
 
+def get_youtube_channel_videos(channel_url):
+    """
+    Get YouTube channel videos
+    :param channel_url:
+    :return list:
+    """
+    from tina4_python import Debug
+
+    if channel_url.endswith('/'):
+        channel_url = channel_url[:-1]
+
+    video_url = f"{channel_url}/videos"
+    html = requests.get(video_url)
+
+    if html.status_code != 200:
+        Debug.error(f"Failed to retrieve videos from {video_url}")
+        return []
+
+    return get_video_ids(html.text)
 
 def get_youtube_info(video_id):
     """

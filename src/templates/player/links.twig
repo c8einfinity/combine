@@ -13,11 +13,15 @@
                 <div class="col-12 col-lg-8 form-group">
                     <label class="font-weight-bold" for="linkUrl">Link Url</label>
                     <input class="form-control" id="linkUrl" name="url" placeholder="https://...">
+                    <div id="link-tooltip" class="alert alert-info">
+                        For YouTube links, use the full URL (https://youtube.com/watch?v=VIDEO_ID).
+                    </div>
                 </div>
                 <div class="col-12 col-lg form-group">
                     <label class="font-weight-bold" for="mediaType">Link Type</label>
                     <select class="form-control" id="mediaType" name="mediaType">
-                        <option value="video-youtube">YouTube</option>
+                        <option value="video-youtube">YouTube Video</option>
+                        <option value="video-youtube-channel">YouTube Channel</option>
                         <option value="link-bio">Bio Link</option>
                         <option value="video-generic">Video Link</option>
                         <option value="link-generic">Generic Link</option>
@@ -154,6 +158,18 @@
                 })
             }
             {% endif %}
+            // event listener to update the tooltip based on the selected media type
+            $('#mediaType').on('change', function () {
+                const selectedType = $(this).val();
+                const tooltipText = {
+                    'video-youtube': `For YouTube links, use the full URL (https://youtube.com/watch?v=VIDEO_ID).`,
+                    'video-youtube-channel': `For YouTube channel links, use the full URL (https://youtube.com/channel/CHANNEL_ID or https://youtube.com/@channel).`,
+                    'link-bio': 'For Bio links, use the full URL (e.g., https://bio.link/USERNAME).',
+                    'video-generic': 'For generic video links, use the full URL.',
+                    'link-generic': 'For generic links, use the full URL.'
+                }[selectedType] || 'Enter a valid link URL.';
+                $('#link-tooltip').text(tooltipText);
+            });
         </script>
     </div>
 {% endif %}

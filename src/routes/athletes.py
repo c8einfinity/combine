@@ -774,6 +774,24 @@ async def post_athlete_links(request, response):
         else:
             return response("Invalid YouTube URL")
 
+    if request.body["mediaType"] == "video-youtube-channel":
+        from ..app.Scraper import get_youtube_channel_videos
+
+        if "youtube.com" in request.body["url"]:
+            videos = get_youtube_channel_videos(request.body["url"])
+            for video in videos:
+                player_media = PlayerMedia()
+                player_media.url = video["url"]
+                player_media.player_id = request.params["id"]
+                player_media.media_type = 'video-youtube'
+                player_media.is_valid = 1
+                player_media.metadata = video["metadata"]
+                player_media.save()
+
+            return response("Videos added from channel")
+        else:
+            return response("Invalid YouTube Channel URL")
+
     if player_media.save():
         return response("Player Media saved")
     else:
