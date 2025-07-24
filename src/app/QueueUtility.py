@@ -6,14 +6,14 @@ from tina4_python import Debug
 from tina4_python.Queue import Queue, Config, Consumer, Producer
 
 queue_config = Config()
-queue_config.queue_type = 'rabbitmq'
+queue_config.queue_type = 'mongo-queue-service'
 queue_config.prefix = ""
-queue_config.rabbitmq_config = {
-    'host': os.getenv('RABBITMQ_SERVER'),
-    'port': 5672,
-    'username': os.getenv('RABBITMQ_USERNAME'),
-    'password': os.getenv('RABBITMQ_PASSWORD'),
-}
+queue_config.mongo_queue_config = {"host": os.getenv("MONGODB_HOST", "localhost"),
+                             "port": int(os.getenv("MONGODB_PORT", 27017)),
+                             "username": os.getenv("MONGODB_USERNAME", "admin"),
+                             "password": os.getenv("MONGODB_PASSWORD", "password"),
+                             "timeout": 300,
+                             "max_attempts": 5}
 
 def process_item(queue, err, msg):
     """
@@ -29,6 +29,7 @@ def process_item(queue, err, msg):
 
     if msg is None:
         Debug.error("Received None message", file_name="queue.log")
+        return
 
 
     if err is not None:
@@ -222,7 +223,7 @@ def process_item(queue, err, msg):
         queue_result = Queue(queue_config, topic="result")
         Producer(queue_result).produce({"processed": True, "message_id": msg.message_id, "message": "OK"})
         Debug.info(f"Acknowledging message: {msg.delivery_tag}", file_name="queue.log")
-        queue.basic_ack(msg.delivery_tag)
+        queue.complete()
         Debug.info("Processing complete, committing changes to database", file_name="queue.log")
         if dba is not None:
             dba.close()
@@ -258,7 +259,7 @@ class QueueUtility(object):
         if queue_config:
             self.config = queue_config
         self.channel = None
-        self.set_queue(os.getenv("RABBITMQ_QUEUE_NAME", "qfinder"))
+        self.set_queue(os.getenv("MONGODB_QUEUE_DATABASE", "qfinder"))
 
     def set_queue(self, queue_name):
         """
@@ -325,8 +326,11 @@ def start_queue_consumer():
             Debug.error(f"Error in consumer thread: {e}", file_name="queue.log")
 
     try:
-        consumer_thread = threading.Thread(target=consumer_thread)
-        consumer_thread.start()
+        # No need for a separate thread while testing
+        # consumer_thread = threading.Thread(target=consumer_thread)
+        # consumer_thread.start()
+        consumer_thread()
+
         Debug.info("Queue consumer started", file_name="queue.log")
     except Exception as e:
         Debug.error(f"Error starting consumer thread: {e}", file_name="queue.log")

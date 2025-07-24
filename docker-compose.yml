@@ -1,7 +1,7 @@
 services:
   mysql:
     image: mysql:8.4.2
-    restart: always
+    restart: unless-stopped
     container_name: "combine-mysql"
     environment:
       MYSQL_ROOT_PASSWORD: Pass1234!
@@ -10,8 +10,20 @@ services:
       - "33068:3306"
     volumes:
       - "./database:/var/lib/mysql"
+  mongo:
+    image: mongo:latest
+    restart: unless-stopped
+    container_name: "combine-mongo"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: qfinder_queue
+    ports:
+      - "27018:27017"
+    volumes:
+      - "./mongo:/data/db"
   rabbit-mq:
-    restart: always
+    restart: unless-stopped
     image: rabbitmq:3
     mem_limit: "1024M"
     ports:
@@ -22,7 +34,7 @@ services:
       RABBITMQ_DEFAULT_PASS: QFinderRMQ1234!
   redis:
     image: redis:7.0.5
-    restart: always
+    restart: unless-stopped
     container_name: "combine-redis"
     ports:
       - "6379:6379"

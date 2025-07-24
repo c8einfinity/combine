@@ -20,7 +20,8 @@ dependencies = [
     "pdfkit>=1.0.0,<2",
     "asyncer>=0.0.8,<0.0.9",
     "pillow>=11.2.1,<12",
-    "tina4-python>=0.2.92",
+    "tina4-python>=0.2.108",
+    "mongo-queue-service>=0.2.2",
 ]
 
 [dependency-groups]

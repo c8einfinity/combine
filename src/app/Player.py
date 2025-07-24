@@ -102,10 +102,11 @@ def submit_player_results(first_name, last_name, image="", text="", candidate_id
     """
     from tina4_python import Debug
 
+    Debug.info(f"submit_player_results: {first_name} {last_name} {sport} {position} {candidate_id}")
     # get the sport and position ids from the database
     sport_position = get_sport_position_ids(sport, position)
 
-    if sport_position["error"] is not None:
+    if "error" in sport_position:
         Debug.error(f"submit_player_results: {sport_position['error']}")
         return {"error": sport_position["error"]}
 

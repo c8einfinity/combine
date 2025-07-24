@@ -4,6 +4,7 @@
 .env
 /transcribe/logs/debug.log
 /database/
+/mongo/
 /transcribe/audio/
 /.google-cookie
 /venv/
