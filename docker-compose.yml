@@ -22,16 +22,6 @@ services:
       - "27018:27017"
     volumes:
       - "./mongo:/data/db"
-  rabbit-mq:
-    restart: unless-stopped
-    image: rabbitmq:3
-    mem_limit: "1024M"
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: qfinder
-      RABBITMQ_DEFAULT_PASS: QFinderRMQ1234!
   redis:
     image: redis:7.0.5
     restart: unless-stopped
