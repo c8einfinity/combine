@@ -96,15 +96,24 @@
                                 let buttons = "";
                                 {% if links_delete_permission %}
                                 if (!row.is_deleted) {
-                                    buttons += `<button class="btn btn-outline-light text-black" onclick="deleteLink(${row.id})"><i class="fas fa-trash"></i></button>`;
+                                    buttons += `<button class="btn btn-outline-light text-black" onclick="deleteLink(${row.id})"
+title="Delete Media Link">
+    <i class="fas fa-trash"></i>
+</button>`;
 
                                 } else {
-                                    buttons += `<button class="btn btn-outline-light text-black" onclick="restoreLink(${row.id})"><i class="fas fa-clock-rotate-left"></i></button>`;
+                                    buttons += `<button class="btn btn-outline-light text-black" onclick="restoreLink(${row.id})"
+title="Restore Media Link">
+    <i class="fas fa-clock-rotate-left"></i>
+</button>`;
                                 }
                                 {% endif %}
                                 {% if videos_edit_permission %}
                                     if (row.media_type === 'video-youtube' && !row.is_deleted) {
-                                        buttons += `<button class="btn btn-outline-light text-black" onclick="queueLink(${row.id})"><i class="fas fa-upload"></i></button>`;
+                                        buttons += `<button class="btn btn-outline-light text-black" onclick="queueLink(${row.id})"
+title="Add to Queue for Transcript">
+    <i class="fas fa-upload"></i>
+</button>`;
                                     }
                                 {% endif %}
                                 return `<div class="d-flex flex-row" style="grid-gap: 0.2rem;">${buttons}</div>`;
@@ -116,7 +125,24 @@
                         emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
                     },
                     processing: true,
-                    serverSide: true
+                    serverSide: true,
+                    layout: {
+                        bottomStart: [
+                            "info",
+                            () => `<div class="d-flex flex-row px-4 mx-auto" style="grid-gap: 0.5rem; font-size: 0.8rem;">
+<div class="text-muted">Actions:</div>
+<div class="text-muted">
+    <i class="fas fa-trash"></i> Delete Media
+</div>
+<div class="text-muted">
+    <i class="fas fa-clock-rotate-left"></i> Restore Media
+</div>
+<div class="text-muted">
+    <i class="fas fa-upload"></i> Queue for Transcript
+</div>
+</div>`
+                        ],
+                    },
                 });
             });
 
