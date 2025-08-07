@@ -36,6 +36,7 @@
                               placeholder="Text to submit"
                               onkeyup="$('#wordCount').html(countWords('playerText'))">{{ text }}</textarea>
                     {{ ("textSubmitForm"~RANDOM()) | formToken }}
+                    <div id="submitResultMessage"></div>
                 </form>
                 <div class="mt-1">
                     <b
@@ -64,6 +65,7 @@
         {% endif %}
         <div class="col-12 col-lg">
             <div id="player-report" class="pt-1 pb-3 px-1 result-tab">
+                {% if results.player %}
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-3 mb-3" style="
                         font-family: 'Inter', 'Arial', sans-serif;
@@ -73,6 +75,7 @@
                     ">
                         Player Results
                     </h5>
+
                     <div class="row justify-content-between">
                         <a
                                 href="{{ url }}/player/{{ candidate_id }}/pdf/report/player/download"
@@ -90,8 +93,12 @@
                     </div>
                 </div>
                 {{ results.player }}
+                {% else %}
+                    <p class="text-muted">Player report unavailable. Submit the transcript to get the report.</p>
+                {% endif %}
             </div>
             <div id="coach-report" class="pt-1 pb-3 px-1 result-tab">
+                {% if results.coach %}
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-3 mb-3" style="
                         font-family: 'Inter', 'Arial', sans-serif;
@@ -118,8 +125,12 @@
                     </div>
                 </div>
                 {{ results.coach }}
+                {% else %}
+                    <p class="text-muted">Coaching report unavailable. Submit the transcript to get the report.</p>
+                {% endif %}
             </div>
             <div id="scout-report" class="pt-1 pb-3 px-1 result-tab">
+                {% if results.scout %}
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-3 mb-3" style="
                         font-family: 'Inter', 'Arial', sans-serif;
@@ -146,6 +157,9 @@
                     </div>
                 </div>
                 {{ results.scout }}
+                {% else %}
+                    <p class="text-muted">Scouting report unavailable. Submit the transcript to get the report.</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -168,7 +182,7 @@
                 let currentCharacter = text[i];
 
                 // Check if the character is a space
-                if (currentCharacter == " ") {
+                if (currentCharacter === " ") {
                     numWords += 1;
                 }
             }
@@ -180,6 +194,13 @@
 
         {% if playerq_create_permission %}
             function submitPlayerText() {
+                $('#submitResultMessage').html(`<div class="text-center" style="position: fixed; top:0; left: 0; width: 100vw; height: 100vh; z-index: 200;">
+                    <div class="d-flex flex-column align-items-center justify-content-center h-100" style="background-color: rgba(255, 255, 255, 0.8);">
+                        <h5 id="submitLoadText" class="text-anton text-black pb-2">Submitting Transcript ...</h5>
+                        <div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                        <span class="sr-only text-black">Submitting Transcript ...</span>
+                    </div>
+                </div>`);
                 submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "", function () {
                     loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
                 });

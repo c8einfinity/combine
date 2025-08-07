@@ -379,8 +379,13 @@ async def get_athlete_results(request, response):
     else:
         candidate_id = player.candidate_id
 
+    url =  os.getenv("TEAMQ_ENDPOINT")
+
+    if url.endswith("/"):
+        url = url[:-1]
+
     html = Template.render_twig_template("player/player-q-results.twig", {
-        "url": os.getenv("TEAMQ_ENDPOINT"),
+        "url": url,
         "candidate_id": candidate_id,
         "player": player.to_dict(),
         "results": {
