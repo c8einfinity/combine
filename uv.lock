@@ -269,7 +269,7 @@ requires-dist = [
     { name = "redis", specifier = ">=5.2.1,<6" },
     { name = "requests", specifier = ">=2.32.3,<3" },
     { name = "semantic-text-splitter", specifier = ">=0.22.0,<0.23" },
-    { name = "tina4-python", specifier = ">=0.2.108" },
+    { name = "tina4-python", specifier = ">=0.2.109" },
 ]
 
 [package.metadata.requires-dev]
@@ -1097,7 +1097,7 @@ wheels = [
 
 [[package]]
 name = "tina4-python"
-version = "0.2.108"
+version = "0.2.109"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asyncer" },
@@ -1112,9 +1112,9 @@ dependencies = [
     { name = "simple-websocket" },
     { name = "watchdog" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/78/d3/2e5a0b6edd46255c02d72a947b444102ed3c6675a702aa91dcb8075a6dda/tina4_python-0.2.108.tar.gz", hash = "sha256:c0754f99da83fb19fd0f3bffc328278cc5c6dcac02a1d0e5c42b7843a5c9dc1e", size = 303892, upload-time = "2025-07-21T16:47:15.467Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/37/ac/b43a8fa77403f4881ad8a89c504d33af30555ad87400d9a0c55d75fc1d8c/tina4_python-0.2.109.tar.gz", hash = "sha256:7881302fd2fd58f19f500062686a788b40de67ef90201cc3356de6c2813ad9b8", size = 303941, upload-time = "2025-07-25T13:56:55.148Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0b/a6/69c311b2600f3fc51be7b38b2ea60dc7ceedf085a7676169cd75e0cfcb52/tina4_python-0.2.108-py3-none-any.whl", hash = "sha256:9fba2399315f94734fdf4748ddd212457d7801681289969f472676c67f62d144", size = 317655, upload-time = "2025-07-21T16:47:12.773Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/80/fdd0f5a1d0381d9ddf5c76d442e615b85d72dc576423fc5421282e018fba/tina4_python-0.2.109-py3-none-any.whl", hash = "sha256:3a2fb47226dc031d271113e0b459e7921f0d1833db4edc0cd19507dcec2346fd", size = 317689, upload-time = "2025-07-25T13:56:51.972Z" },
 ]
 
 [[package]]
