@@ -44,7 +44,7 @@
                         {% if playerq_visible_permission %}
                             <a class="btn btn-outline-dark ml-2 font-weight-bold" role="button"
                                onclick="showTab(this);
-                                       loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ');">PlayerQ</a>
+                                       loadPage('/api/athlete/{{ player.id }}/results', 'tabTeamQ');">TeamQ</a>
                         {% endif %}
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                 </div>
                 <div id="tabVideos" class="col-12 pt-4 tab">
                 </div>
-                <div id="tabPlayerQ" class="col-12 tab">
+                <div id="tabTeamQ" class="col-12 tab">
                 </div>
             </div>
         </div>
@@ -197,7 +197,6 @@
             showTab($('.btn-outline-dark')[0]);
             $(document).ready(function () {
                 teamQNavSetActive($('#athleteLink')[0]);
-
             });
             $('#sportInput').change(function () {
                 render_position_input($(this).val());
@@ -216,4 +215,5 @@
     {% endif %}
 
     <!-- {{ RANDOM()~"ID" }} -->
+    </div>
 {% endblock %}

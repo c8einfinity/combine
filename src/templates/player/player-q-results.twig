@@ -202,7 +202,7 @@
                     </div>
                 </div>`);
                 submitForm("text-submit", "/api/athlete/{{ player.id }}/results", "", function () {
-                    loadPage('/api/athlete/{{ player.id }}/results', 'tabPlayerQ')
+                    loadPage('/api/athlete/{{ player.id }}/results', 'tabTeamQ')
                 });
             }
         {% endif %}
