@@ -368,7 +368,12 @@ async def get_athlete_results(request, response):
                     if speaker["speaker"] == transcript["selected_speaker"]:
                         text += speaker["text"]
 
-        if str(player.candidate_id) != "":
+        if (
+                str(player.candidate_id) != "" and
+                "player" in results and
+                "html" in results["player"] and
+                results["player"]["html"] == ""
+        ):
                 results = get_player_results(str(player.candidate_id))
 
     # remove any none latin characters from text
