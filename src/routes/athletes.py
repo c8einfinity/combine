@@ -281,6 +281,13 @@ async def get_athlete_full_report(request, response):
     else:
         candidate_id = player.candidate_id
 
+    if (
+            "full_report" not in results or
+            "pages" not in results["full_report"] or
+            len(results["full_report"]["pages"]) == 0
+    ):
+        return response("No report found for this athlete.", HTTP_NOT_FOUND, TEXT_PLAIN)
+
     html = Template.render_twig_template("player/reports/full_report.twig", {
         "url": os.getenv("TEAMQ_ENDPOINT"),
         "candidate_id": candidate_id,
@@ -310,6 +317,13 @@ async def get_athlete_report(request, response):
         results = {"full_report": {"pages": []}}
 
     report = []
+
+    if (
+            "full_report" not in results or
+            "pages" not in results["full_report"] or
+            len(results["full_report"]["pages"]) == 0
+    ):
+        return response("No report found for this athlete.", HTTP_NOT_FOUND, TEXT_PLAIN)
 
     for page in results["full_report"]["pages"]:
         if page["category"] == report_type:
