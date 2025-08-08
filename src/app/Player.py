@@ -24,7 +24,12 @@ def get_player_results(candidate_id):
                                          "Authorization": "Bearer " + os.getenv("TEAMQ_API_KEY")} )
     except Exception as e:
         print(f"Error fetching results: {e}")
-        return {"error": str(e), "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+        return {"error": str(e),
+                "player": {"html": ""},
+                "coach": {"html": ""},
+                "scout": {"html": ""},
+                "full_report": {"pages": []}
+                }
 
     try:
         report = results.json()
@@ -35,7 +40,12 @@ def get_player_results(candidate_id):
         print("JSON Error from TEAMQ result:", results)
 
     print("No result:", results)
-    return {"error": "No results found", "player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
+    return {"error": "No results found",
+            "player": {"html": ""},
+            "coach": {"html": ""},
+            "scout": {"html": ""},
+            "full_report": {"pages": []}
+            }
 
 def split_trim_minify(text):
     """
