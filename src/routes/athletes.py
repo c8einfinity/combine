@@ -770,8 +770,13 @@ async def post_athletes_id(request, response):
     player = Player(player_params)
     if player.save():
         teamq_updated = submit_player_teamq_details(player)
+        teamq_response = ""
+        if "error" in teamq_updated and teamq_updated["error"] is not None:
+            teamq_response = f"TeamQ update failed: {teamq_updated['error']}"
+        if "success" in teamq_updated and teamq_updated["success"] is not None:
+            teamq_response = f"TeamQ updated successfully: {teamq_updated['success']}"
 
-        return response(f"Player saved. {'TeamQ updated.' if teamq_updated["error"] is None else teamq_updated['error']}", HTTP_OK, TEXT_PLAIN)
+        return response(f"Player saved. {teamq_response}", HTTP_OK, TEXT_PLAIN)
     else:
         return response("Failed to save player!")
 

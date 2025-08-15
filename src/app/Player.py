@@ -154,7 +154,7 @@ def submit_player_teamq_details(player):
         return {"error": "Error updating TeamQ, athlete does not have a TeamQ id, submit the player results first"}
 
     sport_position = get_sport_position_ids(player["sport"], player["position"])
-    if sport_position["error"] is not None:
+    if "error" in sport_position and sport_position["error"] is not None:
         Debug.error(f"submit_player_teamq_details: {sport_position['error']}")
         return {"error": sport_position["error"]}
 
@@ -192,7 +192,7 @@ def player_bio_complete(player_id):
     player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
     if player.count == 1:
         player = player[0]
-        required_fields = ["first_name", "last_name", "image", "sport", "position", "date_of_birth", "home_town", "team"]
+        required_fields = ["first_name", "last_name", "image", "sport", "position", "team"]
         return all(player[field] for field in required_fields)
 
     return None
