@@ -824,18 +824,27 @@ async def post_athlete_links(request, response):
             videos = get_youtube_channel_videos(request.body["url"])
             for video in videos:
                 player_media = PlayerMedia()
+
+                # Check if the video already exists
+                existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[request.params["id"], video["url"]], limit=1)
+                if existing_media.count > 0:
+                    player_media.id = existing_media[0]["id"]
+                    player_media.load()
+
                 player_media.url = video["url"]
                 player_media.player_id = request.params["id"]
                 player_media.media_type = 'video-youtube'
                 player_media.is_valid = 1
                 player_media.metadata = video["metadata"]
                 player_media.save()
+                player_media.__dba__.commit()
 
             return response("Videos added from channel")
         else:
             return response("Invalid YouTube Channel URL")
 
     if player_media.save():
+        player_media.__dba__.commit()
         return response("Player Media saved")
     else:
         return response("Failed to save media!")
