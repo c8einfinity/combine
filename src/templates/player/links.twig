@@ -157,6 +157,8 @@ title="Add to Queue for Transcript">
             function addLink() {
                 submitForm('linkDetails', '/api/athlete/{{ player_id }}/links', 'linkMessage', function () {
                     linksGrid.ajax.reload();
+                    $('#linkUrl').val('');
+                    $('#mediaType').val('video-youtube');
                 });
             }
             {% endif %}
