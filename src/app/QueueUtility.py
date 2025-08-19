@@ -107,6 +107,13 @@ def process_item(queue, err, msg):
             you_tube_links = get_youtube_videos(str(player["first_name"]) + " " + str(player["last_name"]), video_sport_search_criteria)
             for you_tube_link in you_tube_links:
                 player_media = PlayerMedia()
+                # Check if the video already exists
+                existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[player["id"], you_tube_link["url"]], limit=1)
+
+                if existing_media.count > 0:
+                    player_media.id = existing_media[0]["id"]
+                    player_media.load()
+
                 player_media.url = you_tube_link["url"]
                 player_media.player_id = player["id"]
                 player_media.media_type = 'video-youtube'
