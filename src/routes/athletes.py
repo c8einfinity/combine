@@ -530,6 +530,13 @@ async def get_athlete_videos(request, response):
         you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
         for you_tube_link in you_tube_links:
             player_media = PlayerMedia()
+            # Check if the video already exists
+            existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[request.params["id"], you_tube_link["url"]], limit=1)
+
+            if existing_media.count > 0:
+                player_media.id = existing_media[0]["id"]
+                player_media.load()
+
             player_media.url = you_tube_link["url"]
             player_media.player_id = player.id
             player_media.media_type = 'video-youtube'
@@ -735,6 +742,13 @@ async def post_athletes(request, response):
     you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
     for you_tube_link in you_tube_links:
         player_media = PlayerMedia()
+        # Check if the video already exists
+        existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[player.id, you_tube_link["url"]], limit=1)
+
+        if existing_media.count > 0:
+            player_media.id = existing_media[0]["id"]
+            player_media.load()
+
         player_media.url = you_tube_link["url"]
         player_media.player_id = player.id
         player_media.media_type = 'video-youtube'
@@ -810,18 +824,27 @@ async def post_athlete_links(request, response):
             videos = get_youtube_channel_videos(request.body["url"])
             for video in videos:
                 player_media = PlayerMedia()
+
+                # Check if the video already exists
+                existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[request.params["id"], video["url"]], limit=1)
+                if existing_media.count > 0:
+                    player_media.id = existing_media[0]["id"]
+                    player_media.load()
+
                 player_media.url = video["url"]
                 player_media.player_id = request.params["id"]
                 player_media.media_type = 'video-youtube'
                 player_media.is_valid = 1
                 player_media.metadata = video["metadata"]
                 player_media.save()
+                player_media.__dba__.commit()
 
             return response("Videos added from channel")
         else:
             return response("Invalid YouTube Channel URL")
 
     if player_media.save():
+        player_media.__dba__.commit()
         return response("Player Media saved")
     else:
         return response("Failed to save media!")
@@ -923,7 +946,7 @@ async def get_test_classification(request, response):
                                                                  "Human", "AI",
                                                                  "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
                                                                 _context="CLASSIFICATION RULES:\n"+classification_text,
-                                            _stop_tokens=["Human:"])
+                                            _stop_tokens=["Human:", "[LINEFEED]", "[LINE.Feed]"])
 
                     classification += result["output"]
                 except Exception as e:
