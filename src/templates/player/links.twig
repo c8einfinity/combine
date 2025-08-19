@@ -57,6 +57,12 @@
                     }],
                     columns: [
                         {
+                            "title": "Id",
+                            data: 'id',
+                            visible: false,
+                            searchable: false
+                        },
+                        {
                             "title": "Link Url",
                             "render": function (data, type, row) {
                                 return `<a href="${row.url}" target="_blank" class='text-black text-break truncate-table-link'><u>${row.url}</u></a>`
@@ -124,6 +130,7 @@ title="Add to Queue for Transcript">
                     language: {
                         emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
                     },
+                    order: [[1, 'desc']],
                     processing: true,
                     serverSide: true,
                     layout: {
