@@ -122,6 +122,10 @@ body {
 }
 
 /* BACKGROUND COLORS */
+.bg-black {
+  background: var(--dark) !important;
+}
+
 .bg-maastricht-blue {
     background: #012839;
 }
