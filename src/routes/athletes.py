@@ -1194,3 +1194,31 @@ async def get_sports(request, response):
     sync_sports_positions(dba)
 
     return response("Done!")
+
+@get('athletes/clean-duplicate-links')
+async def get_clean_duplicate_links(request, response):
+    """
+    Clean the duplicate links from the players
+    :param request:
+    :param response:
+    :return:
+    """
+    global dba
+    from ..orm.PlayerMedia import PlayerMedia
+
+    # get all the media with duplicate urls
+    duplicates = dba.fetch("SELECT url, COUNT(*) as count FROM player_media GROUP BY url HAVING count > 1", limit=1000)
+    duplicates = duplicates.to_list()
+    for duplicate in duplicates:
+        url = duplicate["url"]
+        # get all the media with the same url
+        media = dba.fetch("SELECT id FROM player_media WHERE url = ?", [url])
+        media = media.to_list()
+
+        if len(media) > 1:
+            # delete all but the first one
+            for i in range(1, len(media)):
+                player_media = PlayerMedia({"id": media[i]["id"]})
+                player_media.delete()
+
+    return response("Done!")
