@@ -59,7 +59,7 @@
                         {
                             "title": "Id",
                             data: 'id',
-                            visible: false,
+                            visible: true,
                             searchable: false
                         },
                         {
@@ -131,7 +131,7 @@ title="Add to Queue for Transcript">
                     language: {
                         emptyTable: `{% include ('snippets/datatable_empty.twig') %}`
                     },
-                    order: [[1, 'desc']],
+                    order: [[0, 'desc']],
                     processing: true,
                     serverSide: true,
                     layout: {
