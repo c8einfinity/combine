@@ -1278,4 +1278,6 @@ async def get_clean_duplicate_links(request, response):
                 player_media = PlayerMedia({"id": media[i]["id"]})
                 player_media.delete()
 
+        dba.close()
+
     return response("Done!")
