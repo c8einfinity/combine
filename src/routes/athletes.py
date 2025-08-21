@@ -53,7 +53,7 @@ async def get_athletes(request, response):
                       "and pt.player_media_id = pm.id ) "
                       "and pt.player_id = t.id "
                       "and pt.verified_user_id = 0 "
-                      "group by pt.player_id)" )
+                      "group by pt.player_id)")
 
         if request.params["status"] == "verified-speakers":
             where += (" and exists (SELECT pt.player_id FROM player_transcripts pt "
@@ -83,11 +83,12 @@ async def get_athletes(request, response):
     if "selectedSport" in request.params and request.params["selectedSport"] != "":
         where += f" and sport = '{request.params["selectedSport"]}'"
 
-    players = Player().select(["'-' as checkbox", "id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
-                              where,
-                              order_by=data_tables_filter["order_by"],
-                              limit=data_tables_filter["length"],
-                              skip=data_tables_filter["start"], )
+    players = Player().select(
+        ["'-' as checkbox", "id", "first_name", "last_name", "date_of_birth", "sport", "home_town", "major"],
+        where,
+        order_by=data_tables_filter["order_by"],
+        limit=data_tables_filter["length"],
+        skip=data_tables_filter["start"], )
     if players.count == 0:
         return response('{"error": "No matching players found"}', HTTP_NOT_FOUND, TEXT_PLAIN)
 
@@ -103,7 +104,10 @@ async def get_athletes(request, response):
         # Return only the date, Y-m-d format
         player["date_of_birth"] = player["date_of_birth"].split("T")[0]
 
+    dba.close()
+
     return response(data)
+
 
 def player_transcript_stats(player_id):
     """
@@ -117,13 +121,13 @@ def player_transcript_stats(player_id):
 
     return player_transcripts
 
+
 def decode_metadata(record):
     """
     Decode Metadata
     :param record:
     :return:
     """
-
     try:
         record["metadata"] = json.loads(record["metadata"])
     except Exception as e:
@@ -146,12 +150,14 @@ def decode_metadata(record):
 
     return record
 
+
 def decode_player_image(record):
     try:
         record["image"] = ast.literal_eval(base64.b64decode(record["image"]).decode("utf-8"))
     except Exception as e:
         record["image"] = str(e)
     return record
+
 
 @get("/api/receptiviti/export")
 async def get_receptiviti_export(request, response):
@@ -165,7 +171,10 @@ async def get_receptiviti_export(request, response):
         "Content-Type": "text/csv"
     }
 
-    player_transcripts = PlayerTranscripts().select("t.*, (select candidate_id from player where id = t.player_id) as candidate_id", 'verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)', limit=100000000, order_by="player_id")
+    player_transcripts = PlayerTranscripts().select(
+        "t.*, (select candidate_id from player where id = t.player_id) as candidate_id",
+        'verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1)',
+        limit=100000000, order_by="player_id")
     text = "\"player_id\",\"candidate_id\",\"text\"\n"
     transcripts = player_transcripts.to_list(decode_transcript)
     player_id = ""
@@ -175,7 +184,7 @@ async def get_receptiviti_export(request, response):
                 text += "\"\n"
             if transcript["candidate_id"] == "":
                 transcript["candidate_id"] = "NA"
-            text += str(transcript["player_id"])+",\""+str(transcript["candidate_id"])+"\",\""
+            text += str(transcript["player_id"]) + ",\"" + str(transcript["candidate_id"]) + "\",\""
             player_id = transcript["player_id"]
 
         for speaker in transcript["data"]["transcription"]:
@@ -186,7 +195,6 @@ async def get_receptiviti_export(request, response):
     text += "\"\n"
 
     return response(text, 200, "text/csv", headers_in=headers)
-
 
 
 @get("/athlete/{id}")
@@ -217,11 +225,12 @@ async def get_athlete(request, response):
         sports = Sport().select('*', limit=100).to_list()
 
         html = Template.render("player/profile.twig",
-                               {"player": player.to_dict(),  "player_image": player_image,
+                               {"player": player.to_dict(), "player_image": player_image,
                                 "videos": videos.to_list(decode_metadata), "sports": sports})
         return response(html)
     else:
         return response("Player error, or player not found")
+
 
 @get("/api/athlete/{id}/sport-positions/{sport_name}")
 async def get_athlete_sport_position_select(request, response):
@@ -256,9 +265,11 @@ async def get_athlete_sport_position_select(request, response):
     if sport_positions.count == 0:
         return response("No positions found for this sport", HTTP_NOT_FOUND, TEXT_PLAIN)
 
-    html = Template.render_twig_template("components/position_select.twig", {"positions": sport_positions.to_list(), "selected_position": selected_position})
+    html = Template.render_twig_template("components/position_select.twig", {"positions": sport_positions.to_list(),
+                                                                             "selected_position": selected_position})
 
     return response(html)
+
 
 @get("/api/athlete/{id}/report")
 async def get_athlete_full_report(request, response):
@@ -298,6 +309,7 @@ async def get_athlete_full_report(request, response):
     })
 
     return response(html)
+
 
 @get("/api/athlete/{id}/report/{report_type}")
 async def get_athlete_report(request, response):
@@ -345,6 +357,7 @@ async def get_athlete_report(request, response):
 
     return response(html)
 
+
 @get("/api/athlete/{id}/results")
 async def get_athlete_results(request, response):
     """
@@ -363,12 +376,14 @@ async def get_athlete_results(request, response):
     player = Player({"id": request.params["id"]})
     player.load()
 
-    player_transcripts = PlayerTranscripts().select("*", 'player_id = ? and verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
+    player_transcripts = PlayerTranscripts().select("*",
+                                                    'player_id = ? and verified_user_id > 0 and exists (select id from player_media where id = t.player_media_id and is_valid = 1) ',
                                                     params=[request.params["id"]])
     text = ""
     results = {"player": {"html": ""}, "coach": {"html": ""}, "scout": {"html": ""}}
 
-    player_result = PlayerResult().select("data, player_id, transcription", "player_id = ?", params=[str(player.id)], order_by=["date_created desc"], limit=1)
+    player_result = PlayerResult().select("data, player_id, transcription", "player_id = ?", params=[str(player.id)],
+                                          order_by=["date_created desc"], limit=1)
     if player_result:
         player_result = player_result.to_list()
         if len(player_result) == 1:
@@ -388,7 +403,7 @@ async def get_athlete_results(request, response):
                 "html" in results["player"] and
                 results["player"]["html"] == ""
         ):
-                results = get_player_results(str(player.candidate_id))
+            results = get_player_results(str(player.candidate_id))
 
     # remove any none latin characters from text
     text = ''.join([i if ord(i) < 128 else '' for i in text])
@@ -398,7 +413,7 @@ async def get_athlete_results(request, response):
     else:
         candidate_id = player.candidate_id
 
-    url =  os.getenv("TEAMQ_ENDPOINT")
+    url = os.getenv("TEAMQ_ENDPOINT")
 
     if url.endswith("/"):
         url = url[:-1]
@@ -417,6 +432,7 @@ async def get_athlete_results(request, response):
 
     return response(html)
 
+
 @post("/api/athlete/{id}/upload-picture")
 async def post_upload_picture(request, response):
     from ..orm.Player import Player
@@ -429,7 +445,8 @@ async def post_upload_picture(request, response):
         return response(str(e))
 
     player.save()
-    return response("<script>loadPage('/api/athlete/"+request.params["id"]+"', 'content')</script>")
+    return response("<script>loadPage('/api/athlete/" + request.params["id"] + "', 'content')</script>")
+
 
 @post("/api/athlete/{id}/results")
 async def post_athlete_results(request, response):
@@ -449,7 +466,7 @@ async def post_athlete_results(request, response):
     player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
     player_result = player_result.to_list()
     if len(player_result) > 0:
-        return response.redirect("/api/athlete/"+request.params["id"]+"/results")
+        return response.redirect("/api/athlete/" + request.params["id"] + "/results")
 
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
@@ -489,7 +506,6 @@ async def post_athlete_results(request, response):
         if "pdf" in results["scout"]:
             del results["scout"]["pdf"]
 
-
     player_result = PlayerResult({
         "player_id": request.params["id"],
         "transcript_hash": transcription_hash,
@@ -499,7 +515,7 @@ async def post_athlete_results(request, response):
 
     player_result.save()
 
-    return response.redirect("/api/athlete/"+request.params["id"]+"/results")
+    return response.redirect("/api/athlete/" + request.params["id"] + "/results")
 
 
 @get("/api/athlete/{id}/videos")
@@ -527,11 +543,13 @@ async def get_athlete_videos(request, response):
         if search_query_setting.count > 0:
             video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
-        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
+        you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name),
+                                            video_sport_search_criteria)
         for you_tube_link in you_tube_links:
             player_media = PlayerMedia()
             # Check if the video already exists
-            existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[request.params["id"], you_tube_link["url"]], limit=1)
+            existing_media = PlayerMedia().select("id", "player_id = ? and url = ?",
+                                                  params=[request.params["id"], you_tube_link["url"]], limit=1)
 
             if existing_media.count > 0:
                 player_media.id = existing_media[0]["id"]
@@ -544,16 +562,26 @@ async def get_athlete_videos(request, response):
             player_media.metadata = you_tube_link["metadata"]
             player_media.save()
 
-    all_videos = PlayerMedia().select(skip=0, filter="media_type like 'video%' and is_deleted = 0 and is_valid = 1 and player_id = ?", params=[request.params["id"]], limit=200)
+    all_videos = PlayerMedia().select(skip=0,
+                                      filter="media_type like 'video%' and is_deleted = 0 and is_valid = 1 and player_id = ?",
+                                      params=[request.params["id"]], limit=200)
 
-    unsorted_videos = PlayerMedia().select(skip=0, filter="media_type like 'video%' and is_deleted = 0 and is_valid = 1 and is_sorted = 0 and player_id = ?", params=[request.params["id"]])
+    unsorted_videos = PlayerMedia().select(skip=0,
+                                           filter="media_type like 'video%' and is_deleted = 0 and is_valid = 1 and is_sorted = 0 and player_id = ?",
+                                           params=[request.params["id"]])
     if unsorted_videos.count > 0:
         video = unsorted_videos.to_list(decode_metadata)[0]
-        videos_processed = PlayerMedia().select("count(*) as count", limit="1", filter="player_id = ? and media_type like 'video%' and is_deleted = 0 and is_valid = 1 and is_sorted = 1", params=[request.params["id"]])
-        html = Template.render_twig_template("player/sorter.twig", {"remaining_videos": all_videos.count, "videos_processed": videos_processed.to_list()[0]['count'], "video": video, "player": player.to_dict()})
+        videos_processed = PlayerMedia().select("count(*) as count", limit="1",
+                                                filter="player_id = ? and media_type like 'video%' and is_deleted = 0 and is_valid = 1 and is_sorted = 1",
+                                                params=[request.params["id"]])
+        html = Template.render_twig_template("player/sorter.twig", {"remaining_videos": all_videos.count,
+                                                                    "videos_processed": videos_processed.to_list()[0][
+                                                                        'count'], "video": video,
+                                                                    "player": player.to_dict()})
 
     else:
-        videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ",
+        videos = PlayerMedia().select(limit=1000,
+                                      filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ",
                                       params=[request.params["id"]])
 
         html = Template.render("player/videos.twig",
@@ -570,7 +598,7 @@ async def post_athlete_videos(request, response):
     player_media.load()
 
     if request.body["is_valid"] == "1":
-        player_media.is_valid  = 1
+        player_media.is_valid = 1
 
         queue = Queue()
         if not queue.load("player_media_id = ?", [request.body["player_media_id"]]):
@@ -586,7 +614,8 @@ async def post_athlete_videos(request, response):
     player_media.is_sorted = 1
     player_media.save()
 
-    return response.redirect("/api/athlete/"+request.params["id"]+"/videos")
+    return response.redirect("/api/athlete/" + request.params["id"] + "/videos")
+
 
 @get("/api/athlete/{id}/videos/{video_id}/transcript")
 async def get_athlete_transcripts(request, response):
@@ -676,6 +705,7 @@ async def get_athlete_links(request, response):
 
     return response(Template.render_twig_template("player/links.twig", data))
 
+
 @get("/api/athlete/{id}/links_data")
 async def get_athlete_links_data(request, response):
     if "draw" not in request.params:
@@ -689,16 +719,19 @@ async def get_athlete_links_data(request, response):
     if data_tables_filter["where"] != "":
         where += f" and ({data_tables_filter["where"]})"
 
-    player_media = PlayerMedia().select(["id", "url", "media_type", "player_id", "is_valid", "date_created", "is_deleted", "is_sorted"],
-                                        where,
-                                        [0, request.params["id"]],
-                                        order_by=data_tables_filter["order_by"],
-                                        limit=data_tables_filter["length"],
-                                        skip=data_tables_filter["start"], )
+    player_media = PlayerMedia().select(
+        ["id", "url", "media_type", "player_id", "is_valid", "date_created", "is_deleted", "is_sorted"],
+        where,
+        [0, request.params["id"]],
+        order_by=data_tables_filter["order_by"],
+        limit=data_tables_filter["length"],
+        skip=data_tables_filter["start"], )
 
     data = player_media.to_paginate()
 
     data["draw"] = request.params["draw"]
+
+    dba.close()
 
     return response(data)
 
@@ -739,11 +772,13 @@ async def post_athletes(request, response):
     if search_query_setting.count > 0:
         video_sport_search_criteria = search_query_setting[0]["setting_value"]
 
-    you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name), video_sport_search_criteria)
+    you_tube_links = get_youtube_videos(str(player.first_name) + " " + str(player.last_name),
+                                        video_sport_search_criteria)
     for you_tube_link in you_tube_links:
         player_media = PlayerMedia()
         # Check if the video already exists
-        existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[player.id, you_tube_link["url"]], limit=1)
+        existing_media = PlayerMedia().select("id", "player_id = ? and url = ?",
+                                              params=[player.id, you_tube_link["url"]], limit=1)
 
         if existing_media.count > 0:
             player_media.id = existing_media[0]["id"]
@@ -826,7 +861,8 @@ async def post_athlete_links(request, response):
                 player_media = PlayerMedia()
 
                 # Check if the video already exists
-                existing_media = PlayerMedia().select("id", "player_id = ? and url = ?", params=[request.params["id"], video["url"]], limit=1)
+                existing_media = PlayerMedia().select("id", "player_id = ? and url = ?",
+                                                      params=[request.params["id"], video["url"]], limit=1)
                 if existing_media.count > 0:
                     player_media.id = existing_media[0]["id"]
                     player_media.load()
@@ -886,6 +922,7 @@ async def delete_athlete_link(request, response):
     else:
         return response("Failed to delete media!")
 
+
 @post("/api/athlete/{id}/links/{link_id}/restore")
 async def post_athlete_link_restore(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -909,7 +946,8 @@ async def get_test_classification(request, response):
                                                     params=[request.params["id"], request.params["media_id"]])
     transcript = player_transcripts.to_list(decode_transcript)[0]
 
-    if "data" not in transcript and "transcription" not in transcript["data"] and len(transcript["data"]["transcription"]) == 0:
+    if "data" not in transcript and "transcription" not in transcript["data"] and len(
+            transcript["data"]["transcription"]) == 0:
         return response("No data yet.")
 
     if "selected_speaker" in request.params:
@@ -929,10 +967,10 @@ async def get_test_classification(request, response):
     for speaker in transcript["data"]["transcription"]:
         if speaker["speaker"] == selected_speaker:
             speaker_text = ''.join([i if ord(i) < 128 else ' ' for i in speaker["text"]])
-            text += str(counter)+"."+ speaker_text + "\n\n"
+            text += str(counter) + "." + speaker_text + "\n\n"
             counter += 1
 
-    #print("<pre style='width:200px'>",text, "<pre>")
+    # print("<pre style='width:200px'>",text, "<pre>")
 
     player_media = PlayerMedia({"id": request.params["media_id"]})
     classification = ""
@@ -942,18 +980,20 @@ async def get_test_classification(request, response):
             chunks = chunk_text(text, 5000)
             for chunk in chunks:
                 try:
-                    result = aatos.generate("Classify each line of numbered text using the CLASSIFICATION RULES:\nText:"+chunk+"\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
-                                                                 "Human", "AI",
-                                                                 "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                                                                _context="CLASSIFICATION RULES:\n"+classification_text,
-                                            _stop_tokens=["Human:", "[LINEFEED]", "[LINE.Feed]"])
+                    result = aatos.generate(
+                        "Classify each line of numbered text using the CLASSIFICATION RULES:\nText:" + chunk + "\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
+                        "Human", "AI",
+                        "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
+                        _context="CLASSIFICATION RULES:\n" + classification_text,
+                        _stop_tokens=["Human:", "[LINEFEED]", "[LINE.Feed]"])
 
                     classification += result["output"]
                 except Exception as e:
                     print("Error in classification:", e)
                     return response("Could not classify text.")
 
-            dba.execute("update player_transcripts set selected_speaker = ? where id = ?", [selected_speaker,  transcript["id"]])
+            dba.execute("update player_transcripts set selected_speaker = ? where id = ?",
+                        [selected_speaker, transcript["id"]])
             dba.commit()
 
             player_media.classification = classification
@@ -961,7 +1001,7 @@ async def get_test_classification(request, response):
         else:
             classification = str(player_media.classification.value)
 
-        classification = "<div>"+classification.replace("\n", "</div><div>")+"</div>"
+        classification = "<div>" + classification.replace("\n", "</div><div>") + "</div>"
         classification = classification.replace("Text:", "")
 
     classification = """<div class="row"><div class="col-12 col-xl-5"><ul class='text-black text-black pl-3' style="position: sticky; top: 0">
@@ -975,9 +1015,10 @@ async def get_test_classification(request, response):
         <li>H. Personal Relationships: Family and Friends </li>
         <li>I. Unknown </li>
         </ul></div><div class="col-12 col-xl-7">
-        \n"""+classification+"</div>"
+        \n""" + classification + "</div>"
 
     return response(classification)
+
 
 @post("/api/athlete/{id}/transcript/{transcript_id}/verified")
 async def post_transcript_verified(request, response):
@@ -999,6 +1040,7 @@ async def post_transcript_verified(request, response):
 
     return response("Done!")
 
+
 @get("/athletes/athlete-template.csv")
 async def get_athletes_csv_template(request, response):
     """
@@ -1008,7 +1050,9 @@ async def get_athletes_csv_template(request, response):
     :return:
     """
     csv_template = "first_name,last_name,sport,position,team\n"
-    return response(csv_template, 200, "text/csv", headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
+    return response(csv_template, 200, "text/csv",
+                    headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
+
 
 @post("/api/athletes/import-csv")
 async def post_import_csv(request, response):
@@ -1054,7 +1098,8 @@ async def post_import_csv(request, response):
 
     if import_data["count"] > 0:
         html_response = Template.render_twig_template("components/modal_form.twig",
-                        {"title": "Import Players", "content": "Imported "+str(import_data["count"])+" players"})
+                                                      {"title": "Import Players",
+                                                       "content": "Imported " + str(import_data["count"]) + " players"})
 
     if len(import_data["invalid_data"]) > 0:
         invalid_sports = []
@@ -1068,10 +1113,13 @@ async def post_import_csv(request, response):
             sport["positions"] = SportPosition().select("*", "sport_id = ?", params=[sport["id"]], limit=100).to_list()
 
         for invalid in import_data["invalid_data"]:
-            if "sport" in invalid and invalid["sport"] not in invalid_sports and not any(sport["name"] == invalid["sport"] for sport in sports):
+            if "sport" in invalid and invalid["sport"] not in invalid_sports and not any(
+                    sport["name"] == invalid["sport"] for sport in sports):
                 invalid_sports.append(invalid["sport"])
-            if "position" in invalid and invalid["position"] and not any(pos["position"] == invalid["position"] for pos in invalid_positions):
-                invalid_positions.append({"sport": invalid["sport"], "position": invalid["position"], "available_positions": []})
+            if "position" in invalid and invalid["position"] and not any(
+                    pos["position"] == invalid["position"] for pos in invalid_positions):
+                invalid_positions.append(
+                    {"sport": invalid["sport"], "position": invalid["position"], "available_positions": []})
 
         for invalid_position in invalid_positions:
             # find the sport in the sports list
@@ -1089,14 +1137,17 @@ async def post_import_csv(request, response):
         })
 
         html_response = Template.render_twig_template("components/modal_form.twig",
-                        {"title": "Invalid CSV Data", "content": invalid_data_html, "onclick": "submitCSVMapping()"})
+                                                      {"title": "Invalid CSV Data", "content": invalid_data_html,
+                                                       "onclick": "submitCSVMapping()"})
 
     if "error" in import_data:
         Debug.error("No players imported")
         html_response = Template.render_twig_template("components/modal_form.twig",
-                        {"title": "Error Importing Players", "content": "<p>No players imported due to an unexpected error.</p>"})
+                                                      {"title": "Error Importing Players",
+                                                       "content": "<p>No players imported due to an unexpected error.</p>"})
 
     return response(html_response, HTTP_OK, TEXT_HTML)
+
 
 @post("/api/athletes/request-results")
 async def post_send_results(request, response):
@@ -1130,6 +1181,7 @@ async def get_fix_images(request, response):
     from ..orm.Player import Player
 
     players = Player().select("*", "image is not null and image <> ''", limit=500)
+    players.__dba__.commit()
     for player in players.to_array():
         player["image"] = base64.b64decode(player["image"]).decode("utf-8")
         # check if the image is a base64 string, do nothing
@@ -1145,6 +1197,7 @@ async def get_fix_images(request, response):
 
     return response("Done!")
 
+
 @get('athletes/resend-deleted-videos')
 async def get_resend_deleted_videos(request, response):
     """
@@ -1156,7 +1209,9 @@ async def get_resend_deleted_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Queue import Queue
 
-    videos = PlayerMedia().select("id, player_id, CONCAT(('{\"player_media_id\": '), id, '}') as data", "player_id > 153 and is_valid = 1 and is_deleted = 1 and media_type like 'video-%'", limit=2000)
+    videos = PlayerMedia().select("id, player_id, CONCAT(('{\"player_media_id\": '), id, '}') as data",
+                                  "player_id > 153 and is_valid = 1 and is_deleted = 1 and media_type like 'video-%'",
+                                  limit=2000)
     counter = 0
     for video in videos.to_array():
         try:
@@ -1166,7 +1221,7 @@ async def get_resend_deleted_videos(request, response):
             queue.data = video["data"]
             queue.save()
         except Exception as e:
-            Debug.error("Error resending video: "+str(e))
+            Debug.error("Error resending video: " + str(e))
             continue
 
         queue = queue.to_dict()
@@ -1181,6 +1236,7 @@ async def get_resend_deleted_videos(request, response):
 
     return response(f"Done, sent {counter} videos!")
 
+
 @get('athletes/get-sports')
 async def get_sports(request, response):
     """
@@ -1194,6 +1250,7 @@ async def get_sports(request, response):
     sync_sports_positions(dba)
 
     return response("Done!")
+
 
 @get('athletes/clean-duplicate-links')
 async def get_clean_duplicate_links(request, response):
