@@ -861,6 +861,7 @@ async def post_athlete_links(request, response):
                 if video_meta:
                     player_media.is_valid = 1
                     player_media.metadata = video_meta
+
             if "shorts" in parsed_url.path:
                 video_id = parsed_url.path.split("/")[2]
                 video_meta = get_youtube_info(video_id)
