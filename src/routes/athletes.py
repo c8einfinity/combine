@@ -16,6 +16,7 @@ from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image, submit_player_teamq_details
 from .. import dba
 
+
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
@@ -586,6 +587,9 @@ async def get_athlete_videos(request, response):
 
         html = Template.render("player/videos.twig",
                                {"videos": videos.to_list(decode_metadata), "player": player.to_dict()})
+
+    dba.close()
+
     return response(html)
 
 
@@ -850,12 +854,19 @@ async def post_athlete_links(request, response):
         parsed_url = urlparse(request.body["url"])
         params = parse_qs(parsed_url.query)
 
-        if params.get("v"):
-            video_id = params.get("v")[0]
-            video_meta = get_youtube_info(video_id)
-            if video_meta:
-                player_media.is_valid = 1
-                player_media.metadata = video_meta
+        if params.get("v") or "shorts" in parsed_url.path:
+            if params.get("v"):
+                video_id = params.get("v")[0]
+                video_meta = get_youtube_info(video_id)
+                if video_meta:
+                    player_media.is_valid = 1
+                    player_media.metadata = video_meta
+            if "shorts" in parsed_url.path:
+                video_id = parsed_url.path.split("/")[2]
+                video_meta = get_youtube_info(video_id)
+                if video_meta:
+                    player_media.is_valid = 1
+                    player_media.metadata = video_meta
         else:
             return response("Invalid YouTube URL")
 
