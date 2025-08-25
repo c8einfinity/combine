@@ -867,6 +867,7 @@ async def post_athlete_links(request, response):
                 if video_meta:
                     player_media.is_valid = 1
                     player_media.metadata = video_meta
+                    player_media.url = "https://www.youtube.com/watch?v=" + video_id
         else:
             return response("Invalid YouTube URL")
 
