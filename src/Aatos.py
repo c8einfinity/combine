@@ -1,13 +1,15 @@
 import json
+import os
 import requests
+from tina4_python.Debug import Debug
 
 LLM_URLS = [""]
 BALANCER_INDEX = 0
 SEED = 990011
-
+RETRY_COUNT = 5
 
 def generate(_prompt, _human_name, _ai_name, _system_prompt=None, _summary=None, _context="", _history=None,
-                   _temperature=0.0, _top_k=5, _top_p=0.5, _max_tokens=24000, _model="Llama-3.2", _seed=SEED, _stop_tokens=None, _chat_handler=None):
+                   _temperature=0.0, _top_k=5, _top_p=0.5, _max_tokens=24000, _model="phi3:mini", _seed=SEED, _stop_tokens=None, _chat_handler=None):
     global BALANCER_INDEX
     global LLM_URLS
 
@@ -30,21 +32,17 @@ def generate(_prompt, _human_name, _ai_name, _system_prompt=None, _summary=None,
         else:
             stop_tokens = _stop_tokens
 
-    headers = {'Authorization': 'Bearer ABCDEF'}
+    headers = {'Authorization': f"Bearer {os.getenv('AATOS_API_KEY')}"}
+
     data = {
         "prompt": _prompt,
-        "ai": {
-            "modelName": _model,
-            "name": _ai_name,
-            "humanName": _human_name,
+        "model_name": _model,
+        "system_prompt": _system_prompt,
+        "ai_name": _ai_name,
+        "human_name": _human_name,
+        "options": {
             "temperature": _temperature,
-            "topK": _top_k,
-            "topP": _top_p,
-            "maxTokens": _max_tokens,
-            "repeatPenalty": 1.2,
-            "repeatTokens": 512,
             "seed": _seed,
-            "systemPrompt": _system_prompt,
             "stop": stop_tokens
         },
         "summary": _summary,
@@ -52,24 +50,37 @@ def generate(_prompt, _human_name, _ai_name, _system_prompt=None, _summary=None,
         "history": _history
     }
 
-    if _chat_handler is not None:
-        _chat_handler.debug(["BALANCER", BALANCER_INDEX, LLM_URLS[BALANCER_INDEX]])
-        _chat_handler.debug(["PAYLOAD: ", json.dumps(data) ])
+    response = requests.post(url=f"{os.getenv('AATOS_URL')}/api/generate", json=data, headers=headers)
 
-    BALANCER_INDEX += 1
-    if BALANCER_INDEX > len(LLM_URLS)-1:
-        BALANCER_INDEX = 0
+    if not response.ok:
+        return {"output": None, "error": "Server Error"}
 
-    reply = requests.post(url=LLM_URLS[BALANCER_INDEX] + "/api/generate", json=data, headers=headers)
-
-
-    if not reply.ok:
-        reply = {"output": None, "error": "Server Error"}
-
+    reply = response.json()
     try:
-        if _chat_handler is not None:
-            _chat_handler.debug("-- REPLY: "+ json.dumps(reply.json()))
-        return reply.json()
+        if "message_id" in reply and reply["message_id"] is not None:
+            reply = get_valid_message(reply["message_id"])
+            return {"output": reply["response"]}
     except Exception as e:
         reply = {"output": None, "error": str(e)}
         return reply
+
+def get_valid_message(message_id, retry_count=0):
+    reply = get_message(message_id)
+    if "response" in reply or retry_count >= RETRY_COUNT:
+        return reply
+    Debug.debug(["RETRYING GET MESSAGE", retry_count, reply])
+    import time
+    time.sleep(1)
+    return get_valid_message(message_id, retry_count + 1)
+
+def get_message(message_id):
+    try:
+        headers = {'Authorization': f"Bearer {os.getenv('AATOS_API_KEY')}"}
+
+        response = requests.get(url=os.getenv('AATOS_URL') + f"/api/generate/{message_id}", headers=headers)
+
+        if not response.ok:
+            return {"error": "Server Error"}
+        return response.json()
+    except Exception as error:
+        return {"error": str(error)}
