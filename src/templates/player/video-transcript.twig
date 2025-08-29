@@ -45,7 +45,7 @@
                                id="user_verification"
                                value="{{ user.id }}"
                                {% if userVerified %}checked{% endif %}
-                               onclick="submitUserVerification(this)">
+                               onclick="submitUserVerification({{ transcripts[0].id }}, {{ video.id }})">
                         <label class="custom-control-label d-flex flex-column align-items-start"
                                for="user_verification">
                             <span class="d-block">Verified by User</span>
@@ -56,7 +56,7 @@
                 {{ ("videoSpeakerVerified"~RANDOM()) | formToken }}
             </form>
         {% endif %}
-        <div class="bg-lighter p-4 rounded border mb-4" style="overflow: auto; height:35vh">
+        <div class="bg-lighter p-4 rounded border mb-4" style="overflow: auto; height: 60vh">
             {% for transcript in transcripts %}
                 {% for speaker in transcript.data.transcription %}
 
@@ -68,6 +68,7 @@
                 {% endfor %}
             {% endfor %}
         </div>
+        {% if showClassification %}
         <h3 class="pb-2 text-uppercase">Classification</h3>
         <div class="bg-lighter p-4 rounded border">
             <div id="videoClassification" style="overflow: hidden; height: 50vh; overflow-y: auto;">
@@ -88,12 +89,6 @@
 
                 showHideTranscript("{{ selectedSpeaker }}", 0);
 
-                function submitUserVerification(inputElement) {
-                    submitForm("speaker_form", "/api/athlete/{{ player.id }}/transcript/{{ transcripts[0].id }}/verified", "", function () {
-                        loadTranscript({{ transcripts[0].player_media_id }});
-                    });
-                }
-
                 function doClassification(speakerName, refresh) {
                     if (refresh === undefined) refresh = 0;
 
@@ -104,6 +99,7 @@
                     loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
                 }
             </script>
+        {% endif %}
         {% endif %}
     {% else %}
         <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the
