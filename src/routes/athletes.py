@@ -648,20 +648,21 @@ async def post_athlete_links(request, response):
         params = parse_qs(parsed_url.query)
 
         if params.get("v") or "shorts" in parsed_url.path:
+            video_id = None
+            video_meta = None
+
             if params.get("v"):
                 video_id = params.get("v")[0]
                 video_meta = get_youtube_info(video_id)
-                if video_meta:
-                    player_media.is_valid = 1
-                    player_media.metadata = video_meta
 
             if "shorts" in parsed_url.path:
                 video_id = parsed_url.path.split("/")[2]
                 video_meta = get_youtube_info(video_id)
-                if video_meta:
-                    player_media.is_valid = 1
-                    player_media.metadata = video_meta
-                    player_media.url = "https://www.youtube.com/watch?v=" + video_id
+
+            if video_meta:
+                player_media.is_valid = 1
+                player_media.metadata = video_meta
+                player_media.url = "https://www.youtube.com/watch?v=" + video_id
         else:
             return response("Invalid YouTube URL")
 
