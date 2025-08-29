@@ -180,11 +180,8 @@ async def get_athlete(request, response):
         return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
     from ..orm.Player import Player
-    from ..orm.PlayerMedia import PlayerMedia
     from ..orm.Sport import Sport
 
-    videos = PlayerMedia().select(limit=1000, filter="player_id = ? and media_type like 'video-%' and is_deleted = 0 ",
-                                  params=[request.params["id"]])
     player = Player({"id": request.params["id"]})
 
     if player.load():
@@ -197,8 +194,7 @@ async def get_athlete(request, response):
         sports = Sport().select('*', limit=100).to_list()
 
         html = Template.render("player/profile.twig",
-                               {"player": player.to_dict(), "player_image": player_image,
-                                "videos": videos.to_list(decode_metadata), "sports": sports})
+                               {"player": player.to_dict(), "player_image": player_image, "sports": sports})
         return response(html)
     else:
         return response("Player error, or player not found")

@@ -100,9 +100,17 @@ async def get_athlete_videos(request, response):
                                                                     "player": player.to_dict()})
 
     else:
-        videos = PlayerMedia().select(limit=1000,
-                                      filter="player_id = ? and media_type like 'video%' and is_deleted = 0 ",
-                                      params=[request.params["id"]])
+        videos = PlayerMedia().select(limit=1,
+                                     filter="player_id = ? and is_deleted = 0 "
+                                            "and media_type like 'video%' "
+                                            "and not exists (select 1 from player_transcripts where player_media_id = t.id and verified_user_id > 0)",
+                                     params=[request.params["id"]])
+        if videos.count == 0:
+            videos = PlayerMedia().select(limit=1,
+                                           filter="player_id = ? and is_deleted = 0 "
+                                                  "and media_type like 'video%' "
+                                                  "and exists (select 1 from player_transcripts where player_media_id = t.id and verified_user_id > 0)",
+                                           params=[request.params["id"]])
 
         html = Template.render("player/videos.twig",
                                {"videos": videos.to_list(decode_metadata), "player": player.to_dict()})
@@ -136,6 +144,8 @@ async def post_athlete_videos(request, response):
     player_media.is_sorted = 1
     player_media.save()
 
+    dba.close()
+
     return response.redirect("/api/athlete/" + request.params["id"] + "/videos")
 
 @get("/api/athlete/{id}/videos/{video_id}/transcript")
@@ -163,10 +173,43 @@ async def get_athlete_transcripts(request, response):
     else:
         player_transcripts = None
 
+    dba.close()
+
     html = Template.render("player/video-transcript.twig", {"player": player.to_dict(), "video": video,
-                                                            "transcripts": player_transcripts})
+                                                            "transcripts": player_transcripts,"showClassification": False})
     return response(html)
 
+
+@get("/api/athlete/{id}/video-list")
+async def get_athlete_video_list(request, response):
+    from ..orm.PlayerMedia import PlayerMedia
+    verified_videos = PlayerMedia().select(limit=1000,
+                                           filter="player_id = ? and is_deleted = 0 "
+                                                  "and media_type like 'video%' "
+                                                  "and exists (select 1 from player_transcripts where player_media_id = t.id and verified_user_id > 0)",
+                                  params=[request.params["id"]])
+
+    unverified_videos = PlayerMedia().select(limit=1000,
+                                           filter="player_id = ? and is_deleted = 0 "
+                                                  "and media_type like 'video%' "
+                                                  "and not exists (select 1 from player_transcripts where player_media_id = t.id and verified_user_id > 0)",
+                                    params=[request.params["id"]])
+
+    videos = unverified_videos.to_list(decode_metadata) + verified_videos.to_list(decode_metadata)
+
+    if len(videos) > 0:
+        if request.params["selectedvideoid"]:
+            # remove the selected video from the list
+            videos = [video for video in videos if video["id"] != int(request.params["selectedvideoid"])]
+
+        video_list = videos
+    else:
+        video_list = None
+
+    dba.close()
+
+    html = Template.render("player/video-list.twig", {"videos": video_list})
+    return response(html)
 
 @post("/api/athlete/{id}/videos/{video_id}/transcript/queue")
 async def post_athlete_transcripts_queue(request, response):
@@ -178,6 +221,9 @@ async def post_athlete_transcripts_queue(request, response):
         queue.player_id = request.params["id"]
         queue.data = {"player_media_id": request.params["video_id"]}
         queue.save()
+
+    dba.close()
+
     return response("Queued!")
 
 
@@ -189,6 +235,8 @@ async def post_athlete_transcripts_queue(request, response):
     if player_media.load():
         player_media.is_deleted = 1
         player_media.save()
+
+    dba.close()
 
     return response("Removed!")
 
@@ -205,6 +253,8 @@ async def post_athlete_transcripts_queue(request, response):
             player_media.is_valid = 1
 
         player_media.save()
+
+    dba.close()
 
     return response("Done!")
 
@@ -241,8 +291,6 @@ async def get_test_classification(request, response):
             speaker_text = ''.join([i if ord(i) < 128 else ' ' for i in speaker["text"]])
             text += str(counter) + "." + speaker_text + "\n\n"
             counter += 1
-
-    # print("<pre style='width:200px'>",text, "<pre>")
 
     player_media = PlayerMedia({"id": request.params["media_id"]})
     classification = ""
@@ -289,6 +337,8 @@ async def get_test_classification(request, response):
         </ul></div><div class="col-12 col-xl-7">
         \n""" + classification + "</div>"
 
+    dba.close()
+
     return response(classification)
 
 @post("/api/athlete/{id}/transcript/{transcript_id}/verified")
@@ -308,5 +358,7 @@ async def post_transcript_verified(request, response):
     player_transcript.verified_user_id = request.body["verified_user_id"]
     player_transcript.verified_at = datetime.now()
     player_transcript.save()
+
+    dba.close()
 
     return response("Done!")

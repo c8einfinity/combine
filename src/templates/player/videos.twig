@@ -10,78 +10,16 @@
         <div class="col-12" id="videoFeedback"></div>
         <div class="col-12 col-xl-4">
             <h3 class="pb-2 text-uppercase">Videos</h3>
-            <div class="video-list-container mb-4">
+            <div id="currentVideo" class="mb-3"></div>
+            <hr />
+            <div id="videoList" class="video-list-container mb-4">
                 {% if videos %}
-                    {% for video in videos %}
-                        {% set borderColor = "border-dark bg-lighter" %}
-                        {% if video.transcript_verified %}
-                            {% set borderColor = "border-success bg-success-light" %}
-                        {% endif %}
-                        <div class="mb-3">
-                            <div class="card card-body p-3 rounded-lg {{ borderColor }}" style="border-width: 2px;">
-                                <div class="row">
-                                    <div class="col-4">
-                                        <div class="embed-responsive embed-responsive-16by9 rounded-lg">
-                                            <iframe width="420" height="315"
-                                                    src="{% if video %}{{ video.url.replace("watch?v=", "embed/") }}{% endif %}">
-                                            </iframe>
-                                        </div>
-                                        {% if ns.load_video_id == 0 and video %}
-                                            {% set ns.load_video_id = video.id %}
-                                        {% endif %}
-                                    </div>
-                                    <div class="col-8" style="font-size: 13px;">
-                                        <p class="mb-2 font-weight-bold" style="font-size: 14px;">
-                                            <a role="button" onclick="loadTranscript({{ video.id }})">
-                                                {{ video.title }} - {{ video.published_at }}
-                                            </a>
-                                        </p>
-                                        {% if videos_edit_permission %}
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox"
-                                                       class="custom-control-input"
-                                                       id="include_{{ video.id }}"
-                                                       onclick="toggleIncludeVideo({{ video.id }})"
-                                                       {% if video.is_valid %}checked{% endif %}>
-                                                <label class="custom-control-label"
-                                                       for="include_{{ video.id }}">
-                                                    Include this video transcript in the results?
-                                                </label>
-                                            </div>
-                                        {% endif %}
-                                        <div class="row py-2">
-                                            {% if videos_edit_permission %}
-                                                {% if not video.transcript %}
-                                                    <div class="col-6">
-
-                                                        <a role="button" onclick="addToQueue({{ video.id }})">
-                                                            <i class="fa fa-plus-square text-primary mr-1"
-                                                               style="font-size: 18px;"></i> Transcribe
-                                                        </a>
-                                                    </div>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% if videos_delete_permission %}
-                                                <div class="col-6">
-                                                    <a role="button" onclick="removeVideo({{ video.id }})">
-                                                        <i class="fa fa-minus-square mr-1"
-                                                           style="color: orangered; font-size: 18px;"></i> Remove
-                                                        Video
-                                                    </a>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                        <a href="{{ video.url }}" target="_blank"
-                                           class="w-full text-center text-black "><u>View
-                                                on
-                                                YouTube <i class="fa-solid fa-up-right-from-square"></i></u></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="alert alert-info">No videos available</div>
+                    {% if videos|length > 0 %}
+                        {% set ns.load_video_id = videos[0].id %}
+                    {% endif %}
+                    {%  with videos=videos  %}
+                        {% include "player/video-list.twig" %}
+                    {% endwith %}
                 {% endif %}
             </div>
         </div>
@@ -89,12 +27,30 @@
         </div>
     </div>
     <script>
+        function submitUserVerification(transcriptId, mediaId) {
+            submitForm("speaker_form", `/api/athlete/{{ player.id }}/transcript/${transcriptId}/verified`, "", function () {
+                loadTranscript(mediaId);
+            });
+        }
+
+        function moveVideoToCurrent(videoId) {
+            // move the video from the list to the current video section
+            const videoElement = $(`#video_${videoId}`);
+            // remove view button
+            videoElement.find("button").remove();
+            $('#currentVideo').html(videoElement.html());
+            videoElement.remove();
+        }
+
         function loadTranscript(videoId) {
             $('#videoTranscript').html(`<div class="text-center"><h5 class="pb-2">Loading ...</h5><div style="width: 10rem; height: 10rem;" class="spinner-border" role="status">
                 <span class="sr-only text-black">Loading...</span>
             </div></div>`)
 
+            moveVideoToCurrent(videoId);
+
             loadPage(`/api/athlete/{{ player.id }}/videos/${videoId}/transcript`, 'videoTranscript');
+            loadPage(`/api/athlete/{{ player.id }}/video-list?selectedvideoid=${videoId}`, 'videoList');
         }
 
         {% if videos_edit_permission %}
