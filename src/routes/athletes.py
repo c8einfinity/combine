@@ -1,3 +1,7 @@
+# Copyright 2025 Code Infinity
+# Author: Jacques van Zuydam <jacques@codeinfinity.co.za>
+# Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
+
 import ast
 import json
 import base64
@@ -5,18 +9,18 @@ import hashlib
 import os
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs
-
 from tina4_python import Debug
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_HTML, TEXT_PLAIN, HTTP_OK, HTTP_NOT_FOUND, HTTP_BAD_REQUEST
 from tina4_python.Template import Template
-from tina4_python.Router import get, post, delete
+from tina4_python.Router import get, post, delete, middleware
 import re
 from ..app.Scraper import get_youtube_videos, chunk_text
 from ..app.Utility import get_data_tables_filter
 from ..app.Player import get_player_results, submit_player_results, resize_profile_image, submit_player_teamq_details
+from ..app.MiddleWare import MiddleWare
 from .. import dba
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
@@ -109,7 +113,6 @@ async def get_athletes(request, response):
 
     return response(data)
 
-
 def player_transcript_stats(player_id):
     """
     Get the player transcript and media stats
@@ -122,7 +125,6 @@ def player_transcript_stats(player_id):
 
     return player_transcripts
 
-
 def decode_player_image(record):
     try:
         record["image"] = ast.literal_eval(base64.b64decode(record["image"]).decode("utf-8"))
@@ -130,7 +132,7 @@ def decode_player_image(record):
         record["image"] = str(e)
     return record
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/receptiviti/export")
 async def get_receptiviti_export(request, response):
     from ..app.Player import decode_transcript
@@ -168,7 +170,7 @@ async def get_receptiviti_export(request, response):
 
     return response(text, 200, "text/csv", headers_in=headers)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/athlete/{id}")
 async def get_athlete(request, response):
     """
@@ -176,9 +178,6 @@ async def get_athlete(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     from ..orm.Player import Player
     from ..orm.Sport import Sport
 
@@ -199,7 +198,7 @@ async def get_athlete(request, response):
     else:
         return response("Player error, or player not found")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athlete/{id}/sport-positions/{sport_name}")
 async def get_athlete_sport_position_select(request, response):
     """
@@ -208,9 +207,6 @@ async def get_athlete_sport_position_select(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     from ..orm.Sport import Sport
     from ..orm.SportPosition import SportPosition
     from ..orm.Player import Player
@@ -237,7 +233,6 @@ async def get_athlete_sport_position_select(request, response):
                                                                              "selected_position": selected_position})
 
     return response(html)
-
 
 @get("/api/athlete/{id}/report")
 async def get_athlete_full_report(request, response):
@@ -278,7 +273,7 @@ async def get_athlete_full_report(request, response):
 
     return response(html)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athlete/{id}/report/{report_type}")
 async def get_athlete_report(request, response):
     from ..orm.Player import Player
@@ -325,7 +320,7 @@ async def get_athlete_report(request, response):
 
     return response(html)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athlete/{id}/results")
 async def get_athlete_results(request, response):
     """
@@ -334,9 +329,6 @@ async def get_athlete_results(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     from ..app.Player import decode_transcript
     from ..orm.Player import Player
     from ..orm.PlayerTranscripts import PlayerTranscripts
@@ -400,7 +392,7 @@ async def get_athlete_results(request, response):
 
     return response(html)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athlete/{id}/upload-picture")
 async def post_upload_picture(request, response):
     from ..orm.Player import Player
@@ -415,7 +407,7 @@ async def post_upload_picture(request, response):
     player.save()
     return response("<script>loadPage('/api/athlete/" + request.params["id"] + "', 'content')</script>")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athlete/{id}/results")
 async def post_athlete_results(request, response):
     """
@@ -485,6 +477,7 @@ async def post_athlete_results(request, response):
 
     return response.redirect("/api/athlete/" + request.params["id"] + "/results")
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athlete/{id}/links")
 async def get_athlete_links(request, response):
     """
@@ -493,16 +486,13 @@ async def get_athlete_links(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     data = {
         "player_id": request.params["id"]
     }
 
     return response(Template.render_twig_template("player/links.twig", data))
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/athlete/{id}/links_data")
 async def get_athlete_links_data(request, response):
     if "draw" not in request.params:
@@ -532,7 +522,7 @@ async def get_athlete_links_data(request, response):
 
     return response(data)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athletes")
 async def post_athletes(request, response):
     from ..orm.Player import Player
@@ -594,7 +584,7 @@ async def post_athletes(request, response):
 
     return response(player)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athlete/{id}")
 async def post_athletes_id(request, response):
     from ..orm.Player import Player
@@ -626,7 +616,7 @@ async def post_athletes_id(request, response):
     else:
         return response("Failed to save player!")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athlete/{id}/links")
 async def post_athlete_links(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -700,7 +690,7 @@ async def post_athlete_links(request, response):
     else:
         return response("Failed to save media!")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @delete("/api/athlete/{id}")
 async def delete_athlete(request, response):
     from ..orm.Player import Player
@@ -726,7 +716,7 @@ async def delete_athlete(request, response):
 
     return response("Failed to delete player!")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @delete("/api/athlete/{id}/links/{link_id}")
 async def delete_athlete_link(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -737,7 +727,7 @@ async def delete_athlete_link(request, response):
     else:
         return response("Failed to delete media!")
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athlete/{id}/links/{link_id}/restore")
 async def post_athlete_link_restore(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -750,6 +740,7 @@ async def post_athlete_link_restore(request, response):
     else:
         return response("Failed to restore media!")
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/athletes/athlete-template.csv")
 async def get_athletes_csv_template(request, response):
     """
@@ -762,7 +753,7 @@ async def get_athletes_csv_template(request, response):
     return response(csv_template, 200, "text/csv",
                     headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athletes/import-csv")
 async def post_import_csv(request, response):
     """
@@ -857,7 +848,7 @@ async def post_import_csv(request, response):
 
     return response(html_response, HTTP_OK, TEXT_HTML)
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/athletes/request-results")
 async def post_send_results(request, response):
     """
@@ -877,7 +868,6 @@ async def post_send_results(request, response):
         queue.add_item("request_player_results", {"player_id": player_id})
 
     return response(f"{len(player_ids)} items queued!")
-
 
 @get('/athletes/fix-images')
 async def get_fix_images(request, response):
@@ -905,7 +895,6 @@ async def get_fix_images(request, response):
             p.save()
 
     return response("Done!")
-
 
 @get('athletes/resend-deleted-videos')
 async def get_resend_deleted_videos(request, response):
@@ -945,7 +934,6 @@ async def get_resend_deleted_videos(request, response):
 
     return response(f"Done, sent {counter} videos!")
 
-
 @get('athletes/get-sports')
 async def get_sports(request, response):
     """
@@ -959,7 +947,6 @@ async def get_sports(request, response):
     sync_sports_positions(dba)
 
     return response("Done!")
-
 
 @get('athletes/clean-duplicate-links')
 async def get_clean_duplicate_links(request, response):

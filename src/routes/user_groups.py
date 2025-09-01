@@ -1,10 +1,11 @@
 # Copyright 2025 Code Infinity
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
+from ..app.MiddleWare import MiddleWare
 from ..app.UserGroups import UserGroups
-from tina4_python.Constant import HTTP_OK, TEXT_HTML
-from tina4_python.Router import get, post, delete
+from tina4_python.Router import get, post, delete, middleware
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/user_groups/landing")
 async def get_user_group_landing(request, response):
     """
@@ -13,11 +14,9 @@ async def get_user_group_landing(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     return UserGroups.get_user_group_landing(response)
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/user_groups")
 async def get_user_groups(request, response):
     """
@@ -28,6 +27,7 @@ async def get_user_groups(request, response):
     """
     return UserGroups.get_user_groups(request, response)
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/api/user_groups/form")
 async def get_user_group_form(request, response):
     """
@@ -39,6 +39,7 @@ async def get_user_group_form(request, response):
     """
     return UserGroups.get_user_groups_form_modal(request, response)
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/api/user_groups")
 async def post_user_group(request, response):
     """
@@ -50,6 +51,7 @@ async def post_user_group(request, response):
     """
     return UserGroups.post_user_group(request, response)
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @delete("/api/user_groups/{id}")
 async def delete_user_group(request, response):
     """
