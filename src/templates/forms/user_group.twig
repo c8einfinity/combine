@@ -221,7 +221,7 @@
         formData.append("name", $("#name").val());
         formData.append("permissions", JSON.stringify(prepareUserGroupPermissionsSubmission()));
 
-        const errorMessage = `Something went wrong adding the user group.`;
+        const errorMessage = `Something went wrong ${(id) ? "editing" : "adding"} the user group.`;
 
         fetch("/api/user_groups?formToken={{ formToken() }}", {
             method: "POST",

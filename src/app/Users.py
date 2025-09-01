@@ -63,6 +63,11 @@ class Users:
         """
         from ..orm.User import User
 
+        email_address_users = User().select(["id"], "lower(email) = ?", [request.body["email"].lower()])
+
+        if email_address_users and email_address_users.records:
+            return response({"error": f"User with email address {request.body["email"]} already exists."})
+
         request.body["password"] = tina4_auth.hash_password(request.body["password"])
 
         user = User(request.body)

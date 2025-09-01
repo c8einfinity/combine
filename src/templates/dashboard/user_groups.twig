@@ -96,12 +96,12 @@
                             let actions = "";
 
                             {% if user_groups_edit_permission %}
-                            actions += ` <a class="btn btn-outline-light text-black" href="#" onclick="getUserGroupEditFormModal('${row.id}')"><i class="fas fa-edit"></i></a>`;
+                                actions += ` <a class="btn btn-outline-light text-black" href="#" title="Edit" onclick="getUserGroupEditFormModal('${row.id}')"><i class="fas fa-edit"></i></a>`;
                             {% endif %}
 
                             {% if user_groups_delete_permission %}
                             if (row.id !== 0) {
-                                actions += ` <a class="btn btn-outline-light text-black" href="#" onclick="deleteUserGroup(${row.id})"><i class="fas fa-trash"></i></a>`;
+                                actions += ` <a class="btn btn-outline-light text-black" href="#" title="Delete" onclick="deleteUserGroup(${row.id})"><i class="fas fa-trash"></i></a>`;
                             }
                             {% endif %}
 
@@ -112,7 +112,7 @@
                 language: {
                     emptyTable: `{% include ("snippets/datatable_empty.twig") %}`
                 },
-                order: [[1, 'desc']],
+                order: [[0, 'desc']],
                 processing: true,
                 serverSide: true
             });
@@ -120,43 +120,44 @@
             userGroupsGrid.on('length.dt', function (e, settings, len) {
                 sessionStorage.setItem('userGroupsPageLength', len);
             });
+
             teamQNavSetActive($('#userGroupsLink')[0]);
         });
 
         {% if user_groups_create_permission %}
-        /**
-         * Function to get the user group form modal to add records.
-         */
-        function getUserGroupAddFormModal() {
-            showForm("edit", `/api/user_groups/form?formToken={{ formToken() }}`);
-        }
+            /**
+             * Function to get the user group form modal to add records.
+             */
+            function getUserGroupAddFormModal() {
+                showForm("edit", `/api/user_groups/form?formToken={{ formToken() }}`);
+            }
         {% endif %}
 
         {% if user_groups_edit_permission %}
-        /**
-         * Function to get the user group form modal to edit records.
-         * @param id
-         */
-        function getUserGroupEditFormModal(id) {
-            showForm("edit", `/api/user_groups/form?id=${id}&formToken={{ formToken() }}`);
-        }
+            /**
+             * Function to get the user group form modal to edit records.
+             * @param id
+             */
+            function getUserGroupEditFormModal(id) {
+                showForm("edit", `/api/user_groups/form?id=${id}&formToken={{ formToken() }}`);
+            }
         {% endif %}
 
         {% if user_groups_delete_permission %}
-        /**
-         * Function to delete a user group.
-         * @param id
-         */
-        function deleteUserGroup(id) {
-            const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will " +
-                "be reset to the default user group."
+            /**
+             * Function to delete a user group.
+             * @param id
+             */
+            function deleteUserGroup(id) {
+                const deleteConfirmationMessage = "Delete User Group? All users' permissions in this user group will " +
+                    "be reset to the default user group."
 
-            if (confirm(deleteConfirmationMessage)) {
-                deleteUrl(`/api/user_groups/${id}`, null, "message", function () {
-                    userGroupsGrid.ajax.reload();
-                });
+                if (confirm(deleteConfirmationMessage)) {
+                    deleteUrl(`/api/user_groups/${id}?formToken={{ formToken() }}`, null, "message", function () {
+                        userGroupsGrid.ajax.reload();
+                    });
+                }
             }
-        }
         {% endif %}
     </script>
 {% endif %}
