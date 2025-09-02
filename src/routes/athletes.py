@@ -20,7 +20,7 @@ from ..app.Player import get_player_results, submit_player_results, resize_profi
 from ..app.MiddleWare import MiddleWare
 from .. import dba
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athletes/{status}")
 async def get_athletes(request, response):
     """
@@ -132,7 +132,7 @@ def decode_player_image(record):
         record["image"] = str(e)
     return record
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/receptiviti/export")
 async def get_receptiviti_export(request, response):
     from ..app.Player import decode_transcript
@@ -170,7 +170,7 @@ async def get_receptiviti_export(request, response):
 
     return response(text, 200, "text/csv", headers_in=headers)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/athlete/{id}")
 async def get_athlete(request, response):
     """
@@ -198,7 +198,7 @@ async def get_athlete(request, response):
     else:
         return response("Player error, or player not found")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athlete/{id}/sport-positions/{sport_name}")
 async def get_athlete_sport_position_select(request, response):
     """
@@ -273,7 +273,7 @@ async def get_athlete_full_report(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athlete/{id}/report/{report_type}")
 async def get_athlete_report(request, response):
     from ..orm.Player import Player
@@ -320,7 +320,7 @@ async def get_athlete_report(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athlete/{id}/results")
 async def get_athlete_results(request, response):
     """
@@ -392,7 +392,7 @@ async def get_athlete_results(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athlete/{id}/upload-picture")
 async def post_upload_picture(request, response):
     from ..orm.Player import Player
@@ -407,7 +407,7 @@ async def post_upload_picture(request, response):
     player.save()
     return response("<script>loadPage('/api/athlete/" + request.params["id"] + "', 'content')</script>")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athlete/{id}/results")
 async def post_athlete_results(request, response):
     """
@@ -477,7 +477,7 @@ async def post_athlete_results(request, response):
 
     return response.redirect("/api/athlete/" + request.params["id"] + "/results")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athlete/{id}/links")
 async def get_athlete_links(request, response):
     """
@@ -492,7 +492,7 @@ async def get_athlete_links(request, response):
 
     return response(Template.render_twig_template("player/links.twig", data))
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/athlete/{id}/links_data")
 async def get_athlete_links_data(request, response):
     if "draw" not in request.params:
@@ -522,7 +522,7 @@ async def get_athlete_links_data(request, response):
 
     return response(data)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athletes")
 async def post_athletes(request, response):
     from ..orm.Player import Player
@@ -584,7 +584,7 @@ async def post_athletes(request, response):
 
     return response(player)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athlete/{id}")
 async def post_athletes_id(request, response):
     from ..orm.Player import Player
@@ -616,7 +616,7 @@ async def post_athletes_id(request, response):
     else:
         return response("Failed to save player!")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athlete/{id}/links")
 async def post_athlete_links(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -690,7 +690,7 @@ async def post_athlete_links(request, response):
     else:
         return response("Failed to save media!")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @delete("/api/athlete/{id}")
 async def delete_athlete(request, response):
     from ..orm.Player import Player
@@ -716,7 +716,7 @@ async def delete_athlete(request, response):
 
     return response("Failed to delete player!")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @delete("/api/athlete/{id}/links/{link_id}")
 async def delete_athlete_link(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -727,7 +727,7 @@ async def delete_athlete_link(request, response):
     else:
         return response("Failed to delete media!")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athlete/{id}/links/{link_id}/restore")
 async def post_athlete_link_restore(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -740,7 +740,7 @@ async def post_athlete_link_restore(request, response):
     else:
         return response("Failed to restore media!")
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/athletes/athlete-template.csv")
 async def get_athletes_csv_template(request, response):
     """
@@ -753,7 +753,7 @@ async def get_athletes_csv_template(request, response):
     return response(csv_template, 200, "text/csv",
                     headers_in={"Content-Disposition": "attachment; filename=athlete_template.csv"})
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athletes/import-csv")
 async def post_import_csv(request, response):
     """
@@ -848,7 +848,7 @@ async def post_import_csv(request, response):
 
     return response(html_response, HTTP_OK, TEXT_HTML)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/athletes/request-results")
 async def post_send_results(request, response):
     """

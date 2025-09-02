@@ -9,7 +9,7 @@ from tina4_python.Router import get, post, middleware
 import random
 import json
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard")
 async def get_dashboard(request, response):
     """
@@ -25,7 +25,7 @@ async def get_dashboard(request, response):
 
     return response(Template.render_twig_template("dashboard.twig"))
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/home")
 async def get_dashboard_home(request, response):
     """
@@ -45,7 +45,7 @@ async def get_dashboard_home(request, response):
                                                   data={"total_transcribed_stats": total_transcribed_stats,
                                                         "player_stats": player_stats}))
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/athletes/{status}")
 async def get_dashboard_athletes(request, response):
     from ..orm.Sport import Sport
@@ -59,7 +59,7 @@ async def get_dashboard_athletes(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/queue")
 async def get_dashboard_queue(request, response):
     """

@@ -10,7 +10,7 @@ from tina4_python.Router import get, post, delete, middleware
 from ..app.MiddleWare import MiddleWare
 from ..app.Utility import get_data_tables_filter
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/queue")
 async def get_queue(request, response):
     if "draw" not in request.params:
@@ -38,7 +38,7 @@ async def get_queue(request, response):
 
     return response(data)
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/queue/{id}/priority")
 async def get_queue_priority_snippet(request, response):
     """
@@ -55,7 +55,7 @@ async def get_queue_priority_snippet(request, response):
 
     return response(Template.render("/queue/priority.twig", {"queue_item":queue_item}))
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/queue/{id}/set_priority")
 async def set_queue_priority(request, response):
     """
@@ -76,7 +76,7 @@ async def set_queue_priority(request, response):
 
     return response({"status": "error"})
 
-@middleware(MiddleWare, ["after_route_session_validation"])
+@middleware(MiddleWare, ["before_route_session_validation"])
 @delete("/api/queue/{id}")
 async def delete_queue(request, response):
     """
