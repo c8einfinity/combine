@@ -100,7 +100,7 @@
             {% if queue_delete_permission %}
             function deleteQueueItem(id) {
                 if (confirm("Delete Transcription Item?")) {
-                    deleteUrl(`/api/queue/${id}`, null, 'message', function () {
+                    deleteUrl(`/api/queue/${id}?formToken={{ formToken() }}`, null, 'message', function () {
                         queueGrid.ajax.reload();
                     })
                 }

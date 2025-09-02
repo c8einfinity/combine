@@ -1,15 +1,17 @@
-from tina4_python.Template import Template
-from tina4_python.Constant import HTTP_OK, TEXT_HTML
-from tina4_python.Router import get, post, delete
+# Copyright 2025 Code Infinity
+# Author: Jacques van Zuydam <jacques@codeinfinity.co.za>
+# Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
+from ..app.MiddleWare import MiddleWare
+from tina4_python.Template import Template
+from tina4_python.Router import get, post, delete, middleware
+
+@middleware(MiddleWare, ["after_route_session_validation"])
 @get("/settings")
 async def settings_get(request, response):
     """
     Handle GET requests to the /settings endpoint.
     """
-    if not request.session.get('logged_in') and request.session.get('logged_in') is not True and not request.session.get('user_permissions'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     from ..orm.Sport import Sport
     from ..orm.AdminSetting import AdminSetting
 
@@ -24,6 +26,7 @@ async def settings_get(request, response):
 
     return response(html)
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/settings/add-update-search-parameters")
 async def add_update_search_parameters(request, response):
     """
@@ -74,6 +77,7 @@ async def add_update_search_parameters(request, response):
 
     return response({"message": "Sport search parameter added successfully"})
 
+@middleware(MiddleWare, ["after_route_session_validation"])
 @post("/setting/update/{setting_key}")
 async def update_setting(request, response):
     """
@@ -100,7 +104,7 @@ async def update_setting(request, response):
 
     return response({"message": "Setting updated successfully"})
 
-
+@middleware(MiddleWare, ["after_route_session_validation"])
 @delete("/setting/delete/{setting_key}")
 async def delete_setting(request, response):
     """
