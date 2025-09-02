@@ -1,4 +1,5 @@
 from tina4_python.Template import Template
+from tina4_python.Constant import HTTP_OK, TEXT_HTML
 from tina4_python.Router import get, post, delete
 
 @get("/settings")
@@ -6,6 +7,9 @@ async def settings_get(request, response):
     """
     Handle GET requests to the /settings endpoint.
     """
+    if not request.session.get('logged_in') and request.session.get('logged_in') is not True and not request.session.get('user_permissions'):
+        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
+
     from ..orm.Sport import Sport
     from ..orm.AdminSetting import AdminSetting
 
