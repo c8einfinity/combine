@@ -17,10 +17,10 @@ class MiddleWare:
         response.headers["Access-Control-Allow-Methods"] = "*"
 
         if (not request.session.get('logged_in')
-            and request.session.get('logged_in') != False
-            and request.session.get("user_permissions")
-            and "permissions" in request.session.get("user_permissions")
+                or request.session.get('logged_in') == False
+                or (request.session.get("user_permissions") and "permissions" not in request.session.get("user_permissions"))
         ):
+            print("Session invalid - redirecting to login")
             Response.redirect("/login?s_e=1")
 
         return request, response
