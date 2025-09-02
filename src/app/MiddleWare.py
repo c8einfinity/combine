@@ -14,7 +14,6 @@ class MiddleWare:
         :param response:
         :return:
         """
-        response.headers["Access-Control-Allow-Methods"] = "*"
 
         if (not request.session.get('logged_in')
                 or request.session.get('logged_in') == False
