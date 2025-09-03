@@ -83,13 +83,12 @@
                         >
                             Download Report
                         </a>
-                        <a
-                                href="/api/athlete/{{ player.id }}/report/player"
-                                target="_blank"
+                        <button
+                                onclick="viewReport(`{{ url }}/player/{{ candidate_id }}/pdf/report/player/download`, '{{ player.first_name }} {{ player.last_name }} Player Report')"
                                 class="py-1 px-2 btn mr-2 text-soft-green text-inter view-btn"
                         >
                             View Report
-                        </a>
+                        </button>
                     </div>
                 </div>
                 {{ results.player }}
@@ -115,13 +114,12 @@
                         >
                             Download Report
                         </a>
-                        <a
-                                href="/api/athlete/{{ player.id }}/report/coaching"
-                                target="_blank"
+                        <button
+                                onclick="viewReport(`{{ url }}/player/{{ candidate_id }}/pdf/report/coach/download`, '{{ player.first_name }} {{ player.last_name }} Coaching Report')"
                                 class="py-1 px-2 btn mr-2 text-soft-green text-inter view-btn"
                         >
                             View Report
-                        </a>
+                        </button>
                     </div>
                 </div>
                 {{ results.coach }}
@@ -147,19 +145,41 @@
                         >
                             Download Report
                         </a>
-                        <a
-                                href="/api/athlete/{{ player.id }}/report/scouting"
-                                target="_blank"
+                        <button
+                                onclick="viewReport(`{{ url }}/player/{{ candidate_id }}/pdf/report/scout/download`, '{{ player.first_name }} {{ player.last_name }} Scouting Report')"
                                 class="py-1 px-2 btn mr-2 text-soft-green text-inter view-btn"
                         >
                             View Report
-                        </a>
+                        </button>
                     </div>
                 </div>
                 {{ results.scout }}
                 {% else %}
                     <p class="text-muted">Scouting report unavailable. Submit the transcript to get the report.</p>
                 {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-fullscreen" role="document" id="reportModal">
+        <div class="modal-content overflow-hidden">
+            <div class="modal-header border-0">
+                <h3 class="modal-title text-black text-anton" id="reportModalLabel"></h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="gradient-separator mb-0"></div>
+            <div class="modal-body p-0">
+                <div id="pdfLoader" class="flex-column align-items-center justify-content-center h-100" style="background-color: rgba(255, 255, 255, 0.8);">
+                    <h5 id="importLoadText" class="text-anton text-black pb-2">Loading Report ...</h5>
+                    <div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                        <span class="sr-only text-black">Loading Report ...</span>
+                    </div>
+                </div>
+                <div id="reportContent" class="h-100 w-100"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-soft-green" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -191,6 +211,29 @@
         }
 
         $('#wordCount').html(countWords('playerText'));
+
+        function viewReport(url, label) {
+            $('#reportModal').modal('show');
+            // clear the object data and reload
+            document.getElementById('reportContent').innerHTML = '';
+
+            // create the object and append it to the reportContent div
+            let iframe = document.createElement('iframe');
+            iframe.id = 'reportFrame';
+            iframe.src = `${url}?content_disposition=inline`;
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.classList.add('h-100');
+            iframe.onload = function() {
+                $('#pdfLoader').removeClass('d-flex').addClass('d-none');
+            };
+
+            document.getElementById('reportContent').appendChild(iframe);
+
+            $('#pdfLoader').addClass('d-flex').removeClass('d-none');
+            $('#reportModalLabel').html(label ? label : 'Player Report');
+        }
+        // Hide loader when PDF loads or fails
 
         {% if playerq_create_permission %}
             function submitPlayerText() {

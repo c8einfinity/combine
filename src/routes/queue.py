@@ -1,11 +1,16 @@
+# Copyright 2025 Code Infinity
+# Author: Jacques van Zuydam <jacques@codeinfinity.co.za>
+# Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
+
 import ast
 import base64
 from tina4_python.Constant import HTTP_SERVER_ERROR, TEXT_PLAIN
 from tina4_python.Template import Template
-from tina4_python.Router import get, post, delete
-
+from tina4_python.Router import get, post, delete, middleware
+from ..app.MiddleWare import MiddleWare
 from ..app.Utility import get_data_tables_filter
 
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/api/queue")
 async def get_queue(request, response):
     if "draw" not in request.params:
@@ -33,6 +38,7 @@ async def get_queue(request, response):
 
     return response(data)
 
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/queue/{id}/priority")
 async def get_queue_priority_snippet(request, response):
     """
@@ -49,6 +55,7 @@ async def get_queue_priority_snippet(request, response):
 
     return response(Template.render("/queue/priority.twig", {"queue_item":queue_item}))
 
+@middleware(MiddleWare, ["before_route_session_validation"])
 @post("/api/queue/{id}/set_priority")
 async def set_queue_priority(request, response):
     """
@@ -69,6 +76,7 @@ async def set_queue_priority(request, response):
 
     return response({"status": "error"})
 
+@middleware(MiddleWare, ["before_route_session_validation"])
 @delete("/api/queue/{id}")
 async def delete_queue(request, response):
     """

@@ -167,7 +167,9 @@ title="Add to Queue for Transcript">
             {% if links_delete_permission %}
             function deleteLink(link_id) {
                 if (confirm("Delete Link ?")) {
-                    deleteUrl(`/api/athlete/{{ player_id }}/links/${link_id}`, null, 'linkMessage', function () {
+                    const url = `/api/athlete/{{ player_id }}/links/${link_id}?formToken={{ formToken() }}`;
+
+                    deleteUrl(url, null, 'linkMessage', function () {
                         linksGrid.ajax.reload();
                     })
                 }

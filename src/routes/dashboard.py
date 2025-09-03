@@ -1,11 +1,14 @@
-from tina4_python.Constant import HTTP_OK, TEXT_HTML
-from tina4_python.Queue import Producer
+# Copyright 2025 Code Infinity
+# Author: Jacques van Zuydam <jacques@codeinfinity.co.za>
+# Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
+
+from ..app.MiddleWare import MiddleWare
 from tina4_python.Template import Template
-from tina4_python.Router import get, post
+from tina4_python.Router import get, post, middleware
 import random
 import json
 
-
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard")
 async def get_dashboard(request, response):
     """
@@ -14,16 +17,10 @@ async def get_dashboard(request, response):
     :param response:
     :return:
     """
-    # Temp example to test the queue
-    # from ..app.QueueUtility import QueueUtility
-    # queue_instance = QueueUtility()
-    # Producer(queue_instance.get_queue()).produce("A test message")
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
 
     return response(Template.render_twig_template("dashboard.twig"))
 
-
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/home")
 async def get_dashboard_home(request, response):
     """
@@ -32,9 +29,6 @@ async def get_dashboard_home(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     from ..app.Queue import get_total_transcribed_stats
     from ..app.Player import get_player_stats
 
@@ -46,11 +40,9 @@ async def get_dashboard_home(request, response):
                                                   data={"total_transcribed_stats": total_transcribed_stats,
                                                         "player_stats": player_stats}))
 
-
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/athletes/{status}")
 async def get_dashboard_athletes(request, response):
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
     from ..orm.Sport import Sport
     sports = Sport().select("*", limit=100).to_list()
 
@@ -62,7 +54,7 @@ async def get_dashboard_athletes(request, response):
 
     return response(html)
 
-
+@middleware(MiddleWare, ["before_route_session_validation"])
 @get("/dashboard/queue")
 async def get_dashboard_queue(request, response):
     """
@@ -71,11 +63,7 @@ async def get_dashboard_queue(request, response):
     :param response:
     :return:
     """
-    if not request.session.get('logged_in'):
-        return response("<script>window.location.href='/login?s_e=1';</script>", HTTP_OK, TEXT_HTML)
-
     return response(Template.render_twig_template("dashboard/queue.twig"))
-
 
 def decode_metadata(record):
     """
@@ -88,7 +76,6 @@ def decode_metadata(record):
     record["description"] = record["metadata"]["items"][0]["snippet"]["description"]
     record["published_at"] = record["metadata"]["items"][0]["snippet"]["publishedAt"]
     return record
-
 
 @get("/media/sorter")
 async def get_media_sorter(request, response):
@@ -116,7 +103,6 @@ async def get_media_sorter(request, response):
                                          {"video": video, "player": player.to_dict(), "counter": counter})
 
     return response(html)
-
 
 @post("/media/sorter")
 async def post_media_sorter(request, response):
@@ -150,4 +136,3 @@ async def post_media_sorter(request, response):
     player_media.save()
 
     return response.redirect("/media/sorter")
-
