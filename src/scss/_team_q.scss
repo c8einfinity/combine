@@ -66,46 +66,38 @@ body {
 
 /* FONT COLOUR STYLES */
 .text-anton {
-  font-family: Anton, Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-family: 'Anton', sans-serif;
+}
+
+.scout-thinking-style-results-nav .nav-tabs .nav-link {
+  border: none;
+}
+
+.scout-thinking-style-results-nav .nav-tabs .nav-link.active {
+  border-bottom: 2px solid #CFFF80;
+  opacity: 1;
 }
 
 .text-inter {
-  font-family: Inter, Arial, Helvetica, sans-serif;
-}
-
-.download-btn {
-  background-color: #000000;
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 14px;
-  height: 30px;
-  white-space: nowrap;
-}
-
-.download-btn:hover {
-  color: var(--soft-green) !important;
-}
-
-.view-btn {
-  color: #000000 !important;
-  background-color: var(--soft-green);
-  border-radius: 5px;
-  font-weight: 600;
-  font-size: 14px;
-  height: 30px;
-  white-space: nowrap;
-}
-
-.view-btn:hover {
-  background-color: var(--soft-green-hover);
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
 }
 
 .text-charcoal {
   color: var(--charcoal);
 }
 
+.text-white {
+  color: var(--white-color);
+}
+
 .text-grey {
   color: var(--grey);
+}
+
+.text-light-grey {
+  color: var(--light-grey);
 }
 
 .text-green {
@@ -142,6 +134,33 @@ body {
 
 .text-granite-gray {
   color: #666666;
+}
+
+.download-btn {
+  background-color: #000000;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  height: 30px;
+  white-space: nowrap;
+}
+
+.download-btn:hover {
+  color: var(--soft-green) !important;
+}
+
+.view-btn {
+  color: #000000 !important;
+  background-color: var(--soft-green);
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 14px;
+  height: 30px;
+  white-space: nowrap;
+}
+
+.view-btn:hover {
+  background-color: var(--soft-green-hover);
 }
 
 /* BACKGROUND COLORS */
