@@ -166,7 +166,7 @@ body {
 /* BUTTON STYLES */
 .btn-soft-green {
   font-weight: 400;
-  font-family: var(--ff-anton), Impact, Arial, Helvetica, sans-serif;
+  font-family: var(--ff-anton);
   background: var(--soft-green);
   color: var(--dark);
   text-transform: uppercase;
@@ -178,16 +178,23 @@ body {
   color: var(--dark);
 }
 
-.btn-navy {
+.btn-dark {
   font-weight: 400;
   font-family: var(--ff-anton);
   background: var(--dark);
   color: var(--soft-green);
   text-transform: uppercase;
-  border-radius: 0 !important;
 }
 
-.btn-navy:hover {
+.btn-dark-lower {
+  font-weight: 400;
+  font-family: var(--ff-anton);
+  background: var(--dark);
+  color: var(--soft-green);
+}
+
+.btn-dark:hover,
+.btn-dark-lower:hover {
   background: var(--dark);
   box-shadow: 0 0 0 0.25rem rgba(1, 40, 57, 0.15);
   color: var(--soft-green);
@@ -238,22 +245,6 @@ body {
   box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15);
   color: var(--white);
 }
-
-.btn-dark {
-  font-weight: 400;
-  font-family: var(--ff-anton);
-  background: var(--dark);
-  color: var(--soft-green);
-  text-transform: uppercase;
-}
-
-.btn-dark-lower {
-  font-weight: 400;
-  font-family: var(--ff-anton);
-  background: var(--dark);
-  color: var(--soft-green);
-}
-
 /* TABLE STYLES */
 .table {
   color: var(--dark);
