@@ -6,14 +6,21 @@
 
 /* Colors */
 :root {
-  --soft-green: #CFFF80;
+  --soft-green: #DAFC90;
   --soft-green-hover: #B5F151;
-  --darker-green: #B2DB6E;
+  --bright-green: #CFFF80;
+  --darker-green: #9AC750;
   --dark: #000000;
+  --navy: #012839;
   --blue: #315E98;
+  --bright-blue: #029AFF;
+  --dark-blue: #3E6DB3;
   --charcoal: #212529;
   --grey: #495057;
-  --light-grey: #CED4DA;
+  --light-grey: #E7E7E7;
+  --red: #DC2B2B;
+  --red-hover: #C82323;
+  --yellow: #FFB71B;
   --ff-inter: Inter, Arial, Helvetica, sans-serif;
   --ff-anton: Anton, Arial, Helvetica, sans-serif;
 }
@@ -233,6 +240,17 @@ body {
 
 .modal-content {
   border-radius: 12px;
+}
+
+.card-btn,
+.card-btn-attribute {
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  color: var(--dark);
+  text-transform: capitalize;
+  width: 60%;
+  border-radius: 25px;
+  padding: 10px;
 }
 
 /* LOGIN AND SIGNUP SCREENS */
