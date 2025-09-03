@@ -3,7 +3,6 @@
 # Author: Chanelle Bösiger <chanelle@codeinfinity.co.za>
 
 from ..app.MiddleWare import MiddleWare
-from tina4_python.Queue import Producer
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, middleware
 import random
@@ -18,10 +17,6 @@ async def get_dashboard(request, response):
     :param response:
     :return:
     """
-    # Temp example to test the queue
-    # from ..app.QueueUtility import QueueUtility
-    # queue_instance = QueueUtility()
-    # Producer(queue_instance.get_queue()).produce("A test message")
 
     return response(Template.render_twig_template("dashboard.twig"))
 
