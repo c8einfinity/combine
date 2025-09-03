@@ -161,7 +161,7 @@
         </div>
     </div>
     <div class="modal modal-fullscreen" role="document" id="reportModal">
-        <div class="modal-content">
+        <div class="modal-content overflow-hidden">
             <div class="modal-header border-0">
                 <h3 class="modal-title text-black text-anton" id="reportModalLabel"></h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -169,7 +169,7 @@
                 </button>
             </div>
             <div class="gradient-separator mb-0"></div>
-            <div class="modal-body vendor-edits p-0">
+            <div class="modal-body p-0">
                 <div id="pdfLoader" class="flex-column align-items-center justify-content-center h-100" style="background-color: rgba(255, 255, 255, 0.8);">
                     <h5 id="importLoadText" class="text-anton text-black pb-2">Loading Report ...</h5>
                     <div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
@@ -218,33 +218,20 @@
             document.getElementById('reportContent').innerHTML = '';
 
             // create the object and append it to the reportContent div
-            let object = document.createElement('object');
-            object.id = 'reportFrame';
-            object.type = 'application/pdf';
-            object.width = '100%';
-            object.height = '100%';
-            object.classList.add('h-100');
-            object.data = `${url}?content_disposition=inline`;
+            let iframe = document.createElement('iframe');
+            iframe.id = 'reportFrame';
+            iframe.src = `${url}?content_disposition=inline`;
+            iframe.width = '100%';
+            iframe.height = '100%';
+            iframe.classList.add('h-100');
+            iframe.onload = function() {
+                $('#pdfLoader').removeClass('d-flex').addClass('d-none');
+            };
 
-            // the fallback link if the pdf cannot be loaded
-            let fallbackLink = document.createElement('a');
-            fallbackLink.id = 'reportLink';
-            fallbackLink.href = url;
-            fallbackLink.innerText = `Download ${label} Report`;
-
-            object.appendChild(fallbackLink);
-
-            document.getElementById('reportContent').appendChild(object);
+            document.getElementById('reportContent').appendChild(iframe);
 
             $('#pdfLoader').addClass('d-flex').removeClass('d-none');
             $('#reportModalLabel').html(label ? label : 'Player Report');
-
-            object.onload = function() {
-                $('#pdfLoader').removeClass('d-flex').addClass('d-none');
-            };
-            object.onerror = function() {
-                $('#pdfLoader').removeClass('d-flex').addClass('d-none');
-            }
         }
         // Hide loader when PDF loads or fails
 
