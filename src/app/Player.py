@@ -11,6 +11,7 @@ import os
 from PIL import Image
 from PIL.Image import Resampling
 
+
 def get_player_results(candidate_id):
     """
     Fetch results from the API
@@ -74,6 +75,7 @@ def get_sport_position_ids(sport_name, position_name):
     try:
         sport = Sport().select("id, name", limit=1, filter="name = ?", params=[str(sport_name)])
         sport = sport.to_list()
+        sport.__dba__.close()
     except Exception as e:
         Debug.error(f"Error fetching sport {sport_name} from the database, {e}")
         return {"error": "Sport not found"}
@@ -85,6 +87,7 @@ def get_sport_position_ids(sport_name, position_name):
     try:
         position = SportPosition().select("id, name", limit=1, filter="name = ?", params=[str(position_name)])
         position = position.to_list()
+        position.__dba__.close()
     except Exception as e:
         Debug.error(f"Error fetching position {position_name} from the database, {e}")
         return {"error": "Position not found"}
@@ -190,6 +193,7 @@ def player_bio_complete(player_id):
     from ..orm.Player import Player
 
     player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
+    player.__dba__.close()
     if player.count == 1:
         player = player[0]
         required_fields = ["first_name", "last_name", "image", "sport", "position", "team"]
@@ -206,6 +210,7 @@ def player_report_sent(player_id):
     from ..orm.PlayerResult import PlayerResult
 
     player_result = PlayerResult().select("id", filter="player_id = ? and data is not NULL", params=[player_id], limit=1, order_by="date_created desc")
+    player_result.__dba__.close()
     if len(player_result.to_list()) > 0:
         return True
 
@@ -304,6 +309,8 @@ def get_player_stats():
                                                  "and player_media.is_valid = 1 "
                                                  "and player_transcripts.verified_user_id > 0")
 
+    Player.__dba__.close()
+
     return {
         "total_players": players['total_players'] if players else 0,
         "total_bio_links": player_bio_linked['total_bio_links'] if player_bio_linked else 0,
@@ -380,12 +387,14 @@ def validate_csv_player_data(file_data):
 
             # Check if sport exists
             sport = Sport().select("id", filter="name = ?", params=[row['sport']], limit=1)
+            sport.__dba__.close()
             if sport.count == 0:
                 invalid_rows.append(row)
                 continue
 
             # Check if position exists
             position = SportPosition().select("id", filter="name = ?", params=[row['position']], limit=1)
+            position.__dba__.close()
             if position.count == 0:
                 invalid_rows.append(row)
                 continue
@@ -491,6 +500,7 @@ def import_csv_player_data(file_data, temp_file_path, mapped_fields=None):
                 })
                 player.save()
                 player.__dba__.commit()
+                player.__dba__.close()
 
                 count += 1
                 player = player.to_dict()
