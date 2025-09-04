@@ -1069,3 +1069,29 @@ body {
 .daterangepicker td.active:hover {
   background: var(--dark) !important;
 }
+
+.pointer-right {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: var(--dark-blue);
+  border: 1px solid var(--bright-green);
+  border-radius: 50%;
+  top: 5px;
+  right: 0;
+  transform: translate(50%, -50%);
+
+}
+
+.pointer-left {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: var(--bright-green);
+  border: 1px solid var(--dark-blue);
+  border-radius: 50%;
+  top: 5px;
+  right: 0;
+  transform: translate(50%, -50%);
+
+}
