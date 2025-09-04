@@ -10,7 +10,7 @@ import os
 
 from PIL import Image
 from PIL.Image import Resampling
-
+from .. import dba
 
 def get_player_results(candidate_id):
     """
@@ -193,7 +193,7 @@ def player_bio_complete(player_id):
     from ..orm.Player import Player
 
     player = Player().select("*", filter="id = ?", params=[player_id], limit=1)
-    player.__dba__.close()
+    dba.close()
     if player.count == 1:
         player = player[0]
         required_fields = ["first_name", "last_name", "image", "sport", "position", "team"]
@@ -210,7 +210,7 @@ def player_report_sent(player_id):
     from ..orm.PlayerResult import PlayerResult
 
     player_result = PlayerResult().select("id", filter="player_id = ? and data is not NULL", params=[player_id], limit=1, order_by="date_created desc")
-    player_result.__dba__.close()
+    dba.close()
     if len(player_result.to_list()) > 0:
         return True
 
@@ -309,7 +309,7 @@ def get_player_stats():
                                                  "and player_media.is_valid = 1 "
                                                  "and player_transcripts.verified_user_id > 0")
 
-    Player.__dba__.close()
+    dba.close()
 
     return {
         "total_players": players['total_players'] if players else 0,
@@ -387,14 +387,14 @@ def validate_csv_player_data(file_data):
 
             # Check if sport exists
             sport = Sport().select("id", filter="name = ?", params=[row['sport']], limit=1)
-            sport.__dba__.close()
+            dba.close()
             if sport.count == 0:
                 invalid_rows.append(row)
                 continue
 
             # Check if position exists
             position = SportPosition().select("id", filter="name = ?", params=[row['position']], limit=1)
-            position.__dba__.close()
+            dba.close()
             if position.count == 0:
                 invalid_rows.append(row)
                 continue
