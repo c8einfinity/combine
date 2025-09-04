@@ -77,9 +77,11 @@
         // Store both the active tab ID and page URL in localStorage
         if (!initialLoad) {
             localStorage.setItem('activeNavItem', element.id);
-            const urlMatch = element.getAttribute('onclick').match(/loadPage\('([^']+)'/);
-            if (urlMatch && urlMatch[1]) {
-                localStorage.setItem('lastActivePage', urlMatch[1]);
+            if (element.getAttribute('onclick')) {
+                const urlMatch = element.getAttribute('onclick').match(/loadPage\('([^']+)'/);
+                if (urlMatch && urlMatch[1]) {
+                    localStorage.setItem('lastActivePage', urlMatch[1]);
+                }
             }
         }
     }
