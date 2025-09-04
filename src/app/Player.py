@@ -75,7 +75,7 @@ def get_sport_position_ids(sport_name, position_name):
     try:
         sport = Sport().select("id, name", limit=1, filter="name = ?", params=[str(sport_name)])
         sport = sport.to_list()
-        sport.__dba__.close()
+        dba.close()
     except Exception as e:
         Debug.error(f"Error fetching sport {sport_name} from the database, {e}")
         return {"error": "Sport not found"}
@@ -87,7 +87,7 @@ def get_sport_position_ids(sport_name, position_name):
     try:
         position = SportPosition().select("id, name", limit=1, filter="name = ?", params=[str(position_name)])
         position = position.to_list()
-        position.__dba__.close()
+        dba.close()
     except Exception as e:
         Debug.error(f"Error fetching position {position_name} from the database, {e}")
         return {"error": "Position not found"}
@@ -500,7 +500,7 @@ def import_csv_player_data(file_data, temp_file_path, mapped_fields=None):
                 })
                 player.save()
                 player.__dba__.commit()
-                player.__dba__.close()
+                dba.close()
 
                 count += 1
                 player = player.to_dict()
