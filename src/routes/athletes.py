@@ -880,7 +880,7 @@ async def get_fix_images(request, response):
     from ..orm.Player import Player
 
     players = Player().select("*", "image is not null and image <> ''", limit=500)
-    players.__dba__.commit()
+    dba.commit()
     for player in players.to_array():
         player["image"] = base64.b64decode(player["image"]).decode("utf-8")
         # check if the image is a base64 string, do nothing
