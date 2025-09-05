@@ -74,6 +74,7 @@
             <div id="videoClassification" style="overflow: hidden; height: 50vh; overflow-y: auto;">
             </div>
         </div>
+        {% endif %}
         {% if videos_edit_permission %}
             <script>
                 function showHideTranscript(speakerName, refresh) {
@@ -99,7 +100,6 @@
                     loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
                 }
             </script>
-        {% endif %}
         {% endif %}
     {% else %}
         <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the
