@@ -21,7 +21,8 @@ dependencies = [
     "asyncer>=0.0.8,<0.0.9",
     "pillow>=11.2.1,<12",
     "mongo-queue-service>=0.2.2",
-    "tina4-python>=0.2.109",
+    "valkey[libvalkey]>=6.1.1",
+    "tina4-python>=0.2.110",
 ]
 
 [dependency-groups]
