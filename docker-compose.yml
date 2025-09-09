@@ -1,19 +1,32 @@
 services:
+  python:
+    build: .
+    container_name: "qfinder-python"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/app
+    command: tail -f /app/logs/debug.log
+    working_dir: /app
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - mongo
+      - valkey
   mysql:
     image: mysql:8.4.2
-    restart: unless-stopped
-    container_name: "combine-mysql"
+    container_name: "qfinder-mysql"
     environment:
-      MYSQL_ROOT_PASSWORD: Pass1234!
-      MYSQL_DATABASE: qfinder
+      MYSQL_ROOT_PASSWORD: "Pass1234!"
+      MYSQL_DATABASE: "qfinder"
     ports:
       - "33068:3306"
     volumes:
       - "./database:/var/lib/mysql"
   mongo:
     image: mongo:latest
-    restart: unless-stopped
-    container_name: "combine-mongo"
+    container_name: "qfinder-mongo"
     environment:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: password
@@ -22,9 +35,8 @@ services:
       - "27018:27017"
     volumes:
       - "./mongo:/data/db"
-  redis:
-    image: redis:7.0.5
-    restart: unless-stopped
-    container_name: "combine-redis"
+  valkey:
+    image: valkey/valkey:latest
+    container_name: "qfinder-valkey"
     ports:
       - "6379:6379"
