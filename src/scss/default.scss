@@ -20,11 +20,13 @@
 @import "footer.scss";
 
 // Assessment module
-@import "aatos.scss";
-@import "team_q.scss";
+@import "team_q_results.scss";
+@import "qfinder.scss";
+
+$gradient: linear-gradient(90deg, var(--soft-green, #CFFF80) 31%, #006DB0 79%);
 
 .text-darker-green {
-  color: $darker-green;
+  color: var(--darker-green);
 }
 
 .bg-lighter {
@@ -142,7 +144,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn-outline-dark:not(:disabled):not(.disabled).active,
 .btn-outline-dark:not(:disabled):not(.disabled):hover {
-  color: $soft-green;
+  color: var(--soft-green);
   background-color: $black;
   border-color: $black;
 }

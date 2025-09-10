@@ -1,0 +1,125 @@
+/**
+ * Copyright 2024 Code Infinity
+ *
+ * @author Shawen Harker <shawen@codeinfinity.co.za>
+ */
+
+:root {
+  --soft-green: #DAFC90;
+  --soft-green-hover: #B5F151;
+  --bright-green: #CFFF80;
+  --darker-green: #9AC750;
+  --dark: #000000;
+  --navy: #012839;
+  --blue: #315E98;
+  --bright-blue: #029AFF;
+  --dark-blue: #3E6DB3;
+  --charcoal: #212529;
+  --grey: #495057;
+  --light-grey: #E7E7E7;
+  --red: #DC2B2B;
+  --red-hover: #C82323;
+  --yellow: #FFB71B;
+  --white: #FFFFFF;
+  --ff-inter: Inter, Arial, Helvetica, sans-serif;
+  --ff-anton: Anton, Arial, Helvetica, sans-serif;
+}
+
+
+#player-report, #coach-report, #scout-report {
+  .attribute_labels {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    grid-gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+      font-size: 0.8rem;
+
+      &:not(:first-child) {
+        border-left: 1px solid var(--bright-green);
+        padding-left: 0.4rem;
+      }
+    }
+  }
+
+  .border-radius {
+    border-radius: 11px;
+  }
+
+  .scout-thinking-style-results-nav .nav-tabs .nav-link {
+    border: none;
+  }
+
+  .scout-thinking-style-results-nav .nav-tabs .nav-link.active {
+    border-bottom: 2px solid #CFFF80;
+    opacity: 1;
+  }
+
+  .result-grading-heading {
+    font-family: "Inter", sans-serif;
+  }
+
+  .trait_content {
+    border-radius: 1rem;
+    color: var(--dark);
+
+    ul li {
+      list-style: unset;
+      padding: unset;
+      margin: unset;
+      color: var(--bright-blue);
+    }
+
+    &.trait_content__strengths {
+      background-color: #FFFFFF;
+
+      @media(min-width: 768px) {
+        background-color: transparent;
+      }
+    }
+
+    &.trait_content__tips {
+      background-color: #FFFFFF;
+    }
+  }
+
+  .linear-graph-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    margin-top: 0.5rem;
+
+    .linear-bar-color-gradient {
+      background-image: linear-gradient(90deg, #CFFF80 9.13%, #3E6DB3 86.06%);
+
+    }
+
+    .pointer-right {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background-color: var(--dark-blue);
+      border: 1px solid var(--bright-green);
+      border-radius: 50%;
+      top: 5px;
+      right: 0;
+      transform: translate(50%, -50%);
+    }
+
+    .pointer-left {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background-color: var(--bright-green);
+      border: 1px solid var(--dark-blue);
+      border-radius: 50%;
+      top: 5px;
+      right: 0;
+      transform: translate(50%, -50%);
+    }
+  }
+}
