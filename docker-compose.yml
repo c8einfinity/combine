@@ -6,7 +6,7 @@ services:
       - "8080:8080"
     volumes:
       - ./:/app
-    command: tail -f /app/logs/debug.log
+    command: sh -c "uv sync && tail -f /app/logs/debug.log"
     working_dir: /app
     env_file:
       - .env
