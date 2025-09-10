@@ -14,6 +14,14 @@ class MiddleWare:
         :param response:
         :return:
         """
+        if request.session.get("logged_in") is not None and request.session.get("logged_in") == True:
+            if request.session.get("user_permissions") is None:
+                # get the user permissions
+                from ..app.UserGroups import UserGroups
+                user = request.session.get("user")
+                user_group = UserGroups.get_user_group_data_by_id(user["user_group_id"])
+                user_permissions = UserGroups.get_holistic_user_group_permission_list(user_group)
+                request.session.set("user_permissions", user_permissions)
 
         if (not request.session.get('logged_in')
                 or request.session.get('logged_in') == False
