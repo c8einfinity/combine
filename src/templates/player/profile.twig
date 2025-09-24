@@ -8,8 +8,6 @@
 {% set playerq_visible_permission = user_permissions.permissions.PlayerQ.visible == "1" or user.user_group_id == "1" %}
 {% extends "base.twig" %}
 {% block head_content %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css"/>
     <script src="/js/profile_cropper.js"></script>
 {% endblock %}
 {% block navigation %}
@@ -156,7 +154,6 @@
                                                 <input class="custom-file-upload" id="file-upload"
                                                        name="picture-upload"
                                                        type="file" accept="image/*"
-{#                                                       onchange="submitForm('profileDetails', '/api/athlete/{{ player.id }}/upload-picture', 'profile-image')"#}
                                                 />
                                             </div>
                                             {% endif %}
@@ -187,7 +184,9 @@
                 </div>
             </div>
         </div>
-    {% include "components/profile_crop_modal.twig" %}
+    {% with player=player %}
+        {% include "components/profile_crop_modal.twig" %}
+    {% endwith %}
     {% endif %}
     {% if profile_visible_permission %}
         <script>
