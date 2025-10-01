@@ -209,8 +209,8 @@ class ProfileCropper {
             ctx.filter = 'none';
             // draw the zoomed image
             ctx.drawImage(img, x, y, newWidth, newHeight);
-            this.imageSrc = canvas.toDataURL()
-            this.setPreviewImage()
+            this.imageSrc = canvas.toDataURL();
+            this.setPreviewImage();
         }.bind(this)
     }
 
