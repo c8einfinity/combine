@@ -151,7 +151,7 @@ class ProfileCropper {
         if (this.imageSrc) {
             this.zoomAmount = zoomValue;
             if (this.zoomAmount < 0.1) this.zoomAmount = 0.1;
-            this.drawZoomedImage()
+            this.drawZoomedImage();
         }
     }
 
@@ -163,7 +163,7 @@ class ProfileCropper {
         if (this.imageSrc) {
             this.zoomAmount += amount;
             if (this.zoomAmount < 0.1) this.zoomAmount = 0.1;
-            this.drawZoomedImage()
+            this.drawZoomedImage();
         }
     }
 
@@ -176,7 +176,7 @@ class ProfileCropper {
             this.zoomAmount -= amount;
             if (this.zoomAmount < 0.1) this.zoomAmount = 0.1;
             // redo the blurred background to eliminate white space
-            this.drawZoomedImage()
+            this.drawZoomedImage();
         }
     }
 
