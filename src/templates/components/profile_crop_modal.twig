@@ -1,0 +1,97 @@
+<div class="modal fade" id="profileImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadProfileImageModal"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered player-results-modal" role="document">
+        <div class="modal-content white-label">
+            <div class="modal-header border-0">
+                <h3 class="modal-title text-black text-anton" id="uploadProfileImageModal">Edit Photo</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="gradient-separator mb-0"></div>
+            <div class="modal-body vendor-edits p-0">
+                <div class="row no-gutters">
+                    <div class="col-6 d-flex justify-content-center align-items-center px-0 py-5 bg-light-grey">
+                        <div id="cropContainer"></div>
+                    </div>
+                    <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+                        <p class="alert alert-light w-75 text-center">Drag the photo to reposition it within the circle, then use the slider to zoom as needed. Try to keep the face in the dotted circle. </p>
+                        <div class="w-75">
+                            <label for="cropZoom" class="sr-only">Zoom In or Out</label>
+                            <div class="d-flex flex-row">
+                                <button type="button" id="cropZoomOut" class="text-gray-800" style="appearance: none; border: none; background: none; font-size: 1.5rem;">&minus;</button>
+                                <input class="form-control-range w-100 flex-fill cropZoomRange" type="range" min="0.1" max="1.9" value="1" step="0.1" id="cropZoom">
+                                <button type="button" id="cropZoomIn" class="text-gray-800" style="appearance: none; border: none; background: none; font-size: 1.5rem;">&plus;</button>
+                            </div>
+                            <div id="crop-upload-message"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-soft-green" onclick="saveCroppedImage()">
+                    Save
+                </button>
+                <button type="button" class="btn btn-white-uppercase" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cropper = new ProfileCropper('file-upload', 'cropContainer', 'profileImageModal');
+    cropper.init();
+    cropper.enableDrag();
+    document.getElementById('cropZoomIn').addEventListener('click', () => {
+        cropper.zoomIn();
+        // increase the zoom slider value
+        const zoomSlider = document.getElementById('cropZoom');
+        let currentValue = parseFloat(zoomSlider.value);
+        if (currentValue < parseFloat(zoomSlider.getAttribute('max'))) {
+            currentValue += 0.1;
+            zoomSlider.value = currentValue.toFixed(1);
+        }
+    });
+    document.getElementById('cropZoomOut').addEventListener('click', () => {
+        cropper.zoomOut();
+        // decrease the zoom slider value
+        const zoomSlider = document.getElementById('cropZoom');
+        let currentValue = parseFloat(zoomSlider.value);
+        if (currentValue > parseFloat(zoomSlider.getAttribute('min'))) {
+            currentValue -= 0.1;
+            zoomSlider.value = currentValue.toFixed(1);
+        }
+    });
+    document.getElementById('cropZoom').addEventListener('input', (event) => {
+        const zoomValue = parseFloat(event.target.value);
+        cropper.setZoom(zoomValue);
+    });
+    function saveCroppedImage() {
+        const imgData = cropper.getCroppedImage();
+
+        // create file object from base64 string
+        function dataURLtoFile(dataurl, filename) {
+            let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type: mime});
+        }
+
+        const file = dataURLtoFile(imgData, 'profile_image.png');
+        const formData = new FormData();
+        formData.append('picture-upload', file);
+        {% set updateToken = formToken({"url":"/api/athlete/"~player.id~"/upload-picture?t="~RANDOM()}) %}
+        const formToken =  "{{ updateToken }}";
+        formData.append('formToken', formToken);
+
+        // Send the image to the server via AJAX
+        postUrl('/api/athlete/{{ player.id }}/upload-picture', formData, 'profileMessage', function(response) {
+            // Reload the page to show the new profile image
+            location.reload();
+        });
+
+    }
+</script>
