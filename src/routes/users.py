@@ -5,7 +5,7 @@ from ..app.MiddleWare import MiddleWare
 from ..app.Users import Users
 from tina4_python.Router import get, post, delete, middleware
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("api/users/landing")
 async def get_users_landing(request, response):
     """
@@ -16,7 +16,7 @@ async def get_users_landing(request, response):
     """
     return Users.get_users_landing(response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/users")
 async def get_users(request, response):
     """
@@ -27,7 +27,7 @@ async def get_users(request, response):
     """
     return Users.get_users(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/users")
 async def post_users(request, response):
     """
@@ -38,7 +38,7 @@ async def post_users(request, response):
     """
     return Users.post_users(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/users/{id}")
 async def get_users_id(request, response):
     """
@@ -49,7 +49,7 @@ async def get_users_id(request, response):
     """
     return Users.get_users_id(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/users/{id}")
 async def post_users_id(request, response):
     """
@@ -60,7 +60,7 @@ async def post_users_id(request, response):
     """
     return Users.post_users_id(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @delete("/api/users/{id}")
 async def delete_user(request, response):
     """

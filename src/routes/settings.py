@@ -6,7 +6,7 @@ from ..app.MiddleWare import MiddleWare
 from tina4_python.Template import Template
 from tina4_python.Router import get, post, delete, middleware
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/settings")
 async def settings_get(request, response):
     """
@@ -26,7 +26,7 @@ async def settings_get(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/settings/add-update-search-parameters")
 async def add_update_search_parameters(request, response):
     """
@@ -77,7 +77,7 @@ async def add_update_search_parameters(request, response):
 
     return response({"message": "Sport search parameter added successfully"})
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/setting/update/{setting_key}")
 async def update_setting(request, response):
     """
@@ -104,7 +104,7 @@ async def update_setting(request, response):
 
     return response({"message": "Setting updated successfully"})
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @delete("/setting/delete/{setting_key}")
 async def delete_setting(request, response):
     """

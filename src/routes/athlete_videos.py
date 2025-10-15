@@ -41,7 +41,7 @@ def decode_metadata(record):
 
     return record
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/athlete/{id}/videos")
 async def get_athlete_videos(request, response):
     from ..orm.Player import Player
@@ -120,7 +120,7 @@ async def get_athlete_videos(request, response):
 
     return response(html)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/athlete/{id}/videos")
 async def post_athlete_videos(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -150,7 +150,7 @@ async def post_athlete_videos(request, response):
 
     return response.redirect("/api/athlete/" + request.params["id"] + "/videos")
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/athlete/{id}/videos/{video_id}/transcript")
 async def get_athlete_transcripts(request, response):
     from ..app.Player import decode_transcript
@@ -182,7 +182,7 @@ async def get_athlete_transcripts(request, response):
                                                             "transcripts": player_transcripts,"showClassification": False})
     return response(html)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/athlete/{id}/video-list")
 async def get_athlete_video_list(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -214,7 +214,7 @@ async def get_athlete_video_list(request, response):
     html = Template.render("player/video-list.twig", {"videos": video_list})
     return response(html)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/athlete/{id}/videos/{video_id}/transcript/queue")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.Queue import Queue
@@ -230,7 +230,7 @@ async def post_athlete_transcripts_queue(request, response):
 
     return response("Queued!")
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/athlete/{id}/videos/{video_id}/remove")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -244,7 +244,7 @@ async def post_athlete_transcripts_queue(request, response):
 
     return response("Removed!")
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/athlete/{id}/videos/{video_id}/include")
 async def post_athlete_transcripts_queue(request, response):
     from ..orm.PlayerMedia import PlayerMedia
@@ -262,7 +262,7 @@ async def post_athlete_transcripts_queue(request, response):
 
     return response("Done!")
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/athlete/{id}/transcripts/{media_id}/classification")
 async def get_test_classification(request, response):
     from ..app.Player import decode_transcript
@@ -346,7 +346,7 @@ async def get_test_classification(request, response):
 
     return response(classification)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/athlete/{id}/transcript/{transcript_id}/verified")
 async def post_transcript_verified(request, response):
     """

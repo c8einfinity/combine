@@ -5,7 +5,7 @@ from ..app.MiddleWare import MiddleWare
 from ..app.UserGroups import UserGroups
 from tina4_python.Router import get, post, delete, middleware
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/user_groups/landing")
 async def get_user_group_landing(request, response):
     """
@@ -16,7 +16,7 @@ async def get_user_group_landing(request, response):
     """
     return UserGroups.get_user_group_landing(response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/user_groups")
 async def get_user_groups(request, response):
     """
@@ -27,7 +27,7 @@ async def get_user_groups(request, response):
     """
     return UserGroups.get_user_groups(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @get("/api/user_groups/form")
 async def get_user_group_form(request, response):
     """
@@ -39,7 +39,7 @@ async def get_user_group_form(request, response):
     """
     return UserGroups.get_user_groups_form_modal(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @post("/api/user_groups")
 async def post_user_group(request, response):
     """
@@ -51,7 +51,7 @@ async def post_user_group(request, response):
     """
     return UserGroups.post_user_group(request, response)
 
-@middleware(MiddleWare, ["before_route_session_validation"])
+@middleware(MiddleWare)
 @delete("/api/user_groups/{id}")
 async def delete_user_group(request, response):
     """

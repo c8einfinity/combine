@@ -6,7 +6,7 @@ from tina4_python.Response import Response
 
 class MiddleWare:
     @staticmethod
-    def before_route_session_validation(request, response):
+    async def before_route_session_validation(request, response):
         """
         Middleware function to verify the user session and redirect to the login page with a message indication that
         the session has ended.
