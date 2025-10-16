@@ -22,7 +22,8 @@ dependencies = [
     "pillow>=11.2.1,<12",
     "mongo-queue-service>=0.2.2",
     "valkey[libvalkey]>=6.1.1",
-    "tina4-python>=0.2.110",
+    "boto3>=1.40.38",
+    "tina4-python>=0.2.113",
 ]
 
 [dependency-groups]
