@@ -74,7 +74,7 @@
                 <div id="videoClassification" style="overflow: hidden; height: 50vh; overflow-y: auto;">
                 </div>
             </div>
-
+        {% endif %}
             {% if videos_edit_permission %}
                 <script>
                     function showHideTranscript(speakerName, refresh) {
@@ -89,7 +89,7 @@
                     }
 
                     showHideTranscript("{{ selectedSpeaker }}", 0);
-
+                    {% if showClassification %}
                     function doClassification(speakerName, refresh) {
                         if (refresh === undefined) refresh = 0;
 
@@ -99,6 +99,7 @@
 
                         loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
                     }
+                    {% endif}
                 </script>
             {% endif %}
         {% endif %}
