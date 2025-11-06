@@ -75,34 +75,33 @@
                 </div>
             </div>
         {% endif %}
-            {% if videos_edit_permission %}
-                <script>
-                    function showHideTranscript(speakerName, refresh) {
-                        if (speakerName === "ALL") {
-                            $('.speaker').show();
-                        } else {
-                            $('.speaker').hide();
-                            $('.' + speakerName).show();
-                        }
-
-                        doClassification(speakerName, refresh);
+        {% if videos_edit_permission %}
+            <script>
+                function showHideTranscript(speakerName, refresh) {
+                    if (speakerName === "ALL") {
+                        $('.speaker').show();
+                    } else {
+                        $('.speaker').hide();
+                        $('.' + speakerName).show();
                     }
 
-                    showHideTranscript("{{ selectedSpeaker }}", 0);
+                    doClassification(speakerName, refresh);
+                }
 
-                    {% if showClassification %}
-                    function doClassification(speakerName, refresh) {
-                        if (refresh === undefined) refresh = 0;
+                showHideTranscript("{{ selectedSpeaker }}", 0);
 
-                        $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-black pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
-                    <span class="sr-only text-black">Loading...</span>
-                </div></div>`)
+                {% if showClassification %}
+                function doClassification(speakerName, refresh) {
+                    if (refresh === undefined) refresh = 0;
 
-                        loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
-                    }
-                    {% endif %}
-                </script>
-            {% endif %}
+                    $('#videoClassification').html(`<div class="text-center"><h5 class="text-anton text-black pb-2">Processing ...</h5><div style="width: 5rem; height: 5rem;" class="spinner-border" role="status">
+                <span class="sr-only text-black">Loading...</span>
+            </div></div>`)
+
+                    loadPage(`/api/athlete/{{ player.id }}/transcripts/{{ transcripts[0].player_media_id }}/classification?refresh=${refresh}&selected_speaker=${speakerName}`, 'videoClassification');
+                }
+                {% endif %}
+            </script>
         {% endif %}
     {% else %}
         <p class="alert alert-warning py-2">No transcript data available yet, or an error occurred transcribing the
