@@ -297,54 +297,7 @@ async def get_test_classification(request, response):
             text += str(counter) + "." + speaker_text + "\n\n"
             counter += 1
 
-    player_media = PlayerMedia({"id": request.params["media_id"]})
-    classification = ""
-    if player_media.load():
-        if str(player_media.classification) == "" or ("refresh" in request.params and request.params["refresh"] == "1"):
-
-            chunks = chunk_text(text, 5000)
-            for chunk in chunks:
-                try:
-                    result = aatos.generate(
-                        "Classify each line of numbered text using the CLASSIFICATION RULES:\nText:" + chunk + "\nUse ONLY the following output format for each classification in the text:\nText:[Text being classified]\nClassification:[One or more classification categories comma separated]\nComment:[Short motivation for the classification of the text][LINE_FEED]\n",
-                        "Human", "AI",
-                        "You are an AI assistant sports psychologist evaluating a list of phrases someone has said, use the CLASSIFICATION RULES to answer the question.",
-                        _context="CLASSIFICATION RULES:\n" + classification_text,
-                        _stop_tokens=["Human:", "[LINEFEED]", "[LINE.Feed]"])
-
-                    classification += result["output"]
-                except Exception as e:
-                    print("Error in classification:", e)
-                    return response("Could not classify text.")
-
-            dba.execute("update player_transcripts set selected_speaker = ? where id = ?",
-                        [selected_speaker, transcript["id"]])
-            dba.commit()
-
-            player_media.classification = classification
-            player_media.save()
-        else:
-            classification = str(player_media.classification.value)
-
-        classification = "<div>" + classification.replace("\n", "</div><div>") + "</div>"
-        classification = classification.replace("Text:", "")
-
-    classification = """<div class="row"><div class="col-12 col-xl-5"><ul class='text-black text-black pl-3' style="position: sticky; top: 0">
-        <li>A. Leadership and Teamwork </li>
-        <li>B. Resilience and Stress Management </li>
-        <li>C. Goal-Setting and Motivation </li>
-        <li>D. Communication Style </li>
-        <li>E. Problem-Solving and Critical Thinking </li>
-        <li>F. Adaptability and Flexibility </li>
-        <li>G. Self-Awareness and Reflection </li>
-        <li>H. Personal Relationships: Family and Friends </li>
-        <li>I. Unknown </li>
-        </ul></div><div class="col-12 col-xl-7">
-        \n""" + classification + "</div>"
-
-    dba.close()
-
-    return response(classification)
+    return response("Done")
 
 @middleware(MiddleWare)
 @post("/api/athlete/{id}/transcript/{transcript_id}/verified")
