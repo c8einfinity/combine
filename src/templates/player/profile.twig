@@ -170,7 +170,7 @@
                         <div id="profileMessage"></div>
                         {% if profile_edit_permission %}
                             <button style="width:100px" class="btn btn-soft-green float-right btn-text-lg mt-3"
-                                    onclick="submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')">
+                                    onclick="clearFormState('profileDetails'); submitForm('profileDetails', '/api/athlete/{{ player.id }}', 'profileMessage')">
                                 Save
                             </button>
                         {% endif %}
@@ -213,7 +213,9 @@
                 }
 
                 $('#positionSelect').html('<p>Getting positions for selected sport</p>');
-                loadPage(`/api/athlete/{{ player.id }}/sport-positions/${encodeURIComponent(sport)}`, 'positionSelect');
+                loadPage(`/api/athlete/{{ player.id }}/sport-positions/${encodeURIComponent(sport)}`, 'positionSelect', function() {
+                    restoreFormState('profileDetails');
+                });
             }
             render_position_input('{{ player.sport }}');
         </script>

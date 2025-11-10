@@ -226,6 +226,9 @@ async def get_athlete_sport_position_select(request, response):
     sport_positions = SportPosition().select("*", "sport_id = ?", params=[sport[0]["id"]], limit=100)
     selected_position = player["position"]
 
+    if selected_position == '0' or selected_position == '':
+        selected_position = "Other"
+
     if sport_positions.count == 0:
         return response("No positions found for this sport", HTTP_NOT_FOUND, TEXT_PLAIN)
 
@@ -405,7 +408,8 @@ async def post_upload_picture(request, response):
         return response(str(e))
 
     player.save()
-    return response("<script>loadPage('/api/athlete/" + request.params["id"] + "', 'content')</script>")
+
+    return response("Profile picture uploaded successfully!")
 
 @middleware(MiddleWare)
 @post("/api/athlete/{id}/results")

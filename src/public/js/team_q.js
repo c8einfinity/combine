@@ -112,3 +112,72 @@ function CheckOnStatus(data, type, row, fieldName) {
 
     return icon;
 }
+
+function saveFormState(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const data = {};
+    Array.from(form.elements).forEach(el => {
+        if (!el.name) return;
+        if (el.type === 'file') return; // cannot store files
+
+        // handle selects (single and multiple)
+        if (el.tagName && el.tagName.toLowerCase() === 'select') {
+            if (el.multiple) {
+                data[el.name] = Array.from(el.selectedOptions).map(o => o.value);
+            } else {
+                data[el.name] = el.value;
+            }
+            return;
+        }
+
+        if (el.type === 'checkbox' || el.type === 'radio') {
+            data[el.name] = data[el.name] || [];
+            if (el.checked) data[el.name].push(el.value || '__checked__');
+        } else {
+            data[el.name] = el.value;
+        }
+    });
+    sessionStorage.setItem('formState:' + formId, JSON.stringify(data));
+}
+
+function restoreFormState(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const raw = sessionStorage.getItem('formState:' + formId);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Array.from(form.elements).forEach(el => {
+        if (!el.name) return;
+        const val = data[el.name];
+        if (val === undefined) return;
+
+        // handle selects (single and multiple)
+        if (el.tagName && el.tagName.toLowerCase() === 'select') {
+            if (el.multiple) {
+                const values = Array.isArray(val) ? val : [val];
+                Array.from(el.options).forEach(opt => {
+                    opt.selected = values.includes(opt.value) || values.includes(opt.text);
+                });
+            } else {
+                el.value = val;
+            }
+            return;
+        }
+
+        if (el.type === 'checkbox' || el.type === 'radio') {
+            if (Array.isArray(val)) {
+                el.checked = val.includes(el.value) || val.includes('__checked__');
+            } else {
+                // single stored value (defensive)
+                el.checked = val === el.value || val === '__checked__';
+            }
+        } else {
+            el.value = val;
+        }
+    });
+}
+
+function clearFormState(formId) {
+    sessionStorage.removeItem('formState:' + formId);
+}
