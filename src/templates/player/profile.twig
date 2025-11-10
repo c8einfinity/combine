@@ -213,11 +213,11 @@
                 }
 
                 $('#positionSelect').html('<p>Getting positions for selected sport</p>');
-                loadPage(`/api/athlete/{{ player.id }}/sport-positions/${encodeURIComponent(sport)}`, 'positionSelect');
+                loadPage(`/api/athlete/{{ player.id }}/sport-positions/${encodeURIComponent(sport)}`, 'positionSelect', function() {
+                    restoreFormState('profileDetails');
+                });
             }
             render_position_input('{{ player.sport }}');
-
-            restoreFormState('profileDetails');
         </script>
     {% endif %}
 
