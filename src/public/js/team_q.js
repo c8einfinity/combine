@@ -112,3 +112,49 @@ function CheckOnStatus(data, type, row, fieldName) {
 
     return icon;
 }
+
+// Save and restore form state using sessionStorage
+function saveFormState(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const data = {};
+    Array.from(form.elements).forEach(el => {
+        if (!el.name) return;
+        const type = el.type;
+        if (type === 'file') return; // cannot store files
+        if (type === 'checkbox' || type === 'radio') {
+            data[el.name] = data[el.name] || [];
+            if (el.checked) data[el.name].push(el.value || '__checked__');
+        } else {
+            data[el.name] = el.value;
+        }
+    });
+    sessionStorage.setItem('formState:' + formId, JSON.stringify(data));
+}
+
+function restoreFormState(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const raw = sessionStorage.getItem('formState:' + formId);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    Array.from(form.elements).forEach(el => {
+        if (!el.name) return;
+        const val = data[el.name];
+        if (val === undefined) return;
+        const type = el.type;
+        if (type === 'checkbox' || type === 'radio') {
+            if (Array.isArray(val)) {
+                el.checked = val.includes(el.value) || val.includes('__checked__');
+            }
+        } else {
+            el.value = val;
+        }
+    });
+    // optionally remove stored state after restore
+    // sessionStorage.removeItem('formState:' + formId);
+}
+
+function clearFormState(formId) {
+    sessionStorage.removeItem('formState:' + formId);
+}

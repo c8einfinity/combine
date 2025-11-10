@@ -90,6 +90,7 @@
         // Send the image to the server via AJAX
         postUrl('/api/athlete/{{ player.id }}/upload-picture', formData, 'profileMessage', function(response) {
             // Reload the page to show the new profile image
+            saveFormState('profileDetails');
             location.reload();
         });
 
