@@ -430,7 +430,7 @@ async def post_athlete_results(request, response):
     player_result = PlayerResult().select("*", "transcript_hash = ?", params=[transcription_hash])
     player_result = player_result.to_list()
     if len(player_result) > 0:
-        return response.redirect("/api/athlete/" + request.params["id"] + "/results")
+        PlayerResult({"id": player_result[0]["id"]}).delete()
 
     from ..orm.Player import Player
     player = Player({"id": request.params["id"]})
